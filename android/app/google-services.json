@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "252556961056",
+    "firebase_url": "https://gasjm-01-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "gasjm-01",
+    "storage_bucket": "gasjm-01.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252556961056:android:60f8d5fcacc3e60af0e345",
+        "android_client_info": {
+          "package_name": "com.asaz.gasjm"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252556961056-v6oruj3q0j6sj0kqjs77s9l700ffag4g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.asaz.gasjm",
+            "certificate_hash": "7b5d5cb2068cd921d3350684be0d26c071f55d35"
+          }
+        },
+        {
+          "client_id": "252556961056-eddk660j3q3ai2u1331vt4dromm61849.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252556961056-eddk660j3q3ai2u1331vt4dromm61849.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "252556961056-bge1mv0r7bhd3otlaf9j2h6o39qfnvog.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.asaz.gasjm"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
