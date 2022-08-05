@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:gasjm/app/data/controllers/autenticacion_controller.dart';
+import 'package:gasjm/app/data/models/perfil_model.dart';
+import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/models/usuario_model.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
 import 'package:get/get.dart';
@@ -66,7 +68,26 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
     await googleSignIn.signOut();
     await _firebaseAutenticacion.signOut();
   }
+  @override
+  Future<AutenticacionUsuario?> registrarUsuario(PersonaModel usuario) async {
+    //Registro de correo y contraena
+    final resultadoAutenticacion =
+        await _firebaseAutenticacion.createUserWithEmailAndPassword(
+            email: usuario.correoPersona??'', password: usuario.contrasenaPersona);
+    
+    //Actualizar Nombre y apellido del usuario creado
+    await resultadoAutenticacion.user!.updateDisplayName(
+      "${usuario.nombrePersona} ${usuario.apellidoPersona}",
+    );
+    // //Ingresar datos de usuario
+    final uid =
+        Get.find<AutenticacionController>().autenticacionUsuario.value!.uid;
 
+    firestoreInstance.collection("persona").doc(uid).set(usuario.toMap());
+    return _usuarioDeFirebase(resultadoAutenticacion.user);
+  }
+
+/*
   @override
   Future<AutenticacionUsuario?> registrarUsuario(UsuarioModel usuario) async {
     //Registro de correo y contraena
@@ -90,7 +111,7 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
       print("success");
     });
     return _usuarioDeFirebase(resultadoAutenticacion.user);
-  }
+  }*/
 
   @override
   Future<AutenticacionUsuario?> registrarUsuarioConGoogle(

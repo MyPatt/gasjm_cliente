@@ -58,6 +58,9 @@ dependencies:
   #fechas
   #flutter_material_pickers: ^3.1.0
 
+  #change package name
+  change_app_package_name: ^1.1.0
+
 dev_dependencies:
   flutter_lints: ^1.0.3
   flutter_test:

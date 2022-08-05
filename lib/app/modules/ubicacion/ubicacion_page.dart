@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart'; 
-import 'package:gasjm/app/core/theme/app_theme.dart'; 
+import 'package:flutter/material.dart';  
 
 import 'package:gasjm/app/modules/ubicacion/ubicacion_controller.dart';
 import 'package:gasjm/app/modules/ubicacion/widgets/content.dart';

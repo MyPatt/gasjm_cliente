@@ -1,5 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gasjm/app/data/models/pedido_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; 
 import 'package:gasjm/app/data/models/producto_model.dart';
 
 class ProductoProvider {

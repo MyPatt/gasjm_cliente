@@ -31,7 +31,7 @@ class AppPermission extends State<AppState> {
     //bool isLocation = serviceStatusLocation == ServiceStatus.enabled;
 
     final status = await Permission.locationWhenInUse.request();
-    print("ddddddddddddd" + status.isDenied.toString());
+  
     /*
     if (status == PermissionStatus.granted) {
       print('Permission Granted');

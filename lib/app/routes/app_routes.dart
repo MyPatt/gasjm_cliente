@@ -8,11 +8,8 @@ class AppRoutes {
 
   static const agenda = "/agenda";
   static const editaragenda = "/ediitaragenda";
-  static const signup = "/signup";
-  static const permission = "/permission";
+  static const signup = "/signup"; 
     static const procesopedido = "/procesopedido";
 
-    //REPARTIDOR
-      static const iniciorepartidor = "/iniciorepartidor";
-      static const pedidos= "/pedidos";
+  
 }

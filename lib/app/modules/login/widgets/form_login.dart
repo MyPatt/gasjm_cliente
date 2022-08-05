@@ -120,44 +120,7 @@ class FormLogin extends StatelessWidget {
                         ],
                       );
                     }),
-                    /*
-                    //
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * .05),
-
-                    // Opciones de inicio de sesion de redes sociales
-                    const TextDescription(text: "o iniciar sesión con"),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * .02),
-
-                    Obx(() {
-                      final isSaving = _.cargandoParaSocialMedia.value;
-                      return Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              _.iniciarSesionConGoogle();
-                            },
-                            child: const Image(
-                                image:
-                                    AssetImage("assets/icons/logogoogle.png"),
-                                height: 24.0),
-                          ),
-                          if (isSaving) const CircularProgressIndicator(),
-                        ],
-                      );
-                    }),
-                    SizedBox(
-                        height: MediaQuery.of(context).size.height * .02),
-                    Obx(() => Visibility(
-                        visible:
-                            _.errorParaSocialMedia.value?.isNotEmpty == true,
-                        child: TextDescription(
-                          text: _.errorParaSocialMedia.value ?? '',
-                          color: Colors.red,
-                        ))),
-                        */
+               
                     SizedBox(
                         height:
                             Responsive.getScreenSize(context).height * .05),

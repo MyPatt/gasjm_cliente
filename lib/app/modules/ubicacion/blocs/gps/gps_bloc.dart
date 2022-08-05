@@ -2,8 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:flutter/src/widgets/framework.dart';
-import 'package:gasjm/app/global_widgets/dialogs/progress_dialog.dart';
+import 'package:flutter/material.dart'; 
 import 'package:gasjm/app/modules/ubicacion/ubicacion_controller.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';

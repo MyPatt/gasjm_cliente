@@ -11,9 +11,7 @@ import 'package:gasjm/app/modules/inicio/proceso_pedido/proceso_pedido_page.dart
 import 'package:gasjm/app/modules/login/login_binding.dart';
 import 'package:gasjm/app/modules/login/login_page.dart'; 
 import 'package:gasjm/app/modules/registrar/registrar_binding.dart';
-import 'package:gasjm/app/modules/registrar/registrar_page.dart';
-import 'package:gasjm/app/modules/request_permission/request_permission_binding.dart';
-import 'package:gasjm/app/modules/request_permission/request_permission_page.dart';
+import 'package:gasjm/app/modules/registrar/registrar_page.dart'; 
 import 'package:gasjm/app/modules/splash/splash_binding.dart';
 import 'package:gasjm/app/modules/splash/splash_page.dart';
 import 'package:gasjm/app/modules/ubicacion/ubicacion_binding.dart';
@@ -86,14 +84,7 @@ class AppPages {
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
-    GetPage(
-      name: AppRoutes.permission,
-      page: () => const RequestPermissionPage(),
-      binding: RequestPermissionBinding(),
-      transition: Transition.fade,
-      transitionDuration: const Duration(milliseconds: 500),
-    ),
-
+    
     
   ];
 }

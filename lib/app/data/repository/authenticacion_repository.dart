@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/models/usuario_model.dart';
 
 //Repositorio con 2 clases -para autenticar usuario
@@ -40,7 +41,7 @@ abstract class AutenticacionRepository {
       String correo, String contrasena);
 
   //Crear usuario  con datos
-  Future<AutenticacionUsuario?> registrarUsuario(UsuarioModel usuario);
+  Future<AutenticacionUsuario?> registrarUsuario(PersonaModel usuario);
   Future<AutenticacionUsuario?>registrarUsuarioConGoogle(UsuarioModel usuario);
 
 //Iniciar sesion con google

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/models/usuario_model.dart';
 
 class FirebaseProvider {
@@ -28,8 +29,8 @@ class FirebaseProvider {
     return null;
   }
 
-  //
-  Future<UsuarioModel?> getUsuarioPorCedula(String cedula) async {
+//
+ Future<UsuarioModel?> getUsuarioPorCedula(String cedula) async {
     var result = await firestoreInstance
         .collection("usuarios")
         .where("cedula", isEqualTo: cedula)
@@ -40,7 +41,7 @@ class FirebaseProvider {
       return null;
     }
   }
-
+ 
 //
   Future<UsuarioModel?> getPerfilDeUsuario({required String uid}) async {
     final resultado =

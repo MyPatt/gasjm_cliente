@@ -5,16 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/map_style.dart';
+import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
-import 'package:gasjm/app/data/models/usuario_model.dart';
+import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/repository/pedido_repository.dart';
-import 'package:gasjm/app/data/repository/usuario_repository.dart';
+import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 
 class InicioController extends GetxController {
   @override
@@ -50,9 +50,9 @@ class InicioController extends GetxController {
   /* DATOS DEL USUARIO */
   /* Variables para obtener datos del usuario */
   //Repositorio de usuario
-  final _userRepository = Get.find<MyUserRepository>();
+  final _userRepository = Get.find<PersonaRepository>();
   //
-  Rx<UsuarioModel?> usuario = Rx(null);
+  Rx<PersonaModel?> usuario = Rx(null);
   Future<void> getUsuarioActual() async {
     usuario.value = await _userRepository.getUsuario();
   }
@@ -72,7 +72,7 @@ class InicioController extends GetxController {
     try {
       procensandoElNuevoPedido.value = true;
       const idProducto = "glp";
-      final idCliente = usuario.value?.cedula ?? '';
+      final idCliente = usuario.value?.cedulaPersona ?? '';
       const idRepartidor = "SinAsignar";
       final direccion = Direccion(
           latitud: posicionPedido.value.latitude,
@@ -100,18 +100,15 @@ class InicioController extends GetxController {
       _inicializarDatos();
       //Get.back();
       _cargarProcesoPedido();
-      Get.snackbar('Nuevo pedido', 'Su pedido se registro con éxito.',
-       
-          backgroundColor: AppTheme.blueDark,
-          colorText: Colors.white,
-          snackPosition: SnackPosition.TOP,
-          borderRadius: 0);
+      Mensajes.showGetSnackbar(
+          titulo: "Mensaje", mensaje: "Su pedido se registro con éxito.",icono: const Icon(Icons.check_circle_outline_outlined,color: Colors.white,));
+   
     } on FirebaseException catch (e) {
-      Get.snackbar('Mensaje', e.message ?? 'Se produjo un error inesperado.',
-          snackPosition: SnackPosition.TOP,
-          backgroundColor: AppTheme.blueDark,
-          colorText: Colors.white,
-          borderRadius: 0);
+      
+          Mensajes.showGetSnackbar(
+          titulo: "Error", mensaje: "Se produjo un error inesperado.",icono:const Icon(Icons.error_outline_outlined,color: Colors.white,));
+   
+ 
     }
     procensandoElNuevoPedido.value = false;
   }
@@ -176,7 +173,7 @@ class InicioController extends GetxController {
     posicionMarcadorCliente.value = position;
     // final id = _markers.length.toString(); para generar muchos markers
 //Actualizar las posiciones del mismo marker la cedula del usuario conectado como ID
-    final id = usuario.value?.cedula ?? 'MakerIdCliente';
+    final id = usuario.value?.cedulaPersona ?? 'MakerIdCliente';
 
     final markerId = MarkerId(id);
 
@@ -264,7 +261,7 @@ class InicioController extends GetxController {
     posicionMarcadorCliente.value = posicionInicial.value;
 
 //Actualizar las posiciones del mismo marker la cedula del usuario conectado como ID
-    final id = usuario.value?.cedula ?? 'MakerIdCliente';
+    final id = usuario.value?.cedulaPersona ?? 'MakerIdCliente';
 //
     final markerId = MarkerId(id);
     // marcadores.add(Marker(
@@ -320,10 +317,7 @@ class InicioController extends GetxController {
   }
 
 //TODO: Obtener el horario desde la BD
-//TODO: Ajustar horario
 
-//TODO: Optimizar variables para fecha y hora
 //TODO: Horarios de atencion
-//TODO: FechaHoraActual para comparar que no sea local sino de red
 
 }
