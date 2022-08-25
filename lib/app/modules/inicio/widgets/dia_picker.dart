@@ -2,9 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 
-import 'package:gasjm/app/core/utils/responsive.dart';
-import 'package:gasjm/app/global_widgets/primary_button.dart';
-import 'package:gasjm/app/global_widgets/secondary_button.dart';
+import 'package:gasjm/app/core/utils/responsive.dart'; 
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/inicio/inicio_controller.dart';

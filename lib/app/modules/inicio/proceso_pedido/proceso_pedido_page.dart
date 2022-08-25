@@ -3,14 +3,8 @@ import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/cliente/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/cliente/menu_appbar.dart';
-import 'package:gasjm/app/global_widgets/primary_button.dart';
-import 'package:gasjm/app/global_widgets/text_description.dart';
-import 'package:gasjm/app/modules/inicio/inicio_controller.dart';
-import 'package:gasjm/app/modules/inicio/widgets/boton_pedirgas.dart';
-import 'package:gasjm/app/modules/inicio/widgets/content_map.dart';
-import 'package:gasjm/app/modules/inicio/proceso_pedido/local_widgets/contenido.dart';
-import 'package:get/get.dart';
-
+import 'package:gasjm/app/global_widgets/primary_button.dart'; 
+import 'package:gasjm/app/modules/inicio/proceso_pedido/local_widgets/contenido.dart'; 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
 class ProcesoPedidoPage extends StatelessWidget {
   const ProcesoPedidoPage({key}) : super(key: key);

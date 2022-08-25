@@ -7,7 +7,11 @@ class PedidoProvider {
 
   //
   Future<void> insertPedido({required PedidoModel pedidoModel}) async {
-    await _firestoreInstance.collection('pedido').add(pedidoModel.toJson());
+   final resultado =  await _firestoreInstance.collection('pedido').add(pedidoModel.toJson());
+        await _firestoreInstance
+        .collection("pedido")
+        .doc(resultado.id)
+        .update({"idPedido": resultado.id});
   }
   //
 

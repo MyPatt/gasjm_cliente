@@ -1,9 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart';
+import 'package:flutter/material.dart'; 
 import 'package:gasjm/app/core/utils/mensajes.dart';
-import 'package:gasjm/app/data/models/persona_model.dart';
-import 'package:gasjm/app/data/models/usuario_model.dart';
+import 'package:gasjm/app/data/models/persona_model.dart'; 
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
@@ -111,7 +109,7 @@ class RegistrarController extends GetxController {
         errorParaCorreo.value =
             'La cuenta ya existe para ese correo electrónico';
       } else {
-        errorParaCorreo.value = e.message;
+        errorParaCorreo.value = "Se produjo un error inesperado.";
       }
     }
     cargandoParaCorreo.value = false;

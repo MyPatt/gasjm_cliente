@@ -105,9 +105,7 @@ class FormPedirGas extends StatelessWidget {
                         iconColor: AppTheme.light,
                         border: InputBorder.none,
                         labelText: "Nota",
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.deny(RegExp(r'[^\w]')),
-                        ],
+                        
                         filled: false,
                       ),
                       SizedBox(
