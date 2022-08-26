@@ -16,7 +16,7 @@ class ContentMap extends StatelessWidget {
       print("solo por probar $id");
     });
     //
-    print("${controller.servicioHbilitado.value}");
+
     return GetBuilder<InicioController>(
         builder: (_) => Column(
               children: [

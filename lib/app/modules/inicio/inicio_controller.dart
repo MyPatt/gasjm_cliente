@@ -20,6 +20,7 @@ class InicioController extends GetxController {
   void onInit() {
     //Obtiene datos del usuario que inicio sesion
     getUsuarioActual();
+    
     //Obtiene ubicacion actual del dispositivo
     getLocation();
     //
@@ -28,10 +29,7 @@ class InicioController extends GetxController {
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
+
 
   @override
   void onClose() {
@@ -102,7 +100,7 @@ class InicioController extends GetxController {
       Mensajes.showGetSnackbar(
           titulo: "Mensaje", mensaje: "Su pedido se registro con éxito.",icono: const Icon(Icons.check_circle_outline_outlined,color: Colors.white,));
    
-    } on FirebaseException catch (e) {
+    } on FirebaseException {
       
           Mensajes.showGetSnackbar(
           titulo: "Error", mensaje: "Se produjo un error inesperado.",icono:const Icon(Icons.error_outline_outlined,color: Colors.white,));
@@ -167,20 +165,26 @@ class InicioController extends GetxController {
   }
 
 //
-  void onTap(LatLng position) {
+  Future<void> onTap(LatLng position) async {
     posicionInicial.value = position;
     posicionMarcadorCliente.value = position;
     // final id = _markers.length.toString(); para generar muchos markers
 //Actualizar las posiciones del mismo marker la cedula del usuario conectado como ID
     final id = usuario.value?.cedulaPersona ?? 'MakerIdCliente';
 
+
     final markerId = MarkerId(id);
+
+       BitmapDescriptor _marcadorCliente = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      "assets/icons/marcadorCliente.png",
+    );
 
     final marker = Marker(
         markerId: markerId,
         position: posicionInicial.value,
         draggable: true,
-        icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueAzure),
+        icon: _marcadorCliente,
         onDragEnd: (newPosition) {
           posicionInicial.value = newPosition;
           _getDireccionXLatLng(newPosition);
@@ -255,13 +259,20 @@ class InicioController extends GetxController {
 
   Set<Marker> marcadores = {};
 
-  void cargarMarcadores() {
+  Future<void> cargarMarcadores() async {
     //Marcador cliente
     posicionMarcadorCliente.value = posicionInicial.value;
 
 //Actualizar las posiciones del mismo marker la cedula del usuario conectado como ID
     final id = usuario.value?.cedulaPersona ?? 'MakerIdCliente';
-//
+
+       //Icono para el marcador pedido en espera
+    BitmapDescriptor _marcadorCliente = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(),
+      "assets/icons/marcadorCliente.png",
+    );
+
+
     final markerId = MarkerId(id);
     // marcadores.add(Marker(
     final marker = Marker(
@@ -269,7 +280,7 @@ class InicioController extends GetxController {
         position: posicionMarcadorCliente.value,
         draggable: true,
         //212.2
-        icon: BitmapDescriptor.defaultMarkerWithHue(208),
+        icon: _marcadorCliente,
         onDragEnd: (newPosition) {
           // ignore: avoid_print
           posicionMarcadorCliente.value = newPosition;
