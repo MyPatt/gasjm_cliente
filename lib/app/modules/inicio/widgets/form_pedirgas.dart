@@ -45,7 +45,7 @@ class FormPedirGas extends StatelessWidget {
                           height:
                               Responsive.getScreenSize(context).height * .03),
                       InputText(
-                        controller: _.direccionTextoController,
+                        controller: _.locationController,
                         keyboardType: TextInputType.streetAddress,
                         iconPrefix: Icons.room_outlined,
                         iconColor: AppTheme.light,

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart'; 
+import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/cliente/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/cliente/menu_appbar.dart';
 import 'package:gasjm/app/modules/inicio/inicio_controller.dart';
@@ -30,7 +30,7 @@ class InicioPage extends StatelessWidget {
           child: Stack(children: const <Widget>[
             //Widget Mapa
             Positioned.fill(
-              child: ContentMap(), 
+              child: ContentMap(),
             ),
             //
 
