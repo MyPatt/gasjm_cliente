@@ -8,12 +8,8 @@ class MapaWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = InicioController();
-    //Evento en el marcker clic
-    controller.onMarkerTap.listen((id) {
-      print("solo por probar $id");
-    });
-    //
+ return Expanded(child: Container());
+ /*
     return GetBuilder<InicioController>(
         builder: (_) => Expanded(
                 child: Obx(
@@ -29,7 +25,7 @@ class MapaWidget extends StatelessWidget {
                       compassEnabled: false,
                       onTap: _.onTap,
                     ),
-            )));
+            )));*/
   }
 }
 //TODO: Boton para regresar a la ubicacion inicial

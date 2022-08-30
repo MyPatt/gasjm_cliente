@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
-import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/modules/inicio/inicio_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -10,13 +9,6 @@ class ContentMap extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = InicioController();
-    //Evento en el marcker clic
-    controller.onMarkerTap.listen((id) {
-      print("solo por probar $id");
-    });
-    //
-
     return GetBuilder<InicioController>(
         builder: (_) => Column(
               children: [
@@ -39,69 +31,28 @@ class ContentMap extends StatelessWidget {
                               ?.copyWith(
                                   color: Colors.black38,
                                   fontWeight: FontWeight.w400),
-                          controller: _.locationController,
+                          controller: _.direccionTextController,
                           keyboardType: TextInputType.none,
                           decoration: InputDecoration(
-
-                              /*   prefixIcon: Icon(
-                                Icons.pin_drop_outlined,
-                                color: Colors.black26,
-                              ),*/
                               border: OutlineInputBorder(
                                   borderSide: BorderSide(color: Colors.white),
                                   borderRadius: BorderRadius.circular(10))),
                         ),
-                        /* child: Obx(
-                            () {
-                              return TextDescription(
-                                text: _.direccion.value,
-                                textAlign: TextAlign.left,
-                              );
-                            },
-                          )*/
                       ),
                     ),
                   ],
                 ),
                 Expanded(
                     child: Obx(
-                  () =>
-                      _.initialPos.value == const LatLng(-12.122711, -77.027475)
-                          ? const Center(child: CircularProgressIndicator())
-                          : GoogleMap(
-                              mapType: MapType.normal,
-                              markers: Set.of(_.marcador),
-                              initialCameraPosition: CameraPosition(
-                                  target: _.initialPos.value, zoom: 15.0),
-                              myLocationButtonEnabled: true,
-                              compassEnabled: true,
-                              zoomControlsEnabled: false,
-                              zoomGesturesEnabled: true,
-                              mapToolbarEnabled: false,
-                              trafficEnabled: false,
-                              tiltGesturesEnabled: false,
-                              scrollGesturesEnabled: true,
-                              rotateGesturesEnabled: false,
-                              myLocationEnabled: true,
-                              liteModeEnabled: false,
-                              indoorViewEnabled: false,
-                              onMapCreated: _.onCreated,
-                              onCameraMove: _.onCameraMove,
-                              /*
-                          oncameramoveendltng= await pickLocationOnMap(positio)
-
-                          */
-                              onCameraIdle: () async {
-                                _.getMoveCamera();
-                                //getPinnAddress
-                              },
-                            ),
-                  /*
-GoogleMap(
-                          markers: Set.of(_.markers),
-                          onMapCreated: _.onMapaCreated,
+                  () => _.posicionInicialCliente.value ==
+                          const LatLng(-12.122711, -77.027475)
+                      ? const Center(child: CircularProgressIndicator())
+                      : GoogleMap(
+                          mapType: MapType.normal,
+                          markers: Set.of(_.marcadores),
                           initialCameraPosition: CameraPosition(
-                              target: _.posicionInicial.value, zoom: 15),
+                              target: _.posicionInicialCliente.value,
+                              zoom: 15.0),
                           myLocationButtonEnabled: true,
                           compassEnabled: true,
                           zoomControlsEnabled: false,
@@ -114,11 +65,12 @@ GoogleMap(
                           myLocationEnabled: true,
                           liteModeEnabled: false,
                           indoorViewEnabled: false,
-                          onTap: _.onTap,
-                          
-                          //TODO: onCameraMove: https://stackoverflow.com/questions/53652573/fix-google-map-marker-in-center
+                          onMapCreated: _.onMapaCreado,
+                          onCameraMove: _.onCameraMove,
+                          onCameraIdle: () async {
+                            _.getMovimientoCamara();
+                          },
                         ),
-                      */
                 ))
               ],
             ));
