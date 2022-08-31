@@ -120,6 +120,7 @@ class InicioController extends GetxController {
       final diaEntregaPedido = diaDeEntregaPedidoController.value.text;
       final notaPedido = notaTextoController.text;
       final cantidadPedido = int.parse(cantidadTextoController.text);
+      final totalPedido = double.parse(totalTextoController.text);
       //
       PedidoModel pedidoModel = PedidoModel(
         idProducto: idProducto,
@@ -130,7 +131,7 @@ class InicioController extends GetxController {
         fechaHoraPedido: Timestamp.now(),
         diaEntregaPedido: diaEntregaPedido,
         notaPedido: notaPedido,
-        totalPedido: 555555,
+        totalPedido: totalPedido,
         cantidadPedido: cantidadPedido,
       );
 
