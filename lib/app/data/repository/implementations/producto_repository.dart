@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:gasjm/app/data/models/producto_model.dart';
 import 'package:gasjm/app/data/providers/producto_provider.dart';
 import 'package:gasjm/app/data/repository/producto_repository.dart';
@@ -10,17 +12,25 @@ class ProductoRepositoryImpl extends ProductoRepository {
       _provider.deleteProducto(producto: producto);
 
   @override
-  Future<Producto?> getProductoPorId(String id) =>
+  Future<ProductoModel?> getProductoPorId(String id) =>
       _provider.getProductoPorId(id: id);
 
   @override
-  Future<List<Producto>?> getProductos() => _provider.getProductos();
+        Future<double> getPrecioPorProducto({required String id}) =>
+      _provider.getPrecioPorProducto(id: id);
+  
 
   @override
-  Future<void> insertProducto({required Producto producto}) =>
+  Future<List<ProductoModel>?> getProductos() => _provider.getProductos();
+
+  @override
+  Future<void> insertProducto({required ProductoModel producto}) =>
       _provider.insertProducto(producto: producto);
 
   @override
-  Future<void> updateProducto({required Producto producto}) =>
+  Future<void> updateProducto({required ProductoModel producto}) =>
       _provider.updateProducto(producto: producto);
+
+ 
+
 }

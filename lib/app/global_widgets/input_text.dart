@@ -9,6 +9,7 @@ class InputText extends StatelessWidget {
   final List<TextInputFormatter>? inputFormatters;
   final FocusNode? focusnode;
   final bool readOnly;
+  final bool enabled;
   final TextEditingController? controller;
   final IconData? iconPrefix;
   final Color iconColor;
@@ -37,6 +38,7 @@ class InputText extends StatelessWidget {
     this.inputFormatters,
     this.focusnode,
     this.readOnly = false,
+    this.enabled = true,
     this.controller,
     this.iconColor = AppTheme.light,
     this.labelText,
@@ -97,6 +99,12 @@ class InputText extends StatelessWidget {
           labelText: labelText,
           labelStyle: const TextStyle(color: Colors.black45),
           filled: filled,
+          disabledBorder: UnderlineInputBorder(
+            borderSide: BorderSide(
+              width: .5,
+              color: enabledBorderColor,
+            ),
+          ),
           enabledBorder: UnderlineInputBorder(
             borderSide: BorderSide(
               width: .5,
@@ -118,6 +126,7 @@ class InputText extends StatelessWidget {
           ),
           errorStyle: const TextStyle(color: Colors.red)),
       readOnly: readOnly,
+      enabled: enabled,
       controller: controller,
       onSaved: onSaved,
       onChanged: onChanged,
@@ -129,7 +138,7 @@ class InputText extends StatelessWidget {
       validator: validator,
       //
       textInputAction: textInputAction,
-      inputFormatters:inputFormatters ,
+      inputFormatters: inputFormatters,
     );
   }
 }

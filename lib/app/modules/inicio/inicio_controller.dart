@@ -9,6 +9,7 @@ import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/repository/pedido_repository.dart';
 import 'package:gasjm/app/data/repository/persona_repository.dart';
+import 'package:gasjm/app/data/repository/producto_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
@@ -16,25 +17,36 @@ import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class InicioController extends GetxController {
-  /* Variables para obtener datos del usuario */
   //Repositorio de usuario
-  final _userRepository = Get.find<PersonaRepository>();
+  final _usuarioRepository = Get.find<PersonaRepository>();
+
+  /* Variables para obtener datos del usuario */
   Rx<PersonaModel?> usuario = Rx(null);
+
+  //Repositorio de pedidos
+  final _pedidoRepository = Get.find<PedidoRepository>();
+
+  //Repositorio de productos
+  final _productoRepository = Get.find<ProductoRepository>();
+  final precioGlp = 1.60.obs;
 
   /* Variables para el form */
   final formKey = GlobalKey<FormState>();
   final direccionTextoController = TextEditingController();
   final notaTextoController = TextEditingController();
   var cantidadTextoController = TextEditingController();
+  var totalTextoController = TextEditingController();
+  final diaDeEntregaPedidoController = TextEditingController().obs;
+  final itemSeleccionadoDia = 0.obs;
 
-  //Repositorio de pedidos
-  final _pedidoRepository = Get.find<PedidoRepository>();
+  final grupoSeleccionadoFecha = "Ahora".obs;
 
   // //Mientras se inserta el pedido mostrar circuleprobres se carga si o no
   final procensandoElNuevoPedido = RxBool(false);
 
   /* Variables para google maps */
   TextEditingController direccionTextController = TextEditingController();
+
   GoogleMapController? _mapaController = null;
 
   final Rx<LatLng> _posicionInicialCliente =
@@ -52,14 +64,22 @@ class InicioController extends GetxController {
   @override
   void onInit() {
     //Obtiene datos del usuario que inicio sesion
-    getUsuarioActual();
- 
+
     //Obtiene ubicacion actual del dispositivo
-    getUbicacionUsuario();
-    //
-    _cargarDiaYCantidadInicial();
+
+    //Obtener datos del producto
+
+    Future.wait(
+        [getUsuarioActual(), getUbicacionUsuario(), getPrecioProducto()]);
 
     super.onInit();
+  }
+
+  @override
+  void onReady() {
+    //Cargar datos iniciales para el formulario
+    _loadDatosIniciales();
+    super.onReady();
   }
 
   @override
@@ -77,7 +97,12 @@ class InicioController extends GetxController {
 
 //Obtener informacion del cliente conectado
   Future<void> getUsuarioActual() async {
-    usuario.value = await _userRepository.getUsuario();
+    usuario.value = await _usuarioRepository.getUsuario();
+  }
+
+  //Obtener informacion del cliente conectado
+  Future<void> getPrecioProducto() async {
+    precioGlp.value = await _productoRepository.getPrecioPorProducto(id: "glp");
   }
 
 //Metodos para insertar un nuevo pedido
@@ -159,13 +184,13 @@ class InicioController extends GetxController {
   }
 
   /*  DIA PARA AGENDAR EN FORM PEDIR GAS */
-  final diaDeEntregaPedidoController = TextEditingController().obs;
-  final itemSeleccionadoDia = 0.obs;
+
   //
-  void _cargarDiaYCantidadInicial() {
+  void _loadDatosIniciales() {
     direccionTextController.text = "Buscando dirección...";
     diaDeEntregaPedidoController.value.text = "Ahora";
     cantidadTextoController.text = "1";
+    totalTextoController.text = precioGlp.value.toString();
   }
 
   final diaInicialSeleccionado = 0.obs;
@@ -204,7 +229,7 @@ class InicioController extends GetxController {
 //
   }
 
-  void getUbicacionUsuario() async {
+  Future<void> getUbicacionUsuario() async {
     if (!(await Geolocator.isLocationServiceEnabled())) {
       //si la ubicacion esta deshabilitado tiene activarse
       await Geolocator.openLocationSettings();
@@ -253,7 +278,6 @@ class InicioController extends GetxController {
 
   Future<void> _agregarMarcadorCliente(
       LatLng posicion, String direccion) async {
-        
     final markerId = MarkerId(id);
 
     BitmapDescriptor _marcadorCliente = await BitmapDescriptor.fromAssetImage(
@@ -271,9 +295,7 @@ class InicioController extends GetxController {
     _marcadores[markerId] = marker;
   }
 
-
   void onCameraMove(CameraPosition position) async {
-    print("- ${position.target}");
     _posicionInicialCliente.value = position.target;
 
     final markerId = MarkerId(id);
@@ -296,6 +318,21 @@ class InicioController extends GetxController {
     _marcadores.forEach((key, value) {
       print(value.markerId);
     });
+  }
+
+  void onChangedCantidad(valor) {
+    if (cantidadTextoController.text.isEmpty) {
+      totalTextoController.text = "0.00";
+      return;
+    }
+
+    double total =
+        double.parse(valor) * double.parse(precioGlp.value.toStringAsFixed(2));
+
+    totalTextoController.text = total.toString();
+    if (valor.length > 1) {
+      cantidadTextoController.text = valor;
+    }
   }
 }
 

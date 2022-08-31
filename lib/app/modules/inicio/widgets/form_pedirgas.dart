@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/core/utils/validaciones.dart';
 import 'package:gasjm/app/global_widgets/input_text.dart';
@@ -19,10 +18,11 @@ class FormPedirGas extends StatelessWidget {
     return GetBuilder<InicioController>(
         builder: (_) => Container(
               //padding: EdgeInsets.only(     bottom: MediaQuery.of(context).viewInsets.bottom,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(25.0),
-              ),
+              decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(25.0),
+                      topRight: Radius.circular(25.0))),
 
               padding: const EdgeInsets.all(8.0),
               height: Responsive.getScreenSize(context).height * .5,
@@ -48,11 +48,10 @@ class FormPedirGas extends StatelessWidget {
                         controller: _.direccionTextController,
                         keyboardType: TextInputType.streetAddress,
                         iconPrefix: Icons.room_outlined,
-                        iconColor: AppTheme.light,
-                        border: InputBorder.none,
                         labelText: "Dirección",
                         validator: Validacion.validarDireccion,
                         readOnly: true,
+                        enabled: false,
                         filled: false,
                       ),
                       SizedBox(
@@ -60,8 +59,7 @@ class FormPedirGas extends StatelessWidget {
                               Responsive.getScreenSize(context).height * .02),
                       Obx(() => InputText(
                             iconPrefix: Icons.calendar_today_outlined,
-                            iconColor: AppTheme.light,
-                            border: InputBorder.none,
+
                             keyboardType: TextInputType.none,
                             controller: _.diaDeEntregaPedidoController.value,
 
@@ -70,9 +68,9 @@ class FormPedirGas extends StatelessWidget {
                             filled: false,
 
                             onTap: () {
-                              showModalBottomSheet(
+                              showDialog(
                                   context: context,
-                                  backgroundColor: Colors.transparent,
+                                  //backgroundColor: Colors.transparent,
                                   builder: (_) => const DiaPicker());
                             },
                           )),
@@ -82,36 +80,39 @@ class FormPedirGas extends StatelessWidget {
                       InputText(
                         controller: _.cantidadTextoController,
                         iconPrefix: Icons.pin_outlined,
-                        iconColor: AppTheme.light,
-                        border: InputBorder.none,
                         keyboardType: TextInputType.phone,
                         //validator: null,
                         labelText: "Cantidad",
 
                         inputFormatters: <TextInputFormatter>[
-                          //FilteringTextInputFormatter.digitsOnly,
-                          FilteringTextInputFormatter.allow(RegExp(r'\d{1,2}')),
+                          FilteringTextInputFormatter.digitsOnly,
+                          //FilteringTextInputFormatter.allow(RegExp(r'\d{1,2}')),
                         ],
                         validator: Validacion.validarCantidadGas,
+                        onChanged: _.onChangedCantidad,
                         filled: false,
+                      ),
+                      InputText(
+                        readOnly: true,
+                        enabled: false,
+                        controller: _.totalTextoController,
+                        iconPrefix: Icons.attach_money_outlined,
+                        labelText: "Total",
                       ),
                       SizedBox(
                           height:
                               Responsive.getScreenSize(context).height * .02),
                       InputText(
                         controller: _.notaTextoController,
-                        keyboardType: TextInputType.streetAddress,
                         iconPrefix: Icons.note_outlined,
-                        iconColor: AppTheme.light,
-                        border: InputBorder.none,
                         labelText: "Nota",
-                        filled: false,
+                        textInputAction: TextInputAction.none,
                       ),
                       SizedBox(
                           height:
                               Responsive.getScreenSize(context).height * .05),
                       Obx(() {
-                        final isSaving = _.procensandoElNuevoPedido.value;
+                        final estadoGuardar = _.procensandoElNuevoPedido.value;
                         return Stack(
                           alignment: Alignment.center,
                           children: [
@@ -124,7 +125,7 @@ class FormPedirGas extends StatelessWidget {
                                 }
                               },
                             ),
-                            if (isSaving)
+                            if (estadoGuardar)
                               const CircularProgressIndicator(
                                 backgroundColor: Colors.white,
                               ),
