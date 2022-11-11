@@ -15,13 +15,16 @@ abstract class Mensajes {
   }
 
   static void showGetSnackbar(
-      {required String titulo, required String mensaje,Duration? duracion=const Duration(seconds: 3), Icon? icono}) {
+      {required String titulo,
+      required String mensaje,
+      Duration? duracion = const Duration(seconds: 3),
+      Icon? icono}) {
     Get.snackbar(titulo, mensaje,
         backgroundColor: AppTheme.blueDark,
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         duration: duracion,
-        borderRadius: 0,
+        borderRadius: 15,
         icon: icono);
   }
 }

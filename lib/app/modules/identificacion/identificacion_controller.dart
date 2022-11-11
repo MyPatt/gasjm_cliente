@@ -19,23 +19,20 @@ class IdentificacionController extends GetxController {
 
 //Guardar cedula de forma local
   Future<void> _guardarCedula() async {
-             await Future.delayed(const Duration(seconds: 1));
-
+    await Future.delayed(const Duration(seconds: 1));
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("cedula_usuario", cedulaTextoController.text);
-    
   }
 
   //Guardar correo de forma local
   Future<void> _guardarCorreo() async {
-             await Future.delayed(const Duration(seconds: 1));
+    await Future.delayed(const Duration(seconds: 1));
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final correo = await _userRepository.getDatoPersonaPorField(
         field: "cedula", dato: cedulaTextoController.text, getField: "correo");
     await prefs.setString("correo_usuario", correo.toString());
-
   }
 
 //Buscar si tiene cuenta o no
@@ -74,6 +71,8 @@ class IdentificacionController extends GetxController {
                 Icons.info_outlined,
                 color: Colors.white,
               ));
+          await Future.delayed(const Duration(seconds: 1));
+
           Get.offNamed(AppRoutes.login);
         } else {
           Mensajes.showGetSnackbar(
@@ -101,9 +100,8 @@ class IdentificacionController extends GetxController {
     cargando.value = false;
   }
 
-  void onChangedIdentificacion(valor) {
-    if (valor.length > 9) {
-      cedulaTextoController.text = valor;
-    }
+  @override
+  void onClose() {
+    cedulaTextoController.dispose();
   }
 }

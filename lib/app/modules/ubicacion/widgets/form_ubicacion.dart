@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gasjm/app/core/utils/mensajes.dart';
+import 'package:gasjm/app/global_widgets/button_google.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
@@ -43,29 +45,39 @@ class FormUbicacion extends StatelessWidget {
                 SizedBox(
                     height: Responsive.getScreenSize(context).height * .05),
                 Obx(() {
-                  final isSaving = _.cargando.value;
+                  //Mientras se ejecute el evento del button se muestra el circular progress
+                  final estado = _.cargando.value;
                   return Stack(
                     alignment: Alignment.center,
                     children: [
-                      PrimaryButton(
-                        texto: "Permitir",
-                        onPressed: () async {
-                          try {
-                            _.cargando.value = true;
+                      Visibility(
+                        visible: !_.cargando.value,
+                        child: PrimaryButton(
+                          texto: "Permitir",
+                          onPressed: () async {
+                            try {
+                              _.cargando.value = true;
 
-                            final gpsBloc = BlocProvider.of<GpsBloc>(context);
-                            gpsBloc.askGpsAccess(context);
-                            await Future.delayed(const Duration(seconds: 1));
-                          } catch (e) {
-                            // print(e);
-                          }
-                          _.cargando.value = false;
-                        },
-                      ),
-                      if (isSaving)
-                        const CircularProgressIndicator(
-                          backgroundColor: Colors.white,
+                              final gpsBloc = BlocProvider.of<GpsBloc>(context);
+                              gpsBloc.askGpsAccess(context);
+                              await Future.delayed(const Duration(seconds: 1));
+                            } catch (e) {
+                              Mensajes.showGetSnackbar(
+                                  titulo: 'Alerta',
+                                  mensaje:
+                                      'Ha ocurrido un error, por favor inténtelo de nuevo más tarde.',
+                                  duracion: const Duration(seconds: 4),
+                                  icono: const Icon(
+                                    Icons.error_outline_outlined,
+                                    color: Colors.white,
+                                  ));
+                            }
+                            _.cargando.value = false;
+                          },
                         ),
+                      ),
+                      if (estado)
+                        const CircularProgress()
                     ],
                   );
                 }),

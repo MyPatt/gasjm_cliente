@@ -32,6 +32,7 @@ class LoginController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    Future.wait([_obtenerCorreo()]);
   }
 
   @override
@@ -39,6 +40,9 @@ class LoginController extends GetxController {
     //
     _removerCorreo();
     super.onClose();
+    //
+    correoTextoController.dispose();
+    contrasenaTextoController.dispose();
   }
 
   void mostrarContrasena() {

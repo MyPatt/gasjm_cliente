@@ -11,7 +11,7 @@ class PersonaModel {
       this.fotoPersona,
       this.direccionPersona,
       this.celularPersona,
-      this.fechaNaciPersona,
+      this.fechaNaciPersona,  this.estadoPersona,
       required this.idPerfil,
       required this.contrasenaPersona});
 
@@ -23,7 +23,7 @@ class PersonaModel {
   final Direccion? direccionPersona;
   final String? celularPersona;
   final String? fechaNaciPersona;
-  final String idPerfil;
+  final String idPerfil;  final String? estadoPersona;
   final String contrasenaPersona;
 
   factory PersonaModel.fromMap(Map<String, dynamic> json) => PersonaModel(
@@ -34,7 +34,7 @@ class PersonaModel {
         fotoPersona: json["foto"],
        direccionPersona: Direccion.fromMap(json["direccion"]),
         celularPersona: json["celular"],
-        fechaNaciPersona: json["fechaNacimiento"],
+        fechaNaciPersona: json["fechaNacimiento"], estadoPersona: json["estado"],
         idPerfil: json["idPerfil"], contrasenaPersona: json['contrasena'],
       );
 
@@ -46,7 +46,7 @@ class PersonaModel {
         "foto": fotoPersona,
         "direccion": direccionPersona?.toMap(),
         "celular": celularPersona,
-        "fechaNacimiento": fechaNaciPersona,
+        "fechaNacimiento": fechaNaciPersona,"estado": estadoPersona,
         "idPerfil": idPerfil,
         "contrasena":contrasenaPersona
       };
