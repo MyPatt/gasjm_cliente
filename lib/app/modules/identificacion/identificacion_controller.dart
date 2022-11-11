@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/utils/mensajes.dart';
-import 'package:gasjm/app/data/models/persona_model.dart';
+import 'package:gasjm/app/core/utils/mensajes.dart'; 
 import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -33,6 +32,7 @@ class IdentificacionController extends GetxController {
     final correo = await _userRepository.getDatoPersonaPorField(
         field: "cedula", dato: cedulaTextoController.text, getField: "correo");
     await prefs.setString("correo_usuario", correo.toString());
+     
   }
 
 //Buscar si tiene cuenta o no

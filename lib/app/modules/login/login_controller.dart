@@ -95,9 +95,8 @@ class LoginController extends GetxController {
   Future<void> _obtenerCorreo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final s = prefs.getString("correo_usuario");
-    correoTextoController.text = s!;
-    print(" sssss $s ");
+    String? s = prefs.getString("correo_usuario");
+    correoTextoController.text = s.toString(); 
   }
 
   //Remover correo de forma local
