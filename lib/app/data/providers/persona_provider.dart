@@ -1,12 +1,17 @@
+import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:path/path.dart' as path;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gasjm/app/data/models/persona_model.dart';
 
 class PersonaProvider {
-  //Instancia de firestore
+  //Instancia de firestore bd
   final _firestoreInstance = FirebaseFirestore.instance;
- 
-    //Par devolver el usuario actual conectado
+  //Instancia de storage para almacena las imagenes de perfil
+  FirebaseStorage get _storageInstance => FirebaseStorage.instance;
+
+  //Par devolver el usuario actual conectado
   User get usuarioActual {
     final usuario = FirebaseAuth.instance.currentUser;
     if (usuario == null) throw Exception('Excepción no autenticada');
@@ -17,12 +22,43 @@ class PersonaProvider {
     await _firestoreInstance.collection('persona').add(persona.toMap());
   }
 
-  //
-  Future<void> updatePersona({required PersonaModel persona}) async {
+//Metodo para actualizar los datos de una persona incluido su foto de perfil
+  Future<void> updatePersona(
+      {required PersonaModel persona, File? image}) async {
     await _firestoreInstance
         .collection('persona')
-        .doc(persona.cedulaPersona)
+        .doc(persona.uidPersona)
         .update(persona.toMap());
+    if (image != null) {
+      final imagePath =
+          '${usuarioActual.uid}/perfil/fotoperfil${path.extension(image.path)}';
+      final storageRef = _storageInstance.ref(imagePath);
+      await storageRef.putFile(image);
+      final url = await storageRef.getDownloadURL();
+      _firestoreInstance
+          .collection("persona")
+          .doc(usuarioActual.uid)
+          .update({"foto": url});
+    }
+  }
+
+  //Actualiza la contrasena del usuario
+  Future<bool> updateContrasenaPersona(
+      {required String uid,
+      required String actualContrasena,
+      required String nuevaContrasena}) async {
+    bool actualizado = false;
+    //
+
+    final credencial = EmailAuthProvider.credential(
+        email: usuarioActual.email.toString(), password: actualContrasena);
+    await usuarioActual.reauthenticateWithCredential(credencial).then((value) {
+      usuarioActual.updatePassword(nuevaContrasena).then((value) {
+        actualizado = true;
+      });
+    });
+
+    return actualizado;
   }
 
   //
@@ -81,6 +117,7 @@ class PersonaProvider {
     }
     return null;
   }
+
   //Obtner perfil del usuario actual
   Future<PersonaModel?> getUsuarioActual() async {
     final snapshot = await _firestoreInstance
@@ -105,6 +142,20 @@ class PersonaProvider {
     if ((resultado.docs.isNotEmpty)) {
       String dato = resultado.docs.first.get(getField).toString();
       return dato;
+    }
+    return null;
+  }
+
+    Future<String?> getImagenUsuarioActual() async {
+    final snapshot =await  _firestoreInstance
+        .collection('persona')
+        .doc(usuarioActual.uid)
+        .get();
+            
+    String? resultado=(snapshot.get("foto"));
+   
+    if (resultado!=null) {  
+      return resultado;
     }
     return null;
   }

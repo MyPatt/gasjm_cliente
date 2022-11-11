@@ -7,15 +7,19 @@ import 'package:gasjm/app/modules/identificacion/identificacion_page.dart';
 import 'package:gasjm/app/modules/inicio/inicio_binding.dart';
 import 'package:gasjm/app/modules/inicio/inicio_page.dart';
 import 'package:gasjm/app/modules/inicio/proceso_pedido/proceso_pedido_binding.dart';
-import 'package:gasjm/app/modules/inicio/proceso_pedido/proceso_pedido_page.dart'; 
+import 'package:gasjm/app/modules/inicio/proceso_pedido/proceso_pedido_page.dart';
 import 'package:gasjm/app/modules/login/login_binding.dart';
-import 'package:gasjm/app/modules/login/login_page.dart'; 
+import 'package:gasjm/app/modules/login/login_page.dart';
 import 'package:gasjm/app/modules/registrar/registrar_binding.dart';
-import 'package:gasjm/app/modules/registrar/registrar_page.dart'; 
+import 'package:gasjm/app/modules/registrar/registrar_page.dart';
 import 'package:gasjm/app/modules/splash/splash_binding.dart';
 import 'package:gasjm/app/modules/splash/splash_page.dart';
 import 'package:gasjm/app/modules/ubicacion/ubicacion_binding.dart';
 import 'package:gasjm/app/modules/ubicacion/ubicacion_page.dart';
+import 'package:gasjm/app/modules/perfil/perfil_binding.dart';
+import 'package:gasjm/app/modules/perfil/perfil_page.dart';
+import 'package:gasjm/app/modules/perfil/widgets/form_contrasena.dart';
+import 'package:gasjm/app/modules/perfil/widgets/form_direccion.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
@@ -40,7 +44,6 @@ class AppPages {
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
- 
     GetPage(
       name: AppRoutes.registrar,
       page: () => const RegistrarPage(),
@@ -63,6 +66,27 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
+      name: AppRoutes.perfil,
+      page: () => PerfilPage(),
+      binding: PerfilBinding(),
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: AppRoutes.direccion,
+      page: () => const FormDireccion(),
+      // binding: PerfilBinding(),
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
+      name: AppRoutes.contrasena,
+      page: () => const FormContrasena(),
+      // binding: PerfilBinding(),
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+    GetPage(
       name: AppRoutes.procesopedido,
       page: () => const ProcesoPedidoPage(),
       binding: ProcesoPedidoBinding(),
@@ -76,7 +100,6 @@ class AppPages {
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
-
     GetPage(
       name: AppRoutes.editaragenda,
       page: () => const EditarAgendaPage(),
@@ -84,7 +107,5 @@ class AppPages {
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
-    
-    
   ];
 }

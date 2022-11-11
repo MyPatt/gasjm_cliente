@@ -22,9 +22,11 @@ class InicioController extends GetxController {
 
   /* Variables para obtener datos del usuario */
   Rx<PersonaModel?> usuario = Rx(null);
-
+//
+  RxString imagenUsuario = ''.obs;
   //Repositorio de pedidos
   final _pedidoRepository = Get.find<PedidoRepository>();
+  final _personaRepository = Get.find<PersonaRepository>();
 
   //Repositorio de productos
   final _productoRepository = Get.find<ProductoRepository>();
@@ -64,13 +66,16 @@ class InicioController extends GetxController {
   @override
   void onInit() {
     //Obtiene datos del usuario que inicio sesion
-
+    _cargarFotoPerfil();
     //Obtiene ubicacion actual del dispositivo
 
     //Obtener datos del producto
 
-    Future.wait(
-        [getUsuarioActual(), getUbicacionUsuario(), getPrecioProducto()]);
+    Future.wait([
+      getUsuarioActual(),
+      getUbicacionUsuario(),
+      getPrecioProducto(),
+    ]);
 
     super.onInit();
   }
@@ -94,6 +99,11 @@ class InicioController extends GetxController {
   }
 
   /* OTROS METODOS */
+/*METODO PARA CARGAR DATOS DE INICIO */
+  Future<void> _cargarFotoPerfil() async {
+    imagenUsuario.value =
+        await _personaRepository.getImagenUsuarioActual() ?? '';
+  }
 
 //Obtener informacion del cliente conectado
   Future<void> getUsuarioActual() async {

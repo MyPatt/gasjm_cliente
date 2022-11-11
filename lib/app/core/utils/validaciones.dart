@@ -134,4 +134,18 @@ class Validacion {
     }  
     return null;
   }
+ //Metodo para validar el numero celular que tenga 10 digitos
+
+  static String? validarCelular(String? value) {
+    if (value == null) {
+      return null;
+    }
+    if (value.isEmpty) {
+      return null;
+    }
+    if (value.length < 10 || value.length > 10) {
+      return 'El número celular debe tener 10 caracteres';
+    }
+    return null;
+  }
 }

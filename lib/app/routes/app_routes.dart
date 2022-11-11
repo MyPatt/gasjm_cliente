@@ -3,13 +3,14 @@ class AppRoutes {
   static const ubicacion = "/ubicacion";
   static const identificacion = "/identificacion";
   static const login = "/login";
-  static const registrar = "/registrar"; 
+  static const registrar = "/registrar";
   static const inicio = "/inicio";
+  static const perfil = "/perfil";
+  static const contrasena = "/contrasena";
+  static const direccion = "/direccion";
 
   static const agenda = "/agenda";
-  static const editaragenda = "/ediitaragenda";
-  static const signup = "/signup"; 
-    static const procesopedido = "/procesopedido";
-
-  
+  static const editaragenda = "/editaragenda";
+  static const signup = "/signup";
+  static const procesopedido = "/procesopedido";
 }

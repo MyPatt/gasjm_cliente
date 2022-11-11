@@ -12,19 +12,9 @@ class AutenticacionUsuario extends Equatable {
   const AutenticacionUsuario(this.uid, this.nombre, this.perfil);
 
   @override
-  List<Object?> get props => [uid, nombre,perfil];
+  List<Object?> get props => [uid, nombre, perfil];
 }
 
-/*Original
-class AutenticacionUsuario extends Equatable {
-  final String uid;
-
-  const AutenticacionUsuario(this.uid);
-
-  @override
-  List<Object?> get props => [uid];
-}
-*/
 //Clase abstracta
 abstract class AutenticacionRepository {
   AutenticacionUsuario? get autenticacionUsuario;
@@ -42,11 +32,6 @@ abstract class AutenticacionRepository {
 
   //Crear usuario  con datos
   Future<AutenticacionUsuario?> registrarUsuario(PersonaModel usuario);
-  Future<AutenticacionUsuario?>registrarUsuarioConGoogle(UsuarioModel usuario);
-
-//Iniciar sesion con google
-  Future<AutenticacionUsuario?> iniciarSesionConGoogle();
- 
 
 //Cerrar sesion
   Future<void> cerrarSesion();

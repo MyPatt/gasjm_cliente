@@ -44,27 +44,11 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
     return _usuarioDeFirebase(resultadoAutenticacion.user);
   }
 
-  @override
-  Future<AutenticacionUsuario?> iniciarSesionConGoogle() async {
-    final usuarioGoogle = await GoogleSignIn().signIn();
-    final autenticacionGoogle = await usuarioGoogle?.authentication;
-
-    final credencial = GoogleAuthProvider.credential(
-      accessToken: autenticacionGoogle?.accessToken,
-      idToken: autenticacionGoogle?.idToken,
-    );
-
-    final resultadoAutenticacion =
-        await FirebaseAuth.instance.signInWithCredential(credencial);
-    return _usuarioDeFirebase(resultadoAutenticacion.user);
-  }
-
  
   @override
-  Future<void> cerrarSesion() async {
-    final googleSignIn = GoogleSignIn();
+  Future<void> cerrarSesion() async { 
     await Future.delayed(const Duration(seconds: 3));
-    await googleSignIn.signOut();
+ 
     await _firebaseAutenticacion.signOut();
   }
   @override
