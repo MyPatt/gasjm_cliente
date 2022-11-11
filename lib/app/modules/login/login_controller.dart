@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart'; 
-import 'package:gasjm/app/core/utils/mensajes.dart'; 
+import 'package:flutter/material.dart';
+import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
 
 import 'package:get/get.dart';
- 
+
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginController extends GetxController {
@@ -20,11 +20,11 @@ class LoginController extends GetxController {
   final contrasenaTextoController = TextEditingController();
 
   bool estadoProceso = false;
-   
+
 //
   @override
-  void onInit() { 
-    _obtenerCorreo();
+  void onInit() {
+    Future.wait([_obtenerCorreo()]);
 
     super.onInit();
   }
@@ -48,8 +48,7 @@ class LoginController extends GetxController {
   //** Autenticacion para iniciar sesion **
   //Dependencia de AutenticacionRepository
   final _autenticacioRepository = Get.find<AutenticacionRepository>();
- 
- 
+
 //Inicar sesion con correo
 
   //Existe algun error si o no
@@ -66,10 +65,15 @@ class LoginController extends GetxController {
         correoTextoController.text,
         contrasenaTextoController.value.text,
       );
-      
+
       //
-      Mensajes.showGetSnackbar(titulo: 'Mensaje', mensaje: '¡Bienvenido a GasJM!',icono: const Icon(Icons.waving_hand_outlined,color: Colors.white,)); 
- 
+      Mensajes.showGetSnackbar(
+          titulo: 'Mensaje',
+          mensaje: '¡Bienvenido a GasJM!',
+          icono: const Icon(
+            Icons.waving_hand_outlined,
+            color: Colors.white,
+          ));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         errorParaCorreo.value =
@@ -84,11 +88,12 @@ class LoginController extends GetxController {
   }
 
   //Obtener correo de forma local
-  _obtenerCorreo() async {
+  Future<void> _obtenerCorreo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     final s = prefs.getString("correo_usuario");
-    correoTextoController.text = s ?? '';
+    correoTextoController.text = s!;
+    print(" sssss $s ");
   }
 
   //Remover correo de forma local

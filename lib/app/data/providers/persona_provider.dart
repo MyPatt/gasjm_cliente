@@ -92,4 +92,21 @@ class PersonaProvider {
     }
     return null;
   }
+
+  //Retorna datos personales publicos de la persona
+  Future<String?> getDatoPersonaPorField(
+      {required String field,
+      required String dato,
+      required String getField}) async {
+    final resultado = await _firestoreInstance
+        .collection("persona")
+        .where(field, isEqualTo: dato)
+        .get();
+    if ((resultado.docs.isNotEmpty)) {
+      String dato = resultado.docs.first.get(getField).toString();
+      return dato;
+    }
+    return null;
+  }
+
 }

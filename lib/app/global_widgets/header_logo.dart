@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:gasjm/app/core/theme/app_theme.dart';
 
 class HeaderLogo extends StatelessWidget {
   const HeaderLogo({Key? key}) : super(key: key);
@@ -12,14 +13,8 @@ class HeaderLogo extends StatelessWidget {
             height: 96.0,
             width: 96.0,
             child: CircleAvatar(
-              backgroundColor: Colors.transparent,
-              //foregroundColor: this.foregroundColor,
-
-              child: Container(
-                  height: 85,
-                  child: const Image(
-                    image: AssetImage("assets/icons/logogasjm.png"),
-                  )),
+              backgroundImage: AssetImage("assets/icons/gasjm.png"),
+              radius: 50,
             ),
             decoration: BoxDecoration(
               border: Border.all(

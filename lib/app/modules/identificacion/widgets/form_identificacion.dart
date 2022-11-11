@@ -45,18 +45,25 @@ class FormIdentificacion extends StatelessWidget {
                           "Ingrese su número de identificación para iniciar sesión"),
                   SizedBox(
                       height: Responsive.getScreenSize(context).height * .05),
-                  InputText(
-                    controller: _.cedulaTextoController,
-                    autofocus: true,
-                    iconPrefix: Icons.credit_card,
-                    keyboardType: TextInputType.phone,
-                    textInputAction: TextInputAction.done,
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ],
-                    validator: Validacion.validarCedula,
-                    labelText: "Cédula",
-                  ),
+                  Obx(() {
+                    return AbsorbPointer(
+                      absorbing: _.cargando.value,
+                      child: InputText(
+                        controller: _.cedulaTextoController,
+                        autofocus: true,
+                        iconPrefix: Icons.credit_card,
+                        keyboardType: TextInputType.phone,
+                        textInputAction: TextInputAction.done,
+                        inputFormatters: <TextInputFormatter>[
+                          LengthLimitingTextInputFormatter(10),
+                          FilteringTextInputFormatter.digitsOnly
+                        ],
+                        validator: Validacion.validarCedula,
+                        labelText: "Cédula",
+                        // onChanged: _.onChangedIdentificacion,
+                      ),
+                    );
+                  }),
                   SizedBox(
                       height: Responsive.getScreenSize(context).height * .05),
                   Obx(() {
@@ -64,14 +71,20 @@ class FormIdentificacion extends StatelessWidget {
                     return Stack(
                       alignment: Alignment.center,
                       children: [
-                        PrimaryButton(
-                            texto: "Siguiente",
-                            onPressed: () {
-                              if (_.formKey.currentState?.validate() == true) {
-                                _.cargarPerfil();
-                              }
-                            }),
-                        if (estadoProceso) const CircularProgressIndicator(backgroundColor: Colors.white),
+                        Visibility(
+                          visible: !_.cargando.value,
+                          child: PrimaryButton(
+                              texto: "Siguiente",
+                              onPressed: () {
+                                if (_.formKey.currentState?.validate() ==
+                                    true) {
+                                  _.cargarRegistroOLogin();
+                                }
+                              }),
+                        ),
+                        if (estadoProceso)
+                          const CircularProgressIndicator(
+                              backgroundColor: Colors.white),
                       ],
                     );
                   }),

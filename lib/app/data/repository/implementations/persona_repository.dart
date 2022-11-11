@@ -19,6 +19,14 @@ class PersonaRepositoryImpl extends PersonaRepository {
       _provider.getPersonaPorField(field: field, dato: dato);
 
   @override
+  Future<String?> getDatoPersonaPorField(
+          {required String field,
+          required String dato,
+          required String getField}) =>
+      _provider.getDatoPersonaPorField(
+          field: field, dato: dato, getField: getField);
+
+  @override
   Future<List<PersonaModel>?> getPersonas() => _provider.getPersonas();
 
   @override
