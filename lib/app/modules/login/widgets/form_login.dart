@@ -1,5 +1,5 @@
 import 'package:gasjm/app/core/utils/responsive.dart';
-import 'package:gasjm/app/global_widgets/button_google.dart';
+import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/header_logo.dart';
 import 'package:gasjm/app/global_widgets/input_text.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';

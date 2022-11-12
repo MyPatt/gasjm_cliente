@@ -1,10 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
-import 'package:gasjm/app/data/models/persona_model.dart'; 
+import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
-import 'package:gasjm/app/routes/app_routes.dart'; 
+import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:location/location.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -39,8 +39,6 @@ class RegistrarController extends GetxController {
     super.onInit();
   }
 
-  
-
   @override
   void onClose() {
     super.onClose();
@@ -61,7 +59,7 @@ class RegistrarController extends GetxController {
       await Future.delayed(const Duration(seconds: 1));
       Get.toNamed(AppRoutes.login);
     } catch (e) {
-         Mensajes.showGetSnackbar(
+      Mensajes.showGetSnackbar(
           titulo: 'Alerta',
           mensaje:
               'Ha ocurrido un error, por favor inténtelo de nuevo más tarde.',
@@ -77,56 +75,6 @@ class RegistrarController extends GetxController {
   final _authRepository = Get.find<AutenticacionRepository>();
 
   //Metodo para registrar
-
-  Future<void> registrarUsuario() async {
-    //Obtener datos
-    final nombre = nombreTextoController.text;
-    final apellido = apellidoTextoController.text;
-    final correo = correoElectronicoTextoController.text;
-    final contrasena = contrasenaTextoController.text;
-
-    //Guardar en model
-    PersonaModel usuarioDatos = PersonaModel(
-        cedulaPersona: cedula,
-        nombrePersona: nombre,
-        apellidoPersona: apellido,
-        idPerfil: perfil,
-        contrasenaPersona: contrasena,
-        correoPersona: correo);
-
-//
-    try {
-      cargandoParaCorreo.value = true;
-
-      errorParaCorreo.value = null;
-
-//En firebase
-      await _authRepository.registrarUsuario(usuarioDatos);
-//Remover datos locales
-      _removerCedulaYPerfil();
-
-      //Mensaje de ingreso
-      Mensajes.showGetSnackbar(
-          titulo: 'Mensaje',
-          mensaje: '¡Bienvenido a GasJM!',
-          icono: const Icon(
-            Icons.waving_hand_outlined,
-            color: Colors.white,
-          ));
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'weak-password') {
-        errorParaCorreo.value = 'La contraseña es demasiado débil';
-      } else if (e.code == 'email-already-in-use') {
-        errorParaCorreo.value =
-            'La cuenta ya existe para ese correo electrónico';
-      } else {
-        errorParaCorreo.value = "Se produjo un error inesperado.";
-      }
-    }
-    cargandoParaCorreo.value = false;
-  }
-
-   //Metodo para registrar
 
   Future<void> registrarCliente() async {
     //Obtener datos
@@ -156,7 +104,8 @@ class RegistrarController extends GetxController {
           contrasenaPersona: contrasena,
           correoPersona: correo,
           direccionPersona: direccionPersona);
-
+//Testear
+      await Future.delayed(const Duration(seconds: 1));
 //En firebase
       await _authRepository.registrarUsuario(usuarioDatos);
 
@@ -170,6 +119,7 @@ class RegistrarController extends GetxController {
             Icons.waving_hand_outlined,
             color: Colors.white,
           ));
+//
 
       //
     } on FirebaseAuthException catch (e) {
@@ -194,7 +144,6 @@ class RegistrarController extends GetxController {
     }
     cargandoParaCorreo.value = false;
   }
-
 
 //Obtener cedula de forma local
   _obtenerCedulaYPerfil() async {

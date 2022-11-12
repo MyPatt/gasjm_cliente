@@ -65,12 +65,15 @@ class LoginController extends GetxController {
       cargandoParaCorreo.value = true;
 
       errorParaCorreo.value = null;
+      //Testear
+      await Future.delayed(const Duration(seconds: 1));
+      //
       await _autenticacioRepository.iniciarSesionConCorreoYContrasena(
         correoTextoController.text,
         contrasenaTextoController.value.text,
       );
 
-      //
+      //Mensaje de bienvenida
       Mensajes.showGetSnackbar(
           titulo: 'Mensaje',
           mensaje: '¡Bienvenido a GasJM!',
@@ -86,7 +89,15 @@ class LoginController extends GetxController {
         errorParaCorreo.value = 'Contraseña incorrecta.';
       }
     } catch (e) {
-      errorParaCorreo.value = 'Error de inicio de sesión. Inténtalo de nuevo.';
+      Mensajes.showGetSnackbar(
+          titulo: 'Alerta',
+          mensaje:
+              'Ha ocurrido un error, por favor inténtelo de nuevo más tarde.',
+          duracion: const Duration(seconds: 4),
+          icono: const Icon(
+            Icons.error_outline_outlined,
+            color: Colors.white,
+          ));
     }
     cargandoParaCorreo.value = false;
   }
