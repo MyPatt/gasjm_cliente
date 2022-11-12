@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart'; 
+import 'package:gasjm/app/core/theme/app_theme.dart';
+import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/modules/perfil/perfil_controller.dart';
-import 'package:gasjm/app/core/utils/responsive.dart'; 
+import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -13,7 +14,7 @@ class FormDireccion extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<PerfilController>(
       builder: (_) => Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.background,
         appBar: AppBar(
           backgroundColor: AppTheme.blueBackground,
           title: const Text('Dirección'),
@@ -89,10 +90,7 @@ class FormDireccion extends StatelessWidget {
                             },
                           ));
                     } else {
-                      return const CircularProgressIndicator(
-                        backgroundColor: Colors.white,
-                        color: AppTheme.blueBackground,
-                      );
+                      return const CircularProgress();
                     }
                   },
                 ))

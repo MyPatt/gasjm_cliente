@@ -5,6 +5,7 @@ import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/routes/app_pages.dart';
 import 'package:gasjm/app/modules/splash/splash_binding.dart';
 import 'package:gasjm/app/modules/splash/splash_page.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MyApp extends StatelessWidget {
 //controlador de autenticacion
@@ -18,9 +19,10 @@ class MyApp extends StatelessWidget {
         init: autenticacionController,
         builder: (_) {
           return GetMaterialApp(
+            localizationsDelegates: GlobalMaterialLocalizations.delegates,
+            supportedLocales: const [Locale('en'), Locale('es')],
             debugShowCheckedModeBanner: false,
             title: 'Gas J&M',
-            
             theme: ThemeData(
                 primarySwatch: Colors.blue,
                 textSelectionTheme: const TextSelectionThemeData(

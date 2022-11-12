@@ -92,7 +92,7 @@ class FormUsuario extends StatelessWidget {
 
                       InkWell(
                         onTap: () {
-                          _.selectDate(context);
+                          _.seleccionarFechaDeNacimiento(context);
                         },
                         child: InputText(
                           iconPrefix: Icons.calendar_month_outlined,

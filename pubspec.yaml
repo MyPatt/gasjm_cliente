@@ -25,6 +25,7 @@ dependencies:
   flutter_card_swipper: ^0.4.0
   flutter_clean_calendar: ^1.1.0
   flutter_facebook_auth: ^4.0.1
+  flutter_localization: ^0.1.8
   flutter_secure_storage: ^4.2.0
   flutter_spinkit: null
   flutter_svg: ^0.22.0
@@ -45,7 +46,6 @@ dependencies:
   syncfusion_flutter_calendar: ^19.1.54
 
 dev_dependencies:
-  #icono app
   flutter_launcher_icons: "^0.9.2"
   flutter_lints: ^1.0.3
   flutter_test:
