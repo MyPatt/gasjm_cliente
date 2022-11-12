@@ -10,6 +10,6 @@ class Responsive {
   }
 
   static double hp(BuildContext context) {
-    return MediaQuery.of(context).size.width;
+    return MediaQuery.of(context).size.height;
   }
 }

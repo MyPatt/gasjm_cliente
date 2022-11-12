@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/input_text.dart';
 import 'package:gasjm/app/modules/perfil/perfil_controller.dart';
 import 'package:flutter/services.dart';
@@ -24,7 +25,8 @@ class FormUsuario extends StatelessWidget {
         // alignment: Alignment.center,
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: LayoutBuilder(builder: (context, constraint) {
-          return Obx(()=> AbsorbPointer(
+          return Obx(
+            () => AbsorbPointer(
               absorbing: _.cargandoDatos.value,
               child: Form(
                 key: _.claveFormRegistrar,
@@ -45,33 +47,38 @@ class FormUsuario extends StatelessWidget {
                         labelText: "Cédula",
                       ),
                       SizedBox(
-                          height: Responsive.getScreenSize(context).height * .02),
+                          height:
+                              Responsive.getScreenSize(context).height * .02),
                       InputText(
                         iconPrefix: Icons.person_outlined,
                         keyboardType: TextInputType.name,
                         inputFormatters: <TextInputFormatter>[
                           LengthLimitingTextInputFormatter(10),
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z]')),
                         ],
                         labelText: "Nombre",
                         controller: _.nombreTextoController,
                         validator: Validacion.validarNombre,
                       ),
                       SizedBox(
-                          height: Responsive.getScreenSize(context).height * .02),
+                          height:
+                              Responsive.getScreenSize(context).height * .02),
                       InputText(
                         iconPrefix: Icons.person_outlined,
                         keyboardType: TextInputType.name,
                         inputFormatters: <TextInputFormatter>[
                           LengthLimitingTextInputFormatter(10),
-                          FilteringTextInputFormatter.allow(RegExp(r'[a-zA-Z]')),
+                          FilteringTextInputFormatter.allow(
+                              RegExp(r'[a-zA-Z]')),
                         ],
                         labelText: "Apellido",
                         controller: _.apellidoTextoController,
                         validator: Validacion.validarApellido,
                       ),
                       SizedBox(
-                          height: Responsive.getScreenSize(context).height * .02),
+                          height:
+                              Responsive.getScreenSize(context).height * .02),
                       InputText(
                         iconPrefix: Icons.email_outlined,
                         keyboardType: TextInputType.emailAddress,
@@ -80,8 +87,9 @@ class FormUsuario extends StatelessWidget {
                         validator: Validacion.validarCorreoElectronico,
                       ),
                       SizedBox(
-                          height: Responsive.getScreenSize(context).height * .02),
-          
+                          height:
+                              Responsive.getScreenSize(context).height * .02),
+
                       InkWell(
                         onTap: () {
                           _.selectDate(context);
@@ -94,9 +102,10 @@ class FormUsuario extends StatelessWidget {
                           controller: _.fechaNacimientoTextoController,
                         ),
                       ),
-          
+
                       SizedBox(
-                          height: Responsive.getScreenSize(context).height * .02),
+                          height:
+                              Responsive.getScreenSize(context).height * .02),
                       InputText(
                         iconPrefix: Icons.phone_android_outlined,
                         keyboardType: TextInputType.phone,
@@ -109,7 +118,8 @@ class FormUsuario extends StatelessWidget {
                         validator: Validacion.validarCelular,
                       ),
                       SizedBox(
-                          height: Responsive.getScreenSize(context).height * .02),
+                          height:
+                              Responsive.getScreenSize(context).height * .02),
                       GestureDetector(
                         child: InputText(
                           iconPrefix: Icons.room_outlined, enabled: false,
@@ -119,9 +129,10 @@ class FormUsuario extends StatelessWidget {
                         ),
                         onTap: () => _.cargarDireccionActual(),
                       ),
-          
+
                       SizedBox(
-                          height: Responsive.getScreenSize(context).height * .04),
+                          height:
+                              Responsive.getScreenSize(context).height * .04),
                       GestureDetector(
                         child: Text(
                           "Cambiar contraseña",
@@ -132,28 +143,30 @@ class FormUsuario extends StatelessWidget {
                         ),
                         onTap: () => Get.toNamed(AppRoutes.contrasena),
                       ),
-          
+
                       //
                       SizedBox(
-                          height: Responsive.getScreenSize(context).height * .05),
-          
+                          height:
+                              Responsive.getScreenSize(context).height * .05),
+
                       Obx(() {
                         final estadoProceso = _.cargandoDatos.value;
                         return Stack(
                           alignment: Alignment.center,
                           children: [
-                            PrimaryButton(
-                                texto: "Guardar",
-                                onPressed: () {
-                                  if (_.claveFormRegistrar.currentState
-                                          ?.validate() ==
-                                      true) {
-                                    _.guardarUsuario();
-                                  }
-                                }),
-                            if (estadoProceso)
-                              const CircularProgressIndicator(
-                                  backgroundColor: Colors.white),
+                            Visibility(
+                              visible: !_.cargandoDatos.value,
+                              child: PrimaryButton(
+                                  texto: "Guardar",
+                                  onPressed: () {
+                                    if (_.claveFormRegistrar.currentState
+                                            ?.validate() ==
+                                        true) {
+                                      _.guardarUsuario();
+                                    }
+                                  }),
+                            ),
+                            if (estadoProceso) const CircularProgress(),
                           ],
                         );
                       }),

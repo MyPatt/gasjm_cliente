@@ -11,7 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MenuLateral extends StatelessWidget {
   const MenuLateral({key, required this.imagenPerfil}) : super(key: key);
 
-  final RxString? imagenPerfil;
+  final RxString imagenPerfil;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,7 @@ class MenuLateral extends StatelessWidget {
   }
 }
 
-Widget _buildDrawerHeader(RxString? imagenPerfil) {
+Widget _buildDrawerHeader(RxString imagenPerfil) {
   return DrawerHeader(
       margin: EdgeInsets.zero,
       padding: EdgeInsets.zero,
@@ -109,7 +109,7 @@ Widget _buildDrawerHeader(RxString? imagenPerfil) {
           child:  Obx(() => CircleAvatar(
                 radius: 40.0,
                 backgroundColor: Colors.white,
-                child: imagenPerfil == null
+                child: imagenPerfil == ''
                     ? const CircleAvatar(
                         backgroundColor: AppTheme.light,
                         radius: 38.0,
