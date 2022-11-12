@@ -99,14 +99,17 @@ Widget _buildDrawerHeader(RxString imagenPerfil) {
         Container(
           margin: const EdgeInsets.only(bottom: 48),
           height: 150,
-          decoration: const BoxDecoration(
+          decoration:const BoxDecoration(
             color: AppTheme.blueBackground,
-            border: Border(bottom: BorderSide.none, top: BorderSide.none),
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(15),
+            ),
           ),
         ),
         Align(
           alignment: Alignment.bottomCenter,
-          child:  Obx(() => CircleAvatar(
+          child: Obx(
+            () => CircleAvatar(
                 radius: 40.0,
                 backgroundColor: Colors.white,
                 child: imagenPerfil.isEmpty

@@ -29,7 +29,7 @@ List<Transaction> transactions = List.generate(2, (index) {
           ))
           .millisecondsSinceEpoch);
 })
-  ..sort((v1, v2) => (v2.createdMillis!-v1.createdMillis!.toInt()));
+  ..sort((v1, v2) => (v2.createdMillis! - v1.createdMillis!.toInt()));
 
 class TransactionPage extends StatefulWidget {
   const TransactionPage({Key? key}) : super(key: key);
@@ -43,6 +43,11 @@ class _TransactionPageState extends State<TransactionPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            bottom: Radius.circular(15),
+          ),
+        ),
         backgroundColor: AppTheme.blueBackground,
         elevation: 0.0,
         title: const Text(
@@ -63,8 +68,8 @@ class _TransactionPageState extends State<TransactionPage> {
       itemCount: transactions.length,
       itemBuilder: (context, index) {
         Transaction transaction = transactions[index];
-        DateTime date =
-            DateTime.fromMillisecondsSinceEpoch(transaction.createdMillis!.toInt());
+        DateTime date = DateTime.fromMillisecondsSinceEpoch(
+            transaction.createdMillis!.toInt());
         String dateString = DateFormat("d MMM, y").format(date);
 
         if (today == dateString) {

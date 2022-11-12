@@ -17,6 +17,7 @@ class ContentMap extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
+                     
                         color: Colors.transparent,
                         alignment: Alignment.centerLeft,
                         height: Responsive.getScreenSize(context).height * .05,
@@ -35,7 +36,8 @@ class ContentMap extends StatelessWidget {
                           keyboardType: TextInputType.none,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
-                                  borderSide: const BorderSide(color: Colors.white),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white),
                                   borderRadius: BorderRadius.circular(10))),
                         ),
                       ),

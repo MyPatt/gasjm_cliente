@@ -15,6 +15,12 @@ class PerfilPage extends StatelessWidget {
       builder: (_) => Scaffold(
         backgroundColor: AppTheme.background,
         appBar: AppBar(
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(10),
+            ),
+          ),
           leading: BackButton(
             //color: AppTheme.blueDark,
             onPressed: () {
@@ -22,7 +28,8 @@ class PerfilPage extends StatelessWidget {
             },
           ),
           backgroundColor: AppTheme.blueBackground,
-          // actions: const [MenuAppBar()],
+          // actions: const [MenuAppBar(
+
           title: const Text('Mi cuenta'),
         ),
         body: SafeArea(

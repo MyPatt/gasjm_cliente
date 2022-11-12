@@ -16,6 +16,12 @@ class FormDireccion extends StatelessWidget {
       builder: (_) => Scaffold(
         backgroundColor: AppTheme.background,
         appBar: AppBar(
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(10),
+            ),
+          ),
           backgroundColor: AppTheme.blueBackground,
           title: const Text('Dirección'),
         ),

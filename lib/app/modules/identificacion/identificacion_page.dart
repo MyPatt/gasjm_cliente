@@ -11,8 +11,13 @@ class IdentificacionPage extends StatelessWidget {
     return GetBuilder<IdentificacionController>(
       builder: (_) => Scaffold(
         appBar: AppBar(
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(10),
+            ),
+          ),
           backgroundColor: Colors.white,
-          elevation: 0.0,
           automaticallyImplyLeading: false,
         ),
         backgroundColor: Colors.white,

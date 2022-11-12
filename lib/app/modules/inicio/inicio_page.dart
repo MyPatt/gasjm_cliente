@@ -16,11 +16,17 @@ class InicioPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<InicioController>(
       builder: (_) => Scaffold(
+        backgroundColor: AppTheme.background,
         //Menú deslizable a la izquierda con opciones del  usuario
-        drawer: MenuLateral(
-            imagenPerfil: _.imagenUsuario),
+        drawer: MenuLateral(imagenPerfil: _.imagenUsuario),
         //Barra de herramientas de opciones para  agenda y  historial
         appBar: AppBar(
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(10),
+            ),
+          ),
           backgroundColor: AppTheme.blueBackground,
           actions: const [MenuAppBar()],
           title: const Text('GasJ&M'),
@@ -43,4 +49,3 @@ class InicioPage extends StatelessWidget {
     );
   }
 }
-

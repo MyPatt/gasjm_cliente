@@ -14,8 +14,13 @@ class RegistrarPage extends StatelessWidget {
       builder: (_) => Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          elevation: 0,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              bottom: Radius.circular(10),
+            ),
+          ),
           backgroundColor: Colors.white,
-          elevation: 0.0,
           leading: BackButton(
             color: AppTheme.blueDark,
             onPressed: () {

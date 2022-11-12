@@ -15,6 +15,11 @@ class EditarAgendaPage extends StatelessWidget {
     return GetBuilder<EditarAgendaController>(
         builder: (_) => Scaffold(
               appBar: AppBar(
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.vertical(
+                    bottom: Radius.circular(15),
+                  ),
+                ),
                 backgroundColor: AppTheme.blueBackground,
                 elevation: 0.0,
                 title: const Text("Agenda de pedidos"),

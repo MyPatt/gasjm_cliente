@@ -12,13 +12,17 @@ class AgendaClientePage extends StatelessWidget {
     return GetBuilder<AgendaClienteController>(
         builder: (_) => Scaffold(
             appBar: AppBar(
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(15),
+                ),
+              ),
               automaticallyImplyLeading: true,
               backgroundColor: AppTheme.blueBackground,
               elevation: 0.0,
               title: const Text(
                 "Agenda de pedidos",
               ),
-
               actions: [
                 ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
