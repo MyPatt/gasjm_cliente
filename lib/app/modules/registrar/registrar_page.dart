@@ -16,9 +16,9 @@ class RegistrarPage extends StatelessWidget {
         appBar: AppBar(
           backgroundColor: Colors.white,
           elevation: 0.0,
-          leading:  BackButton(
+          leading: BackButton(
             color: AppTheme.blueDark,
-              onPressed: () {
+            onPressed: () {
               Get.offNamed(AppRoutes.identificacion);
             },
           ),
@@ -29,7 +29,7 @@ class RegistrarPage extends StatelessWidget {
             child: SizedBox(
                 height: MediaQuery.of(context).size.height -
                     MediaQuery.of(context).padding.top,
-                child: Content()),
+                child: const Contenido()),
           ),
         ),
       ),

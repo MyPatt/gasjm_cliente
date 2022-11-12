@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 
 class PrimaryButton extends StatelessWidget {
-  // ignore: use_key_in_widget_constructors
-  PrimaryButton({
+  
+  const PrimaryButton({Key? key, 
     required this.texto,
     required this.onPressed,
-  });
+  }) : super(key: key);
 
   final void Function() onPressed;
   final String texto;

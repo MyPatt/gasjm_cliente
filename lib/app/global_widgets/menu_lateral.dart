@@ -109,7 +109,7 @@ Widget _buildDrawerHeader(RxString imagenPerfil) {
           child:  Obx(() => CircleAvatar(
                 radius: 40.0,
                 backgroundColor: Colors.white,
-                child: imagenPerfil == ''
+                child: imagenPerfil.isEmpty
                     ? const CircleAvatar(
                         backgroundColor: AppTheme.light,
                         radius: 38.0,

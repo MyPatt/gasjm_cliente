@@ -49,7 +49,7 @@ class InicioController extends GetxController {
   /* Variables para google maps */
   TextEditingController direccionTextController = TextEditingController();
 
-  GoogleMapController? _mapaController = null;
+  GoogleMapController? _mapaController;
 
   final Rx<LatLng> _posicionInicialCliente =
       const LatLng(-12.122711, -77.027475).obs;
@@ -235,9 +235,8 @@ class InicioController extends GetxController {
         _posicionInicialCliente.value.longitude,
         localeIdentifier: "en_US");
     direccionTextController.text = placemark[0].name!;
-    print('=');
-    print(placemark[0].name);
-//
+ 
+ 
   }
 
   Future<void> getUbicacionUsuario() async {
@@ -326,9 +325,7 @@ class InicioController extends GetxController {
 
     _marcadores[markerId] = updatedMarker;
 
-    _marcadores.forEach((key, value) {
-      print(value.markerId);
-    });
+  
   }
 
   void onChangedCantidad(valor) {

@@ -5,6 +5,8 @@ import 'package:gasjm/app/modules/ubicacion/widgets/content.dart';
 import 'package:get/get.dart';
 
 class UbicacionPage extends StatelessWidget {
+  const UbicacionPage({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return GetBuilder<UbicacionController>(

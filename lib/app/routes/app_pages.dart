@@ -32,14 +32,14 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.ubicacion,
-      page: () => UbicacionPage(),
+      page: () => const UbicacionPage(),
       binding: UbicacionBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
       name: AppRoutes.identificacion,
-      page: () => IdentificacionPage(),
+      page: () => const IdentificacionPage(),
       binding: IdentificacionBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),

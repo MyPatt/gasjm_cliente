@@ -35,7 +35,7 @@ class ContentMap extends StatelessWidget {
                           keyboardType: TextInputType.none,
                           decoration: InputDecoration(
                               border: OutlineInputBorder(
-                                  borderSide: BorderSide(color: Colors.white),
+                                  borderSide: const BorderSide(color: Colors.white),
                                   borderRadius: BorderRadius.circular(10))),
                         ),
                       ),
