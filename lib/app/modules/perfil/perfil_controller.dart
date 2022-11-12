@@ -218,7 +218,6 @@ class PerfilController extends GetxController {
 
   //
   Future<String> _getDireccionXLatLng(LatLng posicion) async {
- 
     List<Placemark> placemark =
         await placemarkFromCoordinates(posicion.latitude, posicion.longitude);
     Placemark lugar = placemark[0];

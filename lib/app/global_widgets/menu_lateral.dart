@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/data/controllers/autenticacion_controller.dart';
 import 'package:gasjm/app/global_widgets/dialogs/progress_dialog.dart';
+import 'package:gasjm/app/global_widgets/modal_alert.dart';
 
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
@@ -73,12 +74,26 @@ class MenuLateral extends StatelessWidget {
             icon: Icons.exit_to_app_outlined,
             text: 'Cerrar sesión',
             onTap: () async {
-              ProgressDialog.show(context, "Cerrando sesión");
+              return showDialog<void>(
+                context: context,
+                barrierDismissible: true,
+                builder: (BuildContext context) {
+                  return ModalAlert(
+                    onPressed: () async {
+                      ProgressDialog.show(context, "Cerrando sesión");
 
-              Get.find<AutenticacionController>().cerrarSesion();
-              SharedPreferences prefs = await SharedPreferences.getInstance();
-              await prefs.remove("cedula_usuario");
-              await prefs.clear();
+                      Get.find<AutenticacionController>().cerrarSesion();
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.remove("cedula_usuario");
+                      await prefs.clear();
+                    },
+                    titulo: 'Cerrar sesión',
+                    mensaje: '¿Está seguro de cerrar sesión en la aplicación?',
+                    icono: Icons.exit_to_app_outlined,
+                  );
+                },
+              );
             },
           ),
           SizedBox(height: MediaQuery.of(context).size.height * .05),
@@ -99,7 +114,7 @@ Widget _buildDrawerHeader(RxString imagenPerfil) {
         Container(
           margin: const EdgeInsets.only(bottom: 48),
           height: 150,
-          decoration:const BoxDecoration(
+          decoration: const BoxDecoration(
             color: AppTheme.blueBackground,
             borderRadius: BorderRadius.vertical(
               bottom: Radius.circular(15),
@@ -112,7 +127,7 @@ Widget _buildDrawerHeader(RxString imagenPerfil) {
             () => CircleAvatar(
                 radius: 40.0,
                 backgroundColor: Colors.white,
-                child: imagenPerfil.isEmpty
+                child: (imagenPerfil.isEmpty )
                     ? const CircleAvatar(
                         backgroundColor: AppTheme.light,
                         radius: 38.0,
