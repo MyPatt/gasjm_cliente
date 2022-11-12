@@ -38,7 +38,7 @@ class LoginController extends GetxController {
   @override
   void onClose() {
     //
-    _removerCorreo();
+    _removerCorreo(); 
     super.onClose();
     //
     correoTextoController.dispose();
@@ -107,7 +107,7 @@ class LoginController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? s = prefs.getString("correo_usuario");
-    correoTextoController.text = s.toString(); 
+    correoTextoController.text = s.toString();
   }
 
   //Remover correo de forma local
@@ -115,4 +115,5 @@ class LoginController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove("correo_usuario");
   }
+
 }

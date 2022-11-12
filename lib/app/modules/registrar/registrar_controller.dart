@@ -118,9 +118,7 @@ class RegistrarController extends GetxController {
           icono: const Icon(
             Icons.waving_hand_outlined,
             color: Colors.white,
-          ));
-//
-
+          )); 
       //
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -155,10 +153,5 @@ class RegistrarController extends GetxController {
     //perfil = p ?? '';
   }
 
-  //Eliminar la cedula del usuario de forma local
-  _removerCedulaYPerfil() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("cedula_usuario");
-    //  await prefs.remove("perfil_usuario");
-  }
+  
 }

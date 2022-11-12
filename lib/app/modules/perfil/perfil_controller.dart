@@ -41,7 +41,7 @@ class PerfilController extends GetxController {
   final RxBool _contrasenaNuevaOculta2 = true.obs;
   RxBool get contrasenaNuevaOculta2 => _contrasenaNuevaOculta2;
   //
-  PersonaModel? _usuario = null;
+  PersonaModel? _usuario;
   PersonaModel? get usuario => _usuario;
 
   final _personaRepository = Get.find<PersonaRepository>();
@@ -98,14 +98,8 @@ class PerfilController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    cedulaTextoController.clear();
-    nombreTextoController.clear();
-    apellidoTextoController.clear();
-    direccionTextoController.clear();
-    fechaNacimientoTextoController.clear();
-    celularTextoController.clear();
-    correoElectronicoTextoController.clear();
-    contrasenaActualTextoController.clear();
+    //Limpiar campos
+    _limpiarCamposDeTodosLosFormsDelUsuario();
   }
 
   /* METODOS PARA CLIENTES */
@@ -224,7 +218,7 @@ class PerfilController extends GetxController {
 
   //
   Future<String> _getDireccionXLatLng(LatLng posicion) async {
-    print(posicion);
+ 
     List<Placemark> placemark =
         await placemarkFromCoordinates(posicion.latitude, posicion.longitude);
     Placemark lugar = placemark[0];
@@ -397,7 +391,7 @@ class PerfilController extends GetxController {
     //  emit(state.copyWith(pickedImage: imageFile));
   }
 
-  Future<void> restablecerContrasena() async {
+  Future<void> restablecerContrasena(BuildContext context) async {
     final contrasenaActual = contrasenaActualTextoController.text;
     final contrasenaNueva1 = contrasenaNueva1TextoController.text;
     final contrasenaNueva2 = contrasenaNueva2TextoController.text;
@@ -406,25 +400,30 @@ class PerfilController extends GetxController {
       errorDeContrasena.value = null;
 
       if (contrasenaNueva1 == contrasenaNueva2) {
-        bool actualizado = await _personaRepository.updateContrasenaPersona(
+        await _personaRepository.updateContrasenaPersona(
             uid: _usuario!.uidPersona.toString(),
-            actualContrasena: contrasenaNueva2,
+            actualContrasena: contrasenaActual,
             nuevaContrasena: contrasenaNueva2);
 
-        //Mensaje de ingreso
-        if (!actualizado) {
-          Mensajes.showGetSnackbar(
-              titulo: 'Mensaje',
-              mensaje: '¡Se guardo con éxito!',
-              icono: const Icon(
-                Icons.save_outlined,
-                color: Colors.white,
-              ));
-        } else {
-          errorDeContrasena.value = "Contraseña actual incorrecta";
-        }
+        //Mensaje de confirmacion
+
+        Mensajes.showGetSnackbar(
+            titulo: 'Mensaje',
+            mensaje: '¡Se guardo con éxito!',
+            icono: const Icon(
+              Icons.save_outlined,
+              color: Colors.white,
+            ));
+
+        //Retornar al pagina de perfil
+        Navigator.of(context).pop();
       } else {
         errorDeContrasena.value = "Las contraseñas no coinciden";
+      }
+      // } catch (e) {
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'wrong-password') {
+        errorDeContrasena.value = 'Contraseña actual incorrecta';
       }
     } catch (e) {
       Mensajes.showGetSnackbar(
@@ -439,5 +438,36 @@ class PerfilController extends GetxController {
     }
     await Future.delayed(const Duration(seconds: 1));
     cargandoDeContrasena.value = false;
+  }
+
+  cargarFormContrasena() {
+    //Limpiar campos
+    _limpiarCamposDelFormContrasena();
+
+    //Ir a la ruta
+    Get.toNamed(AppRoutes.contrasena);
+  }
+
+  void _limpiarCamposDeTodosLosFormsDelUsuario() {
+    cedulaTextoController.dispose();
+    nombreTextoController.dispose();
+    apellidoTextoController.dispose();
+    direccionTextoController.dispose();
+    fechaNacimientoTextoController.dispose();
+    celularTextoController.dispose();
+    correoElectronicoTextoController.dispose();
+    contrasenaActualTextoController.dispose();
+    contrasenaNueva1TextoController.dispose();
+    contrasenaNueva2TextoController.dispose();
+  }
+
+  void _limpiarCamposDelFormContrasena() {
+    contrasenaActualTextoController.clear();
+    contrasenaNueva1TextoController.clear();
+    contrasenaNueva2TextoController.clear();
+    errorDeContrasena.value = '';
+    _contrasenaActualOculta.value = true;
+    _contrasenaNuevaOculta1.value = true;
+    _contrasenaNuevaOculta2.value = true;
   }
 }

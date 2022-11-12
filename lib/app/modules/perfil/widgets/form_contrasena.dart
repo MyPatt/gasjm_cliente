@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/validaciones.dart';
+import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/modules/perfil/perfil_controller.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
@@ -15,7 +16,7 @@ class FormContrasena extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<PerfilController>(
       builder: (_) => Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: AppTheme.background,
         appBar: AppBar(
           backgroundColor: AppTheme.blueBackground,
           title: const Text('Cambiar contraseña'),
@@ -23,17 +24,24 @@ class FormContrasena extends StatelessWidget {
         body: SafeArea(
           bottom: false,
           child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height -
-                  MediaQuery.of(context).padding.top,
-              child: LayoutBuilder(
-                builder: (context, constraint) {
-                  return Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Padding(
-                        padding:
-                            EdgeInsets.only(bottom: constraint.maxHeight * .1),
+              height: Responsive.hp(context) * 0.83,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  color: Colors.white,
+                ),
+                height: 350,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+
+                alignment: Alignment.center,
+                // height: Responsive.hp(context),
+                child: LayoutBuilder(
+                  builder: (context, constraint) {
+                    return Padding(
+                        padding: EdgeInsets.symmetric(
+                            vertical: constraint.maxHeight * .05),
                         child: Obx(
                           () => AbsorbPointer(
                             absorbing: _.cargandoDeContrasena.value,
@@ -43,12 +51,36 @@ class FormContrasena extends StatelessWidget {
                                 SliverFillRemaining(
                                   hasScrollBody: false,
                                   child: Column(
-                                      mainAxisSize: MainAxisSize.max,
                                       mainAxisAlignment:
-                                          MainAxisAlignment.start,
+                                          MainAxisAlignment.center,
                                       crossAxisAlignment:
                                           CrossAxisAlignment.stretch,
                                       children: [
+                                        const CircleAvatar(
+                                          backgroundColor: AppTheme.light,
+                                          child: CircleAvatar(
+                                            backgroundColor: Colors.white,
+                                            child: Icon(
+                                              Icons.lock_person_outlined,
+                                              color: AppTheme.blueDark,
+                                              size: 50,
+                                            ),
+                                            radius: 55.0,
+                                          ),
+                                          radius: 56.0,
+                                        ),
+                                        SizedBox(
+                                            height: Responsive.getScreenSize(
+                                                        context)
+                                                    .height *
+                                                .05),
+                                        const TextDescription(
+                                            text: 'Ingrese los datos'),
+                                        SizedBox(
+                                            height: Responsive.getScreenSize(
+                                                        context)
+                                                    .height *
+                                                .05),
                                         Obx(
                                           () => InputText(
                                             iconPrefix: Icons.lock_outlined,
@@ -82,7 +114,7 @@ class FormContrasena extends StatelessWidget {
                                                 .02),
                                         Obx(
                                           () => InputText(
-                                            iconPrefix: Icons.lock_reset,
+                                            iconPrefix: Icons.lock_outlined,
                                             keyboardType: TextInputType.text,
                                             obscureText:
                                                 _.contrasenaNuevaOculta1.value,
@@ -113,7 +145,7 @@ class FormContrasena extends StatelessWidget {
                                                 .02),
                                         Obx(
                                           () => InputText(
-                                            iconPrefix: Icons.lock_reset,
+                                            iconPrefix: Icons.lock_outlined,
                                             keyboardType: TextInputType.text,
                                             obscureText:
                                                 _.contrasenaNuevaOculta2.value,
@@ -124,7 +156,7 @@ class FormContrasena extends StatelessWidget {
                                             validator:
                                                 Validacion.validarContrasena,
                                             maxLines: 1,
-                                            labelText: "Contraseña nueva",
+                                            labelText: "Confirmar contraseña",
                                             suffixIcon: GestureDetector(
                                               onTap: _.mostrarContrasenaNueva2,
                                               child: Icon(
@@ -163,37 +195,35 @@ class FormContrasena extends StatelessWidget {
                                           return Stack(
                                             alignment: Alignment.center,
                                             children: [
-                                              PrimaryButton(
-                                                  texto: "Guardar",
-                                                  onPressed: () {
-                                                    if (_.claveFormContrasena
-                                                            .currentState
-                                                            ?.validate() ==
-                                                        true) {
-                                                      _.restablecerContrasena();
-                                                    }
-                                                  }),
+                                              Visibility(
+                                                visible: !_
+                                                    .cargandoDeContrasena.value,
+                                                child: PrimaryButton(
+                                                    texto: "Guardar",
+                                                    onPressed: () {
+                                                      if (_.claveFormContrasena
+                                                              .currentState
+                                                              ?.validate() ==
+                                                          true) {
+                                                        _.restablecerContrasena(
+                                                            context);
+                                                      }
+                                                    }),
+                                              ),
                                               if (estadoProceso)
-                                                const CircularProgressIndicator(
-                                                    backgroundColor:
-                                                        Colors.white),
+                                                const CircularProgress()
                                             ],
                                           );
                                         }),
                                         //
-                                        SizedBox(
-                                            height: MediaQuery.of(context)
-                                                    .size
-                                                    .height *
-                                                .05),
                                       ]),
                                 ),
                               ]),
                             ),
                           ),
-                        )),
-                  );
-                },
+                        ));
+                  },
+                ),
               ),
             ),
           ),

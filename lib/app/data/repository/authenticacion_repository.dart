@@ -1,6 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:gasjm/app/data/models/persona_model.dart';
-import 'package:gasjm/app/data/models/usuario_model.dart';
+import 'package:gasjm/app/data/models/persona_model.dart'; 
 
 //Repositorio con 2 clases -para autenticar usuario
 //Abstraer el usuario de firebase para obtener el uid

@@ -5,8 +5,7 @@ import 'package:gasjm/app/modules/perfil/perfil_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
-import 'package:gasjm/app/core/utils/validaciones.dart';
-import 'package:gasjm/app/routes/app_routes.dart';
+import 'package:gasjm/app/core/utils/validaciones.dart'; 
 import 'package:get/get.dart';
 
 class FormUsuario extends StatelessWidget {
@@ -141,7 +140,7 @@ class FormUsuario extends StatelessWidget {
                               .subtitle2
                               ?.copyWith(color: Colors.black54),
                         ),
-                        onTap: () => Get.toNamed(AppRoutes.contrasena),
+                        onTap: () => _.cargarFormContrasena(),
                       ),
 
                       //

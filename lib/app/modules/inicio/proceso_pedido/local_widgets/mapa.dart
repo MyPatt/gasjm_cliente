@@ -1,7 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:gasjm/app/modules/inicio/inicio_controller.dart';
-import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter/material.dart'; 
 
 class MapaWidget extends StatelessWidget {
   const MapaWidget({Key? key}) : super(key: key);

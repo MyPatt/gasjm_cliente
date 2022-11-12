@@ -1,4 +1,4 @@
-import 'package:gasjm/app/data/models/pedido_model.dart';
+ 
 import 'package:gasjm/app/data/models/ubicacionrepartidor_model.dart';
 import 'package:gasjm/app/data/providers/ubicacionrepartidor_provider.dart';
 import 'package:gasjm/app/data/repository/ubicacionrepartidor_repository.dart';
