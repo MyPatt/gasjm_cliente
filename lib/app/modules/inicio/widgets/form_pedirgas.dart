@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/core/utils/validaciones.dart';
 import 'package:gasjm/app/global_widgets/input_text.dart';
@@ -18,126 +19,148 @@ class FormPedirGas extends StatelessWidget {
     return GetBuilder<InicioController>(
         builder: (_) => Container(
               //padding: EdgeInsets.only(     bottom: MediaQuery.of(context).viewInsets.bottom,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 30.0,
+                vertical: 5,
+              ),
               decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(25.0),
-                      topRight: Radius.circular(25.0))),
-
-              padding: const EdgeInsets.all(8.0),
-              height: Responsive.getScreenSize(context).height * .5,
-              child: Center(
-                child: Form(
-                  key: _.formKey,
-                  child: ListView(
-                    shrinkWrap: true,
-                    children: [
-                      _buildHandle(context),
-                      SizedBox(
-                          height:
-                              Responsive.getScreenSize(context).height * .02),
-                      const TextSubtitle(
-                        text: "Nuevo pedido",
-                      ),
-                      const TextDescription(
-                          text: "Ingrese los datos para realizar su pedido"),
-                      SizedBox(
-                          height:
-                              Responsive.getScreenSize(context).height * .03),
-                      InputText(
-                        controller: _.direccionTextController,
-                        keyboardType: TextInputType.streetAddress,
-                        iconPrefix: Icons.room_outlined,
-                        labelText: "Dirección",
-                        validator: Validacion.validarDireccion,
-                        readOnly: true,
-                        enabled: false,
-                        filled: false,
-                      ),
-                      SizedBox(
-                          height:
-                              Responsive.getScreenSize(context).height * .02),
-                      Obx(() => InputText(
-                            iconPrefix: Icons.calendar_today_outlined,
-
-                            keyboardType: TextInputType.none,
-                            controller: _.diaDeEntregaPedidoController.value,
-
-                            labelText: "Fecha",
-                            //readOnly: true,
-                            filled: false,
-
-                            onTap: () {
-                              showDialog(
-                                  context: context,
-                                  //backgroundColor: Colors.transparent,
-                                  builder: (_) => const DiaPicker());
-                            },
-                          )),
-                      SizedBox(
-                          height:
-                              Responsive.getScreenSize(context).height * .02),
-                      InputText(
-                        controller: _.cantidadTextoController,
-                        iconPrefix: Icons.pin_outlined,
-                        keyboardType: TextInputType.phone,
-                        //validator: null,
-                        labelText: "Cantidad",
-
-                        inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly,
-                          //FilteringTextInputFormatter.allow(RegExp(r'\d{1,2}')),
-                        ],
-                        validator: Validacion.validarCantidadGas,
-                        onChanged: _.onChangedCantidad,
-                        filled: false,
-                      ),
-                      InputText(
-                        readOnly: true,
-                        enabled: false,
-                        controller: _.totalTextoController,
-                        iconPrefix: Icons.attach_money_outlined,
-                        labelText: "Total",
-                      ),
-                      SizedBox(
-                          height:
-                              Responsive.getScreenSize(context).height * .02),
-                      InputText(
-                        controller: _.notaTextoController,
-                        iconPrefix: Icons.note_outlined,
-                        labelText: "Nota",
-                        textInputAction: TextInputAction.none,
-                      ),
-                      SizedBox(
-                          height:
-                              Responsive.getScreenSize(context).height * .05),
-                      Obx(() {
-                        final estadoGuardar = _.procensandoElNuevoPedido.value;
-                        return Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            PrimaryButton(
-                              texto: "Pedir el gas",
-                              onPressed: () {
-                                if (_.formKey.currentState?.validate() ==
-                                    true) {
-                                  _.insertarPedido();
-                                }
-                              },
-                            ),
-                            if (estadoGuardar)
-                              const CircularProgressIndicator(
-                                backgroundColor: Colors.white,
-                              ),
-                          ],
-                        );
-                      }),
-                      SizedBox(
-                          height:
-                              Responsive.getScreenSize(context).height * .03),
-                    ],
-                  ),
+                color: Colors.white,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(30.0),
+                  topRight: Radius.circular(30.0),
                 ),
+              ),
+              // height: Responsive.getScreenSize(context).height * .5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      width: 50.0,
+                      height: 5.0,
+                      margin: const EdgeInsets.only(bottom: 25.0),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[400],
+                        borderRadius: BorderRadius.circular(20.0),
+                      ),
+                    ),
+                  ),
+                  // _buildHandle(context),
+                  SizedBox(
+                      height: Responsive.getScreenSize(context).height * .02),
+                  SizedBox(
+                    height: Responsive.hp(context) * 0.45,
+                    child: Form(
+                      key: _.formKey,
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: [
+                          const TextSubtitle(
+                            text: "Nuevo pedido",
+                          ),
+                          const TextDescription(
+                              text:
+                                  "Ingrese los datos para realizar su pedido"),
+                          SizedBox(
+                              height: Responsive.getScreenSize(context).height *
+                                  .03),
+                          GestureDetector(
+                            onTap: () => Navigator.of(context).pop(),
+                            child: InputText(
+                              controller: _.direccionTextController,
+                              keyboardType: TextInputType.streetAddress,
+                              iconPrefix: Icons.room_outlined,
+                              labelText: "Dirección",
+                              validator: Validacion.validarDireccion,
+                              readOnly: true,
+                              enabled: false,
+                              // enabled: true,
+                            ),
+                          ),
+                          SizedBox(
+                              height: Responsive.getScreenSize(context).height *
+                                  .02),
+                          Obx(() => InputText(
+                                iconPrefix: Icons.calendar_today_outlined,
+                                keyboardType: TextInputType.none,
+                                controller:
+                                    _.diaDeEntregaPedidoController.value,
+                                labelText: "Fecha",
+                                readOnly: true,
+                                onTap: () {
+                                  /* showDialog(
+                                          context: context,
+                                          //backgroundColor: Colors.transparent,
+                                          builder: (_) => const DiaPicker());*/
+                                },
+                              )),
+                          SizedBox(
+                              height: Responsive.getScreenSize(context).height *
+                                  .02),
+                          InputText(
+                            controller: _.cantidadTextoController,
+                            iconPrefix: Icons.pin_outlined,
+                            keyboardType: TextInputType.phone,
+                            //validator: null,
+                            labelText: "Cantidad",
+
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly,
+                              //FilteringTextInputFormatter.allow(RegExp(r'\d{1,2}')),
+                            ],
+                            validator: Validacion.validarCantidadGas,
+                            onChanged: _.onChangedCantidad,
+                            filled: false,
+                          ),
+                          InputText(
+                            readOnly: true,
+                            enabled: false,
+                            controller: _.totalTextoController,
+                            iconPrefix: Icons.attach_money_outlined,
+                            labelText: "Total",
+                          ),
+                          SizedBox(
+                              height: Responsive.getScreenSize(context).height *
+                                  .02),
+                          InputText(
+                            controller: _.notaTextoController,
+                            iconPrefix: Icons.note_outlined,
+                            labelText: "Nota",
+                            textInputAction: TextInputAction.none,
+                          ),
+                          SizedBox(
+                              height: Responsive.getScreenSize(context).height *
+                                  .05),
+                          Obx(() {
+                            final estadoGuardar =
+                                _.procensandoElNuevoPedido.value;
+                            return Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                PrimaryButton(
+                                  texto: "Pedir el gas",
+                                  onPressed: () {
+                                    if (_.formKey.currentState?.validate() ==
+                                        true) {
+                                      _.insertarPedido();
+                                    }
+                                  },
+                                ),
+                                if (estadoGuardar)
+                                  const CircularProgressIndicator(
+                                    backgroundColor: Colors.white,
+                                  ),
+                              ],
+                            );
+                          }),
+                          SizedBox(
+                              height: Responsive.getScreenSize(context).height *
+                                  .03),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ));
   }

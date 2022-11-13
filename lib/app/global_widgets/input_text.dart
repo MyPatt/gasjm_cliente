@@ -31,7 +31,8 @@ class InputText extends StatelessWidget {
   final void Function()? onTap;
   final void Function(String?)? onSaved;
 
-  const InputText({Key? key, 
+  const InputText({
+    Key? key,
     this.initialValue,
     this.autofocus = false,
     this.textInputAction = TextInputAction.next,
@@ -60,28 +61,6 @@ class InputText extends StatelessWidget {
     this.onSaved,
     this.iconPrefix,
   }) : super(key: key);
-  /*InputText( 
-      {this.initialValue,
-      this.readOnly = false,
-      this.controller, 
-      this.iconColor = AppTheme.light,
-      this.labelText,
-      this.filled = false,
-      this.fontColor = Colors.black54,
-      this.fontSize = 14.0,
-      this.enabledBorderColor = Colors.black26,
-      this.focusedBorderColor = AppTheme.blueBackground,
-      this.validator,
-      this.keyboardType = TextInputType.text,
-      this.obscureText = false,
-      this.suffixIcon,
-      this.hintText,
-      this.minLines = 1,
-      this.maxLines,
-      this.border = InputBorder.none,
-      this.onChanged,
-      this.onTap,
-      this.onSaved, this.iconPrefix});*/
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +100,15 @@ class InputText extends StatelessWidget {
           errorBorder: UnderlineInputBorder(
             borderRadius: BorderRadius.circular(6.0),
             borderSide: const BorderSide(
+              width: .5,
+              color: Colors.red,
+            ),
+          ),
+          
+          focusedErrorBorder: UnderlineInputBorder(
+            borderRadius: BorderRadius.circular(6.0),
+            borderSide: const BorderSide(
+              width: .5,
               color: Colors.red,
             ),
           ),

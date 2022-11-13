@@ -5,7 +5,7 @@ import 'package:gasjm/app/modules/perfil/perfil_controller.dart';
 import 'package:flutter/services.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
-import 'package:gasjm/app/core/utils/validaciones.dart'; 
+import 'package:gasjm/app/core/utils/validaciones.dart';
 import 'package:get/get.dart';
 
 class FormUsuario extends StatelessWidget {
@@ -44,6 +44,8 @@ class FormUsuario extends StatelessWidget {
                         ],
                         validator: Validacion.validarCedula,
                         labelText: "Cédula",
+                        readOnly: true,
+                        enabled: false,
                       ),
                       SizedBox(
                           height:

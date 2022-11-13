@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
@@ -29,8 +28,7 @@ class BotonPedirGas extends StatelessWidget {
                             texto: "Pedir el gas",
                             //  onPressed: _.verFormPedirGas,
                             onPressed: () {
-                              showBottomSheet(
-                                  // isScrollControlled: true,
+                              showModalBottomSheet(
                                   backgroundColor: Colors.transparent,
                                   context: context,
                                   builder: (context) => (const FormPedirGas()));
