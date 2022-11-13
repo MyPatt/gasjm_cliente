@@ -4,8 +4,8 @@ import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/cliente/menu_appbar.dart';
 import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
-import 'package:gasjm/app/modules/inicio/proceso_pedido/local_widgets/contenido.dart';
-import 'package:gasjm/app/modules/inicio/proceso_pedido/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/proceso_pedido/local_widgets/contenido.dart';
+import 'package:gasjm/app/modules/proceso_pedido/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
