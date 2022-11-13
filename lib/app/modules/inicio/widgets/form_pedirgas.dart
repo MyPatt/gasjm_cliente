@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/core/utils/validaciones.dart';
+import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/input_text.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
@@ -105,6 +106,7 @@ class FormPedirGas extends StatelessWidget {
                             labelText: "Cantidad",
 
                             inputFormatters: <TextInputFormatter>[
+                              LengthLimitingTextInputFormatter(2),
                               FilteringTextInputFormatter.digitsOnly,
                               //FilteringTextInputFormatter.allow(RegExp(r'\d{1,2}')),
                             ],
@@ -137,19 +139,19 @@ class FormPedirGas extends StatelessWidget {
                             return Stack(
                               alignment: Alignment.center,
                               children: [
-                                PrimaryButton(
-                                  texto: "Pedir el gas",
-                                  onPressed: () {
-                                    if (_.formKey.currentState?.validate() ==
-                                        true) {
-                                      _.insertarPedido();
-                                    }
-                                  },
-                                ),
-                                if (estadoGuardar)
-                                  const CircularProgressIndicator(
-                                    backgroundColor: Colors.white,
+                                Visibility(
+                                  visible: !_.procensandoElNuevoPedido.value,
+                                  child: PrimaryButton(
+                                    texto: "Pedir el gas",
+                                    onPressed: () {
+                                      if (_.formKey.currentState?.validate() ==
+                                          true) {
+                                        _.insertarPedido();
+                                      }
+                                    },
                                   ),
+                                ),
+                                if (estadoGuardar) const CircularProgress()
                               ],
                             );
                           }),

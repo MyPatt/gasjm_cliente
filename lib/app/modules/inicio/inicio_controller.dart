@@ -235,8 +235,6 @@ class InicioController extends GetxController {
         _posicionInicialCliente.value.longitude,
         localeIdentifier: "en_US");
     direccionTextController.text = placemark[0].name!;
- 
- 
   }
 
   Future<void> getUbicacionUsuario() async {
@@ -324,8 +322,6 @@ class InicioController extends GetxController {
         );
 
     _marcadores[markerId] = updatedMarker;
-
-  
   }
 
   void onChangedCantidad(valor) {
@@ -338,9 +334,6 @@ class InicioController extends GetxController {
         double.parse(valor) * double.parse(precioGlp.value.toStringAsFixed(2));
 
     totalTextoController.text = total.toString();
-    if (valor.length > 1) {
-      cantidadTextoController.text = valor;
-    }
   }
 }
 
