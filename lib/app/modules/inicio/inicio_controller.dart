@@ -5,8 +5,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/map_style.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
+import 'package:gasjm/app/data/models/horario_model.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/data/models/persona_model.dart';
+import 'package:gasjm/app/data/repository/horario_repository.dart';
 import 'package:gasjm/app/data/repository/pedido_repository.dart';
 import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/data/repository/producto_repository.dart';
@@ -30,14 +32,16 @@ class InicioController extends GetxController {
 
   //Repositorio de productos
   final _productoRepository = Get.find<ProductoRepository>();
-  final precioGlp = 1.60.obs;
+  final RxDouble precioGlp = 1.60.obs;
+//Repositorio para horario
+  final _horarioRepository = Get.find<HorarioRepository>();
 
   /* Variables para el form */
   final formKey = GlobalKey<FormState>();
   final direccionTextoController = TextEditingController();
   final notaTextoController = TextEditingController();
   var cantidadTextoController = TextEditingController();
-  var totalTextoController = TextEditingController();
+  Rx<TextEditingController> totalTextoController = TextEditingController().obs;
   final diaDeEntregaPedidoController = TextEditingController().obs;
   final itemSeleccionadoDia = 0.obs;
 
@@ -84,6 +88,9 @@ class InicioController extends GetxController {
   void onReady() {
     //Cargar datos iniciales para el formulario
     _loadDatosIniciales();
+    Future.wait([
+      getHorario(),
+    ]);
     super.onReady();
   }
 
@@ -110,9 +117,56 @@ class InicioController extends GetxController {
     usuario.value = await _usuarioRepository.getUsuario();
   }
 
-  //Obtener informacion del cliente conectado
+  //Obtener informacion del producto
   Future<void> getPrecioProducto() async {
     precioGlp.value = await _productoRepository.getPrecioPorProducto(id: "glp");
+  }
+
+  //Obtener informacion del horario
+  Timestamp horarioApertura = Timestamp.now();
+  Timestamp horarioActual = Timestamp.now();
+  Timestamp horarioCierre = Timestamp.now();
+  RxString cadenaHorarioAtencion = ''.obs;
+  Future<void> getHorario() async {
+    //Obtener hora actual
+    horarioActual = Timestamp.now();
+    DateTime horaActualConvertida = DateTime.fromMillisecondsSinceEpoch(
+        horarioActual.millisecondsSinceEpoch);
+    //Numero del dia de la semana 1=lunes
+    int idDia = horaActualConvertida.weekday;
+    //Datos del horario desde firestore
+    HorarioModel horarioAtencion =
+        await _horarioRepository.getHorarioPorIdDia(idDiaHorario: idDia);
+    //
+
+    //Convertir horario  del dia
+    int horaApertura = int.parse(horarioAtencion.aperturaHorario.split(':')[0]);
+    int minutoApertura =
+        int.parse(horarioAtencion.aperturaHorario.split(':')[1]);
+    //
+    int horaCierre = int.parse(horarioAtencion.cierreHorario.split(':')[0]);
+    int minutoCierre = int.parse(horarioAtencion.cierreHorario.split(':')[1]);
+    //
+    DateTime aperturaAux = DateTime(
+        horaActualConvertida.year,
+        horaActualConvertida.month,
+        horaActualConvertida.day,
+        horaApertura,
+        minutoApertura);
+    //
+    DateTime cierreAux = DateTime(
+        horaActualConvertida.year,
+        horaActualConvertida.month,
+        horaActualConvertida.day,
+        horaCierre,
+        minutoCierre);
+    //
+    horarioApertura = Timestamp.fromDate(aperturaAux);
+    horarioCierre = Timestamp.fromDate(cierreAux);
+
+    //Horario de atencion en texto
+    cadenaHorarioAtencion.value =
+        "${horarioAtencion.aperturaHorario} - ${horarioAtencion.cierreHorario}";
   }
 
 //Metodos para insertar un nuevo pedido
@@ -130,7 +184,7 @@ class InicioController extends GetxController {
       final diaEntregaPedido = diaDeEntregaPedidoController.value.text;
       final notaPedido = notaTextoController.text;
       final cantidadPedido = int.parse(cantidadTextoController.text);
-      final totalPedido = double.parse(totalTextoController.text);
+      final totalPedido = double.parse(totalTextoController.value.text);
       //
       PedidoModel pedidoModel = PedidoModel(
         idProducto: idProducto,
@@ -189,11 +243,6 @@ class InicioController extends GetxController {
     }
   }
 
-  cerrarSesion() async {
-    await FirebaseAuth.instance.signOut();
-    cargarLogin;
-  }
-
   /*  DIA PARA AGENDAR EN FORM PEDIR GAS */
 
   //
@@ -201,7 +250,7 @@ class InicioController extends GetxController {
     direccionTextController.text = "Buscando dirección...";
     diaDeEntregaPedidoController.value.text = "Ahora";
     cantidadTextoController.text = "1";
-    totalTextoController.text = precioGlp.value.toString();
+    totalTextoController.value.text = '${precioGlp.value}';
   }
 
   final diaInicialSeleccionado = 0.obs;
@@ -326,14 +375,14 @@ class InicioController extends GetxController {
 
   void onChangedCantidad(valor) {
     if (cantidadTextoController.text.isEmpty) {
-      totalTextoController.text = "0.00";
+      totalTextoController.value.text = "0.00";
       return;
     }
 
     double total =
         double.parse(valor) * double.parse(precioGlp.value.toStringAsFixed(2));
 
-    totalTextoController.text = total.toString();
+    totalTextoController.value.text = total.toString();
   }
 }
 

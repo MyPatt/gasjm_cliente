@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
+import 'package:gasjm/app/global_widgets/modal_alert.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
 import 'package:gasjm/app/modules/inicio/inicio_controller.dart';
 import 'package:gasjm/app/modules/inicio/widgets/form_pedirgas.dart';
@@ -27,13 +29,45 @@ class BotonPedirGas extends StatelessWidget {
                         : PrimaryButton(
                             texto: "Pedir el gas",
                             //  onPressed: _.verFormPedirGas,
-                            onPressed: () {
-                              showModalBottomSheet(
-                                  backgroundColor: Colors.transparent,
+                            onPressed: () async {
+                              Timestamp horarioActual = Timestamp.now();
+                              if (!(horarioActual.seconds >=
+                                      _.horarioApertura.seconds &&
+                                  horarioActual.seconds <=
+                                      _.horarioCierre.seconds)) {
+                                //
+                                _.diaDeEntregaPedidoController.value.text = "Mañana";
+                                //
+                                showDialog(
                                   context: context,
-                                  builder: (context) => (const FormPedirGas()));
-                            },
-                          ),
+                                  barrierDismissible: true,
+                                  builder: (context) {
+                                    return Obx(
+                                      () => ModalAlert(
+                                          titulo: 'Agendar pedido',
+                                          mensaje:
+                                              'Fuera del horario de atención ${_.cadenaHorarioAtencion.value}. ¿Desea agendar el pedido para mañana?',
+                                          icono: Icons.edit_calendar_outlined,
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            showModalBottomSheet(
+                                                backgroundColor:
+                                                    Colors.transparent,
+                                                context: context,
+                                                builder: (context) =>
+                                                    (const FormPedirGas()));
+                                          }),
+                                    );
+                                  },
+                                );
+                              } else {
+                                showModalBottomSheet(
+                                    backgroundColor: Colors.transparent,
+                                    context: context,
+                                    builder: (context) =>
+                                        (const FormPedirGas()));
+                              }
+                            }),
                   )),
             ));
   }

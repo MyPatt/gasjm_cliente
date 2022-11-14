@@ -20,7 +20,7 @@ class TextDescription extends StatelessWidget {
           .textTheme
           .subtitle2
           ?.copyWith(color: color, fontWeight: FontWeight.w400),
-      maxLines: 2,
+      maxLines: 3,
     );
   }
 }

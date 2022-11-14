@@ -1,4 +1,6 @@
-import 'package:gasjm/app/data/providers/estadopedido_provider.dart';
+import 'package:gasjm/app/data/providers/horario_provider.dart';
+import 'package:gasjm/app/data/repository/horario_repository.dart';
+import 'package:gasjm/app/data/repository/implementations/horario_repository.dart';import 'package:gasjm/app/data/providers/estadopedido_provider.dart';
 import 'package:gasjm/app/data/providers/pedido_provider.dart';
 import 'package:gasjm/app/data/providers/perfil_provider.dart';
 import 'package:gasjm/app/data/providers/persona_provider.dart';
@@ -30,7 +32,9 @@ class DependencyInjection {
     Get.put<PersonaProvider>(PersonaProvider());
 
     //Local
+ Get.put<HorarioProvider>(HorarioProvider());
 
+    Get.put<HorarioRepository>(HorarioRepositoryImpl());
     //Respositories
 
 

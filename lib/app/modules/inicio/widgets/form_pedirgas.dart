@@ -51,114 +51,129 @@ class FormPedirGas extends StatelessWidget {
                       height: Responsive.getScreenSize(context).height * .02),
                   SizedBox(
                     height: Responsive.hp(context) * 0.45,
-                    child: Form(
-                      key: _.formKey,
-                      child: ListView(
-                        shrinkWrap: true,
-                        children: [
-                          const TextSubtitle(
-                            text: "Nuevo pedido",
-                          ),
-                          const TextDescription(
-                              text:
-                                  "Ingrese los datos para realizar su pedido"),
-                          SizedBox(
-                              height: Responsive.getScreenSize(context).height *
-                                  .03),
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
-                            child: InputText(
-                              controller: _.direccionTextController,
-                              keyboardType: TextInputType.streetAddress,
-                              iconPrefix: Icons.room_outlined,
-                              labelText: "Dirección",
-                              validator: Validacion.validarDireccion,
-                              readOnly: true,
-                              enabled: false,
-                              // enabled: true,
-                            ),
-                          ),
-                          SizedBox(
-                              height: Responsive.getScreenSize(context).height *
-                                  .02),
-                          Obx(() => InputText(
-                                iconPrefix: Icons.calendar_today_outlined,
-                                keyboardType: TextInputType.none,
-                                controller:
-                                    _.diaDeEntregaPedidoController.value,
-                                labelText: "Fecha",
-                                readOnly: true,
-                                onTap: () {
-                                  /* showDialog(
-                                          context: context,
-                                          //backgroundColor: Colors.transparent,
-                                          builder: (_) => const DiaPicker());*/
-                                },
-                              )),
-                          SizedBox(
-                              height: Responsive.getScreenSize(context).height *
-                                  .02),
-                          InputText(
-                            controller: _.cantidadTextoController,
-                            iconPrefix: Icons.pin_outlined,
-                            keyboardType: TextInputType.phone,
-                            //validator: null,
-                            labelText: "Cantidad",
-
-                            inputFormatters: <TextInputFormatter>[
-                              LengthLimitingTextInputFormatter(2),
-                              FilteringTextInputFormatter.digitsOnly,
-                              //FilteringTextInputFormatter.allow(RegExp(r'\d{1,2}')),
-                            ],
-                            validator: Validacion.validarCantidadGas,
-                            onChanged: _.onChangedCantidad,
-                            filled: false,
-                          ),
-                          InputText(
-                            readOnly: true,
-                            enabled: false,
-                            controller: _.totalTextoController,
-                            iconPrefix: Icons.attach_money_outlined,
-                            labelText: "Total",
-                          ),
-                          SizedBox(
-                              height: Responsive.getScreenSize(context).height *
-                                  .02),
-                          InputText(
-                            controller: _.notaTextoController,
-                            iconPrefix: Icons.note_outlined,
-                            labelText: "Nota",
-                            textInputAction: TextInputAction.none,
-                          ),
-                          SizedBox(
-                              height: Responsive.getScreenSize(context).height *
-                                  .05),
-                          Obx(() {
-                            final estadoGuardar =
-                                _.procensandoElNuevoPedido.value;
-                            return Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Visibility(
-                                  visible: !_.procensandoElNuevoPedido.value,
-                                  child: PrimaryButton(
-                                    texto: "Pedir el gas",
-                                    onPressed: () {
-                                      if (_.formKey.currentState?.validate() ==
-                                          true) {
-                                        _.insertarPedido();
-                                      }
-                                    },
-                                  ),
+                    child: Obx(
+                      () => AbsorbPointer(
+                        absorbing: _.procensandoElNuevoPedido.value,
+                        child: Form(
+                          key: _.formKey,
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              const TextSubtitle(
+                                text: "Nuevo pedido",
+                              ),
+                              const TextDescription(
+                                  text:
+                                      "Ingrese los datos para realizar su pedido"),
+                              SizedBox(
+                                  height:
+                                      Responsive.getScreenSize(context).height *
+                                          .03),
+                              GestureDetector(
+                                onTap: () => Navigator.of(context).pop(),
+                                child: InputText(
+                                  controller: _.direccionTextController,
+                                  keyboardType: TextInputType.streetAddress,
+                                  iconPrefix: Icons.room_outlined,
+                                  labelText: "Dirección",
+                                  validator: Validacion.validarDireccion,
+                                  readOnly: true,
+                                  enabled: false,
+                                  // enabled: true,
                                 ),
-                                if (estadoGuardar) const CircularProgress()
-                              ],
-                            );
-                          }),
-                          SizedBox(
-                              height: Responsive.getScreenSize(context).height *
-                                  .03),
-                        ],
+                              ),
+                              SizedBox(
+                                  height:
+                                      Responsive.getScreenSize(context).height *
+                                          .02),
+                              Obx(() => InputText(
+                                    iconPrefix: Icons.calendar_today_outlined,
+                                    keyboardType: TextInputType.none,
+                                    controller:
+                                        _.diaDeEntregaPedidoController.value,
+                                    labelText: "Fecha",
+                                    readOnly: true,
+                                    onTap: () {
+                                      /* showDialog(
+                                              context: context,
+                                              //backgroundColor: Colors.transparent,
+                                              builder: (_) => const DiaPicker());*/
+                                    },
+                                  )),
+                              SizedBox(
+                                  height:
+                                      Responsive.getScreenSize(context).height *
+                                          .02),
+                              InputText(
+                                controller: _.cantidadTextoController,
+                                iconPrefix: Icons.pin_outlined,
+                                keyboardType: TextInputType.phone,
+                                //validator: null,
+                                labelText: "Cantidad",
+
+                                inputFormatters: <TextInputFormatter>[
+                                  LengthLimitingTextInputFormatter(2),
+                                  FilteringTextInputFormatter.digitsOnly,
+                                  //FilteringTextInputFormatter.allow(RegExp(r'\d{1,2}')),
+                                ],
+                                validator: Validacion.validarCantidadGas,
+                                onChanged: _.onChangedCantidad,
+                                filled: false,
+                              ),
+                              Obx(
+                                () => InputText(
+                                  readOnly: true,
+                                  enabled: false,
+                                  controller: _.totalTextoController.value,
+                                  iconPrefix: Icons.attach_money_outlined,
+                                  labelText: "Total",
+                                ),
+                              ),
+                              SizedBox(
+                                  height:
+                                      Responsive.getScreenSize(context).height *
+                                          .02),
+                              InputText(
+                                controller: _.notaTextoController,
+                                iconPrefix: Icons.note_outlined,
+                                labelText: "Nota",
+                                textInputAction: TextInputAction.none,
+                              ),
+                              SizedBox(
+                                  height:
+                                      Responsive.getScreenSize(context).height *
+                                          .05),
+                              Obx(() {
+                                final estadoGuardar =
+                                    _.procensandoElNuevoPedido.value;
+                                return Stack(
+                                  alignment: Alignment.center,
+                                  children: [
+                                    Visibility(
+                                      visible:
+                                          !_.procensandoElNuevoPedido.value,
+                                      child: PrimaryButton(
+                                        texto: "Pedir el gas",
+                                        onPressed: () {
+                                          if (_.formKey.currentState
+                                                  ?.validate() ==
+                                              true) {
+                                            _.insertarPedido();
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                    if (estadoGuardar) const CircularProgress()
+                                  ],
+                                );
+                              }),
+                              SizedBox(
+                                  height:
+                                      Responsive.getScreenSize(context).height *
+                                          .03),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
