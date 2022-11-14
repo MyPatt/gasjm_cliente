@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/map_style.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
@@ -383,6 +382,12 @@ class InicioController extends GetxController {
         double.parse(valor) * double.parse(precioGlp.value.toStringAsFixed(2));
 
     totalTextoController.value.text = total.toString();
+  }
+//Volver a obtener la hora actual y calculsr el total con el precio de firestore
+  void actualizarDatosDelForm() {
+    horarioActual = Timestamp.now();
+    totalTextoController.value.text =
+        '${precioGlp.value * (cantidadTextoController.text.isEmpty ? 0 : double.parse(cantidadTextoController.text))}';
   }
 }
 

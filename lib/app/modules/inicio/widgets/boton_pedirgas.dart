@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/modal_alert.dart';
@@ -7,6 +6,7 @@ import 'package:gasjm/app/modules/inicio/inicio_controller.dart';
 import 'package:gasjm/app/modules/inicio/widgets/form_pedirgas.dart';
 import 'package:get/get.dart';
 
+//Boton en la parte inferior del mapa para mostrar el form para pedir el gas
 class BotonPedirGas extends StatelessWidget {
   const BotonPedirGas({Key? key}) : super(key: key);
 
@@ -23,21 +23,23 @@ class BotonPedirGas extends StatelessWidget {
                     color: AppTheme.blueBackground,
                     borderRadius: BorderRadius.circular(25.0),
                   ),
+                  //Esperando que se obtenga la ubicacion actual
                   child: Obx(
                     () => _.direccion.value == 'Buscando dirección...'
                         ? const Text('')
                         : PrimaryButton(
                             texto: "Pedir el gas",
-                            //  onPressed: _.verFormPedirGas,
                             onPressed: () async {
-                              Timestamp horarioActual = Timestamp.now();
-                              if (!(horarioActual.seconds >=
+                              _.actualizarDatosDelForm();
+                              //La hora actual esta en rango de atencion se realiza el pedido caso contrario se agenda
+                              if (!(_.horarioActual.seconds >=
                                       _.horarioApertura.seconds &&
-                                  horarioActual.seconds <=
+                                  _.horarioActual.seconds <=
                                       _.horarioCierre.seconds)) {
                                 //
-                                _.diaDeEntregaPedidoController.value.text = "Mañana";
-                                //
+                                _.diaDeEntregaPedidoController.value.text =
+                                    "Mañana";
+                                // 
                                 showDialog(
                                   context: context,
                                   barrierDismissible: true,
@@ -46,7 +48,7 @@ class BotonPedirGas extends StatelessWidget {
                                       () => ModalAlert(
                                           titulo: 'Agendar pedido',
                                           mensaje:
-                                              'Fuera del horario de atención ${_.cadenaHorarioAtencion.value}. ¿Desea agendar el pedido para mañana?',
+                                              'Fuera del horario de atención ${_.cadenaHorarioAtencion.value}. ¿Desea agendar el pedido?',
                                           icono: Icons.edit_calendar_outlined,
                                           onPressed: () {
                                             Navigator.of(context).pop();

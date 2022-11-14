@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart';
+import 'package:flutter/services.dart'; 
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/core/utils/validaciones.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
@@ -8,8 +7,7 @@ import 'package:gasjm/app/global_widgets/input_text.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
-import 'package:gasjm/app/modules/inicio/inicio_controller.dart';
-import 'package:gasjm/app/modules/inicio/widgets/dia_picker.dart';
+import 'package:gasjm/app/modules/inicio/inicio_controller.dart'; 
 import 'package:get/get.dart';
 
 class FormPedirGas extends StatelessWidget {
@@ -110,7 +108,7 @@ class FormPedirGas extends StatelessWidget {
                                 keyboardType: TextInputType.phone,
                                 //validator: null,
                                 labelText: "Cantidad",
-
+                              
                                 inputFormatters: <TextInputFormatter>[
                                   LengthLimitingTextInputFormatter(2),
                                   FilteringTextInputFormatter.digitsOnly,
@@ -181,25 +179,4 @@ class FormPedirGas extends StatelessWidget {
               ),
             ));
   }
-
-  Widget _buildHandle(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return FractionallySizedBox(
-      widthFactor: 0.25,
-      child: Container(
-        margin: const EdgeInsets.symmetric(
-          vertical: 12.0,
-        ),
-        child: Container(
-          height: 5.0,
-          decoration: BoxDecoration(
-            color: theme.dividerColor,
-            borderRadius: const BorderRadius.all(Radius.circular(2.5)),
-          ),
-        ),
-      ),
-    );
-  }
 }
-//TODO: Scroll cuando el teclado se visualiza
