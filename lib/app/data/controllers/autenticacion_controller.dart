@@ -1,8 +1,9 @@
 //Estados de sutenticacion
-import 'dart:async'; 
-import 'package:gasjm/app/data/repository/authenticacion_repository.dart'; 
+import 'dart:async';
+import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 enum EstadosDeAutenticacion { sesionNoIniciada, sesionIniciada }
 
@@ -15,7 +16,7 @@ class AutenticacionController extends GetxController {
       Rx(EstadosDeAutenticacion.sesionNoIniciada);
 
   final Rx<AutenticacionUsuario?> autenticacionUsuario = Rx(null);
-
+ 
   @override
   void onInit() async {
     // TSolo para testear. Permitir la pantalla de splash luego unos pocos segundos
@@ -26,18 +27,27 @@ class AutenticacionController extends GetxController {
         .listen(_estadoAutenticacionCambiado);
 
     super.onInit();
+
+ 
   }
 
-  void _estadoAutenticacionCambiado(AutenticacionUsuario? usuario) {
+  Future<void> _estadoAutenticacionCambiado(AutenticacionUsuario? usuario) async {
     if (usuario == null) {
       autenticacionEstado.value = EstadosDeAutenticacion.sesionNoIniciada;
 
       Get.offAllNamed(AppRoutes.ubicacion);
     } else {
       autenticacionEstado.value = EstadosDeAutenticacion.sesionIniciada;
-      
-      Get.offAllNamed(AppRoutes.inicio);
- 
+       
+         //Verificar si el cliente no tiene un pedido en espera
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool pedidoEsperando = prefs.getBool("pedido_esperando") ?? false;
+    
+      if (pedidoEsperando == true) {
+        Get.offAllNamed(AppRoutes.procesopedido);
+      } else {
+        Get.offAllNamed(AppRoutes.inicio);
+      }
     }
     autenticacionUsuario.value = usuario;
   }

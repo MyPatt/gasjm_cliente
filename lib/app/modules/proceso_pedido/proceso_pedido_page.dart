@@ -51,7 +51,11 @@ class ProcesoPedidoPage extends StatelessWidget {
                       color: AppTheme.blueBackground,
                       borderRadius: BorderRadius.circular(25.0),
                     ),
-                    child: PrimaryButton(texto: "Cancelar", onPressed: () {})))
+                    child: PrimaryButton(
+                        texto: "Cancelar",
+                        onPressed: () {
+                          _.cancelarPedido();
+                        })))
           ],
         ),
       ),

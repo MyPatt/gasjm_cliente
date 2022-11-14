@@ -9,14 +9,13 @@ class MenuAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<InicioController>(
-        builder: (_) => Row(
+    return   Row(
               children: [
                 //Opcion agenda
                 IconButton(
                     //
-                    // onPressed: showRatingDialog,calificarservicio
-                    onPressed: _.cargarAgenda,
+                        onPressed: () {},
+                  //  onPressed: _.cargarAgenda,
                     icon: const Icon(Icons.date_range_outlined)),
 
                 //Opcion historial
@@ -37,7 +36,7 @@ class MenuAppBar extends StatelessWidget {
                   width: 10,
                 ),
               ],
-            ));
+            );
   }
 }
 /**

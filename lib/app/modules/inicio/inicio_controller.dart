@@ -16,6 +16,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class InicioController extends GetxController {
   //Repositorio de usuario
@@ -200,7 +201,6 @@ class InicioController extends GetxController {
 
       await _pedidoRepository.insertPedido(pedidoModel: pedidoModel);
 
-      _cargarProcesoPedido();
       Mensajes.showGetSnackbar(
           titulo: "Mensaje",
           mensaje: "Su pedido se registro con éxito.",
@@ -208,10 +208,21 @@ class InicioController extends GetxController {
             Icons.check_circle_outline_outlined,
             color: Colors.white,
           ));
+      _cargarProcesoPedido();
     } on FirebaseException {
       Mensajes.showGetSnackbar(
-          titulo: "Error",
-          mensaje: "Se produjo un error inesperado.",
+          titulo: "Alerta",
+          mensaje:
+              "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.",
+          icono: const Icon(
+            Icons.error_outline_outlined,
+            color: Colors.white,
+          ));
+    } catch (e) {
+      Mensajes.showGetSnackbar(
+          titulo: "Alerta",
+          mensaje:
+              "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.",
           icono: const Icon(
             Icons.error_outline_outlined,
             color: Colors.white,
@@ -227,8 +238,8 @@ class InicioController extends GetxController {
       await Future.delayed(const Duration(seconds: 1));
       Get.offNamed(AppRoutes.agenda);
     } catch (e) {
-      // ignore: avoid_print
-      print(e);
+      throw Exception(
+          "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.");
     }
   }
 
@@ -237,8 +248,8 @@ class InicioController extends GetxController {
       await Future.delayed(const Duration(seconds: 1));
       Get.offNamed(AppRoutes.identificacion);
     } catch (e) {
-      // ignore: avoid_print
-      print(e);
+      throw Exception(
+          "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.");
     }
   }
 
@@ -267,10 +278,14 @@ class InicioController extends GetxController {
   _cargarProcesoPedido() async {
     try {
       await Future.delayed(const Duration(seconds: 1));
-      Get.offNamed(AppRoutes.procesopedido);
+      Get.offAllNamed(AppRoutes.procesopedido);
+      //Guardar estado del cliente de forma local
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setBool("pedido_esperando", true);
     } catch (e) {
-      // ignore: avoid_print
-      print(e);
+      throw Exception(
+          "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.");
     }
   }
 
@@ -383,6 +398,7 @@ class InicioController extends GetxController {
 
     totalTextoController.value.text = total.toString();
   }
+
 //Volver a obtener la hora actual y calculsr el total con el precio de firestore
   void actualizarDatosDelForm() {
     horarioActual = Timestamp.now();
