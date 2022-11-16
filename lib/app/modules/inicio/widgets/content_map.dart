@@ -30,7 +30,7 @@ class ContentMap extends StatelessWidget {
                               .textTheme
                               .subtitle2
                               ?.copyWith(
-                                  color: Colors.black38,
+                                  color: Color.fromARGB(96, 2, 1, 1),
                                   fontWeight: FontWeight.w400),
                           controller: _.direccionTextController,
                           keyboardType: TextInputType.none,

@@ -1,14 +1,15 @@
-import 'package:cloud_firestore/cloud_firestore.dart'; 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 
 class PedidoProvider {
   //Instancia de firestore
-  final _firestoreInstance = FirebaseFirestore.instance; 
+  final _firestoreInstance = FirebaseFirestore.instance;
 
   //
   Future<void> insertPedido({required PedidoModel pedidoModel}) async {
-   final resultado =  await _firestoreInstance.collection('pedido').add(pedidoModel.toJson());
-        await _firestoreInstance
+    final resultado =
+        await _firestoreInstance.collection('pedido').add(pedidoModel.toJson());
+    await _firestoreInstance
         .collection("pedido")
         .doc(resultado.id)
         .update({"idPedido": resultado.id});
@@ -45,17 +46,29 @@ class PedidoProvider {
     return null;
   }
 
-  Future<List<PedidoModel>?> getPedidoPorField(
+  Future<PedidoModel?> getPedidoPorField(
       {required String field, required String dato}) async {
     final resultado = await _firestoreInstance
         .collection("pedido")
         .where(field, isEqualTo: dato)
+        .limit(1)
         .get();
     if ((resultado.docs.isNotEmpty)) {
-      return (resultado.docs)
-          .map((item) => PedidoModel.fromJson(item.data()))
-          .toList();
+      return PedidoModel.fromJson(resultado.docs.first.data());
     }
     return null;
+  }
+
+  //
+  // 
+  Future<String?> getDescripcionEstadoPedido({required String idEstado}) async {
+ 
+    final snapshot = await _firestoreInstance
+        .collection('estadopedido')
+        .where("idEstadoPedido", isEqualTo: idEstado)
+        .limit(1)
+        .get();
+   return snapshot.docs.first.get("descripcionEstadoPedido").toString();
+
   }
 }

@@ -5,6 +5,8 @@ abstract class PedidoRepository {
   Future<void> updatePedido({required PedidoModel pedidoModel});
   Future<void> deletePedido({required String pedido});
   Future<List<PedidoModel>?> getPedidos();
-  Future<List<PedidoModel>?> getPedidoPorField(
+  Future<PedidoModel?>  getPedidoPorField(
       {required String field, required String dato});
+
+  Future<String?> getDescripcionEstadoPedido({required String idEstado});
 }

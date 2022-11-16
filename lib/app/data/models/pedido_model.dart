@@ -8,17 +8,16 @@ class PedidoModel {
   final Direccion direccion;
   final String idEstadoPedido;
   final Timestamp fechaHoraPedido;
-  final Timestamp? fechaHoraEntregaPedido;
   final String diaEntregaPedido;
-  // final String? horaEntregaPedido;
-  //final Timestamp? fechaHoraEntregaPedido;
+  final Timestamp? fechaHoraEntregaPedido;
+  String? nombreUsuario;
+  String? direccionUsuario;
+  int? tiempoEntrega;
 
   final int cantidadPedido;
   final String? notaPedido;
   final double totalPedido;
-
   //
-
   PedidoModel({
     this.idPedido,
     required this.idProducto,
@@ -27,8 +26,8 @@ class PedidoModel {
     required this.direccion,
     required this.idEstadoPedido,
     required this.fechaHoraPedido,
-    this.fechaHoraEntregaPedido,
     required this.diaEntregaPedido,
+    this.fechaHoraEntregaPedido,
     required this.cantidadPedido,
     required this.notaPedido,
     required this.totalPedido,
