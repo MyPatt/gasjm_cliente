@@ -6,8 +6,7 @@ class CircularProgress extends StatelessWidget {
   const CircularProgress();
   @override
   Widget build(BuildContext context) {
-    return const CircularProgressIndicator(
-      backgroundColor: Colors.white,
+    return const CircularProgressIndicator( 
       color: AppTheme.blueBackground,
     );
   }

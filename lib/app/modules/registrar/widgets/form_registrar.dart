@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
+import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/input_text.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
@@ -157,7 +158,7 @@ class FormRegistrar extends StatelessWidget {
                                           }),
                                     ),
                                     if (estadoProceso)
-                                      const CircularProgressIndicator()
+                                      const CircularProgress()
                                   ],
                                 );
                               }),

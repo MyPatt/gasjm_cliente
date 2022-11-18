@@ -82,7 +82,6 @@ class RegistrarController extends GetxController {
     final apellido = apellidoTextoController.text;
     final correo = correoElectronicoTextoController.text;
     final contrasena = contrasenaTextoController.text;
-
 //
     try {
       cargandoParaCorreo.value = true;
@@ -104,6 +103,8 @@ class RegistrarController extends GetxController {
           contrasenaPersona: contrasena,
           correoPersona: correo,
           direccionPersona: direccionPersona);
+      
+
 //Testear
       await Future.delayed(const Duration(seconds: 1));
 //En firebase
@@ -118,7 +119,7 @@ class RegistrarController extends GetxController {
           icono: const Icon(
             Icons.waving_hand_outlined,
             color: Colors.white,
-          )); 
+          ));
       //
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -152,6 +153,4 @@ class RegistrarController extends GetxController {
     cedula = s ?? '';
     //perfil = p ?? '';
   }
-
-  
 }
