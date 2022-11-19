@@ -29,6 +29,11 @@ class PersonaProvider {
         .collection('persona')
         .doc(persona.uidPersona)
         .update(persona.toMap());
+    await usuarioActual.updateDisplayName(
+        '${persona.nombrePersona} ${persona.apellidoPersona}');
+
+        //
+        
     if (image != null) {
       final imagePath =
           '${usuarioActual.uid}/perfil/fotoperfil${path.extension(image.path)}';
@@ -146,18 +151,17 @@ class PersonaProvider {
     return null;
   }
 
-    Future<String?> getImagenUsuarioActual() async {
-    final snapshot =await  _firestoreInstance
+  Future<String?> getImagenUsuarioActual() async {
+    final snapshot = await _firestoreInstance
         .collection('persona')
         .doc(usuarioActual.uid)
         .get();
-            
-    String? resultado=(snapshot.get("foto"));
-   
-    if (resultado!=null) {  
+
+    String? resultado = (snapshot.get("foto"));
+
+    if (resultado != null) {
       return resultado;
     }
     return null;
   }
-
 }
