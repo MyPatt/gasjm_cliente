@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart'; 
-import 'package:gasjm/app/data/controllers/autenticacion_controller.dart'; 
-import 'package:gasjm/app/data/models/persona_model.dart'; 
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gasjm/app/data/controllers/autenticacion_controller.dart';
+import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
-import 'package:get/get.dart'; 
+import 'package:get/get.dart';
 
 class AutenticacionRepositoryImpl extends AutenticacionRepository {
   final _firebaseAutenticacion = FirebaseAuth.instance;
@@ -12,7 +12,8 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
 //Modelo User de Firebase
   AutenticacionUsuario? _usuarioDeFirebase(User? usuario) => usuario == null
       ? null
-      : AutenticacionUsuario(usuario.uid, usuario.displayName,usuario.tenantId);
+      : AutenticacionUsuario(
+          usuario.uid, usuario.displayName, usuario.tenantId);
 
   @override
   AutenticacionUsuario? get autenticacionUsuario =>
@@ -42,20 +43,21 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
     return _usuarioDeFirebase(resultadoAutenticacion.user);
   }
 
- 
   @override
-  Future<void> cerrarSesion() async { 
+  Future<void> cerrarSesion() async {
     await Future.delayed(const Duration(seconds: 3));
- 
+
     await _firebaseAutenticacion.signOut();
   }
+
   @override
   Future<AutenticacionUsuario?> registrarUsuario(PersonaModel usuario) async {
     //Registro de correo y contraena
     final resultadoAutenticacion =
         await _firebaseAutenticacion.createUserWithEmailAndPassword(
-            email: usuario.correoPersona??'', password: usuario.contrasenaPersona);
-    
+            email: usuario.correoPersona ?? '',
+            password: usuario.contrasenaPersona);
+
     //Actualizar Nombre y apellido del usuario creado
     await resultadoAutenticacion.user!.updateDisplayName(
       "${usuario.nombrePersona} ${usuario.apellidoPersona}",
@@ -64,8 +66,9 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
     final uid =
         Get.find<AutenticacionController>().autenticacionUsuario.value!.uid;
 
-    firestoreInstance.collection("persona").doc(uid).set(usuario.toMap());
+    await firestoreInstance.collection("persona").doc(uid).set(usuario.toMap());
+    //
+    firestoreInstance.collection("persona").doc(uid).update({"uid": uid});
     return _usuarioDeFirebase(resultadoAutenticacion.user);
   }
- 
 }
