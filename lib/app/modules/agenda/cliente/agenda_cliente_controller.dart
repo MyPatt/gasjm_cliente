@@ -17,14 +17,5 @@ class AgendaClienteController extends GetxController {
     super.onClose();
   }
 
-  cargarEditarAgenda() async {
-    print("nnn");
-    try {
-      await Future.delayed(const Duration(seconds: 1));
-      Get.offNamed(AppRoutes.editaragenda);
-    } catch (e) {
-      // ignore: avoid_print
-      print(e);
-    }
-  }
+
 }

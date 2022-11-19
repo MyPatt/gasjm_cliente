@@ -18,9 +18,22 @@ class PedidoRepositoryImpl extends PedidoRepository {
       _provider.deletePedido(pedido: pedido);
 
   @override
+  Future<List<PedidoModel>?> getListaPedidosPorField(
+          {required String field, required String dato}) =>
+      _provider.getListaPedidosPorField(field: field, dato: dato);
+  @override
   Future<PedidoModel?> getPedidoPorField(
           {required String field, required String dato}) =>
       _provider.getPedidoPorField(field: field, dato: dato);
+  @override
+  Future<List<PedidoModel>?> getPedidosPorDosQueries({
+    required String field1,
+    required String dato1,
+    required String field2,
+    required String dato2,
+  }) =>
+      _provider.getPedidosPorDosQueries(
+          field1: field1, dato1: dato1, field2: field2, dato2: dato2);
 
   @override
   Future<void> updatePedido({required PedidoModel pedidoModel}) =>

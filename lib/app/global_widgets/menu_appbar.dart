@@ -1,40 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/modules/historial/historial_cliente.dart';
- 
+import 'package:gasjm/app/routes/app_routes.dart';
+import 'package:get/get.dart';
+
 //Barra de herramientas de opciones para la agenda y el historial
 class MenuAppBar extends StatelessWidget {
   const MenuAppBar({key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return   Row(
-              children: [
-                //Opcion agenda
-                IconButton(
-                    //
-                        onPressed: () {},
-                  //  onPressed: _.cargarAgenda,
-                    icon: const Icon(Icons.date_range_outlined)),
+    return Row(
+      children: [
+        //Opcion agenda
+        IconButton(
+            //
+            onPressed: () {},
+            //  onPressed: _.cargarAgenda,
+            icon: const Icon(Icons.date_range_outlined)),
 
-                //Opcion historial
-
-                IconButton(
-                    onPressed: () {
-                      // Creamos una ruta
-                      // recuerda que necesitamos del context proporcionado por el build
-                      final route = MaterialPageRoute(builder: (context) {
-                        return const TransactionPage();
-                      });
-                      // Usamos el método Navigator para ir a la página
-                      // Este método requiere del contexto y la ruta
-                      Navigator.push(context, route);
-                    },
-                    icon: const Icon(Icons.history_outlined)),
-                const SizedBox(
-                  width: 10,
-                ),
-              ],
-            );
+        //Opcion historial
+        IconButton(
+            onPressed: () => Get.toNamed(AppRoutes.historial),
+            icon: const Icon(Icons.history_outlined)),
+        const SizedBox(
+          width: 10,
+        ),
+      ],
+    );
   }
 }
 /**

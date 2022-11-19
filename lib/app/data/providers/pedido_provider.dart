@@ -46,6 +46,21 @@ class PedidoProvider {
     return null;
   }
 
+  Future<List<PedidoModel>?> getListaPedidosPorField(
+      {required String field, required String dato}) async {
+    final resultado = await _firestoreInstance
+        .collection("pedido")
+        .where(field, isEqualTo: dato)
+        .get();
+    if ((resultado.docs.isNotEmpty)) {
+      (resultado.docs)
+          .map((item) => PedidoModel.fromJson(item.data()))
+          .toList();
+    }
+    return null;
+  }
+
+  //
   Future<PedidoModel?> getPedidoPorField(
       {required String field, required String dato}) async {
     final resultado = await _firestoreInstance
@@ -54,21 +69,40 @@ class PedidoProvider {
         .limit(1)
         .get();
     if ((resultado.docs.isNotEmpty)) {
-      return PedidoModel.fromJson(resultado.docs.first.data());
+      (resultado.docs)
+          .map((item) => PedidoModel.fromJson(item.data()))
+          .toList();
     }
     return null;
   }
 
   //
-  // 
+  Future<List<PedidoModel>?> getPedidosPorDosQueries({
+    required String field1,
+    required String dato1,
+    required String field2,
+    required String dato2,
+  }) async {
+    final resultado = await _firestoreInstance
+        .collection("pedido")
+        .where(field1, isEqualTo: dato1)
+        .where(field2, isEqualTo: dato2)
+        .get();
+    if ((resultado.docs.isNotEmpty)) {
+      return (resultado.docs)
+          .map((item) => PedidoModel.fromJson(item.data()))
+          .toList();
+    }
+    return null;
+  }
+
+  //
   Future<String?> getDescripcionEstadoPedido({required String idEstado}) async {
- 
     final snapshot = await _firestoreInstance
         .collection('estadopedido')
         .where("idEstadoPedido", isEqualTo: idEstado)
         .limit(1)
         .get();
-   return snapshot.docs.first.get("descripcionEstadoPedido").toString();
-
+    return snapshot.docs.first.get("descripcionEstadoPedido").toString();
   }
 }

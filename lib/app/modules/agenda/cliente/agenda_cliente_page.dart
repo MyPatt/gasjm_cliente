@@ -29,7 +29,7 @@ class AgendaClientePage extends StatelessWidget {
                         primary: Colors.transparent,
                         shadowColor: Colors.transparent),
                     label: const Text("Agregar"),
-                    onPressed: _.cargarEditarAgenda,
+                    onPressed: (){},
                     icon: const Icon(Icons.add_outlined))
               ],
             ),

@@ -1,0 +1,93 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:gasjm/app/core/utils/mensajes.dart';
+import 'package:gasjm/app/data/models/pedido_model.dart';
+import 'package:gasjm/app/data/repository/pedido_repository.dart';
+import 'package:gasjm/app/data/repository/persona_repository.dart';
+import 'package:geocoding/geocoding.dart';
+import 'package:get/get.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class HistorialController extends GetxController {
+  final _pedidosRepository = Get.find<PedidoRepository>();
+  final _personaRepository = Get.find<PersonaRepository>();
+
+//
+  final cargandoPedidos = true.obs;
+
+  //Pedidos realizado
+
+  final RxList<PedidoModel> _listaPedidosRealizados = <PedidoModel>[].obs;
+  RxList<PedidoModel> get listaPedidosRealizados => _listaPedidosRealizados;
+
+  //
+  @override
+  void onInit() {
+    super.onInit();
+    cargarListaPedidosRealizadosPorCliente();
+  }
+
+  //Metodo para cargarLista de los pedidos para el administrador
+  Future<void> cargarListaPedidosRealizadosPorCliente() async {
+    try {
+      cargandoPedidos.value = true;
+      //
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String cedulaCliente = prefs.getString("cedula_usuario") ?? '';
+      //
+
+      print(cedulaCliente);
+      var lista = await _pedidosRepository.getListaPedidosPorField(
+              field: "idCliente", dato: cedulaCliente) ??
+          [];
+
+      //
+      for (var i = 0; i < lista.length; i++) {
+        final nombre = await _getNombresCliente(lista[i].idCliente);
+        final direccion = await _getDireccionXLatLng(
+            LatLng(lista[i].direccion.latitud, lista[i].direccion.longitud));
+        lista[i].nombreUsuario = nombre;
+        lista[i].direccionUsuario = direccion;
+      }
+
+//
+      _listaPedidosRealizados.value = lista;
+    } on FirebaseException {
+      Mensajes.showGetSnackbar(
+          titulo: 'Alerta',
+          mensaje:
+              'Ha ocurrido un error, por favor inténtelo de nuevo más tarde.',
+          icono: const Icon(
+            Icons.error_outline_outlined,
+            color: Colors.white,
+          ));
+    }
+    cargandoPedidos.value = false;
+  }
+
+  //
+  Future<String> _getNombresCliente(String cedula) async {
+    final nombre =
+        await _personaRepository.getNombresPersonaPorCedula(cedula: cedula);
+    return nombre ?? 'Usuario';
+  }
+
+  Future<String> _getDireccionXLatLng(LatLng posicion) async {
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(posicion.latitude, posicion.longitude);
+    Placemark lugar = placemark[0];
+
+//
+    return _getDireccion(lugar);
+  }
+
+  String _getDireccion(Placemark lugar) {
+    //
+    if (lugar.subLocality?.isEmpty == true) {
+      return lugar.street.toString();
+    } else {
+      return '${lugar.street}, ${lugar.subLocality}';
+    }
+  }
+}

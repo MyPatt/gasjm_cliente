@@ -2,6 +2,8 @@ import 'package:gasjm/app/modules/agenda/cliente/agenda_cliente_binding.dart';
 import 'package:gasjm/app/modules/agenda/cliente/agenda_cliente_page.dart';
 import 'package:gasjm/app/modules/agenda/cliente/local_widgets/editar/editar_binding.dart';
 import 'package:gasjm/app/modules/agenda/cliente/local_widgets/editar/editar_page.dart';
+import 'package:gasjm/app/modules/historial/historial_binding.dart';
+import 'package:gasjm/app/modules/historial/historial_page.dart';
 import 'package:gasjm/app/modules/identificacion/identificacion_binding.dart';
 import 'package:gasjm/app/modules/identificacion/identificacion_page.dart';
 import 'package:gasjm/app/modules/inicio/inicio_binding.dart';
@@ -94,18 +96,18 @@ class AppPages {
       transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
-      name: AppRoutes.agenda,
-      page: () => const AgendaClientePage(),
-      binding: AgendaClienteBinding(),
+      name: AppRoutes.historial,
+      page: () => const HistorialPage(),
+      binding: HistorialBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
-    GetPage(
-      name: AppRoutes.editaragenda,
+  /*  GetPage(
+      name: AppRoutes.horario,
       page: () => const EditarAgendaPage(),
       binding: EditarPedidoAgendadoBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
-    ),
+    ),*/
   ];
 }

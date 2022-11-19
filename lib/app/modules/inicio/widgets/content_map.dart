@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
+import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/modules/inicio/inicio_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -17,7 +18,6 @@ class ContentMap extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                     
                         color: Colors.transparent,
                         alignment: Alignment.centerLeft,
                         height: Responsive.getScreenSize(context).height * .05,
@@ -48,7 +48,7 @@ class ContentMap extends StatelessWidget {
                     child: Obx(
                   () => _.posicionInicialCliente.value ==
                           const LatLng(-12.122711, -77.027475)
-                      ? const Center(child: CircularProgressIndicator())
+                      ? const Center(child: CircularProgress())
                       : GoogleMap(
                           mapType: MapType.normal,
                           markers: Set.of(_.marcadores),

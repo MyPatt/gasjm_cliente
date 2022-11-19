@@ -236,7 +236,7 @@ class InicioController extends GetxController {
   cargarAgenda() async {
     try {
       await Future.delayed(const Duration(seconds: 1));
-      Get.offNamed(AppRoutes.agenda);
+      Get.offNamed(AppRoutes.historial);
     } catch (e) {
       throw Exception(
           "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.");
