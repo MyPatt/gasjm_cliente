@@ -25,7 +25,10 @@ class HistorialController extends GetxController {
   //Obtener fecha de los pedidos
   final RxList<Timestamp> _listaFechas = <Timestamp>[].obs;
   RxList<Timestamp> get listaFechas => _listaFechas;
-
+//
+//Visible informacion del detalle de=historial
+  RxBool visibleDetalle = false.obs;
+  final int indice = 0;
   //
   @override
   void onInit() {

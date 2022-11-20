@@ -6,6 +6,7 @@ import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/historial/historial_controller.dart';
+import 'package:gasjm/app/modules/historial/widgets/detalle_historial.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -59,7 +60,7 @@ class HistorialPage extends StatelessWidget {
                           ],
                         ),
                 ),
-              )
+              ),
             ],
           ),
         ),
@@ -152,13 +153,22 @@ class HistorialPage extends StatelessWidget {
         borderRadius: BorderRadius.circular(15.0),
       ),
       //  shape: Border.all(color: AppTheme.light, width: 0.5),
-      child: 
-      Padding(
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             GestureDetector(
-                onTap: () {},
+                onTap: () {
+             //     Navigator.push(context, route)
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (BuildContext context) => DetalleHistorial(
+                        pedido: pedido,
+                      ),
+                    ),
+                  );
+                },
                 /*=> Get.to(DetallePedido(
                     e: e, indiceCategoriaPedido: indiceCategoriaPedido)),*/
                 child: Column(
@@ -170,15 +180,18 @@ class HistorialPage extends StatelessWidget {
                           text: '${pedido.direccionUsuario}',
                         ),
                         TextSubtitle(
-                          text:pedido.cantidadPedido>1? '${pedido.cantidadPedido} cilindros':'${pedido.cantidadPedido} cilindro',
+                          text: pedido.cantidadPedido > 1
+                              ? '${pedido.cantidadPedido} cilindros'
+                              : '${pedido.cantidadPedido} cilindro',
                         )
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        TextDescription(text: pedido.estadoPedidoUsuario??'Finalizado'),
-                         TextDescription(text: '\$ ${pedido.totalPedido}')
+                        TextDescription(
+                            text: pedido.estadoPedidoUsuario ?? 'Finalizado'),
+                        TextDescription(text: '\$ ${pedido.totalPedido}')
                       ],
                     ),
                   ],
@@ -186,7 +199,7 @@ class HistorialPage extends StatelessWidget {
           ],
         ),
       ),
-   );
+    );
   }
 
   Container buildLine(int index, BuildContext context) {

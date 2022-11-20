@@ -1,12 +1,11 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
-import 'package:gasjm/app/data/models/pedido_model.dart'; 
+import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/historial/historial_controller.dart';
-import 'package:get/get.dart'; 
+import 'package:get/get.dart';
 
 class DetalleHistorial extends StatelessWidget {
   const DetalleHistorial({Key? key, required this.pedido}) : super(key: key);
@@ -14,19 +13,17 @@ class DetalleHistorial extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-       HistorialController controladorDePedidos =
-      Get.put(HistorialController());
+    HistorialController controladorDePedidos = Get.put(HistorialController());
     List<Step> steps = [
       Step(
-        title: 
-         Text(
-            'Pedido realizado',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color:  AppTheme.blueDark ,
-                fontWeight: 
-                    FontWeight.w500),
-          ),
-   
+        title: Text(
+          'Pedido realizado',
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall
+              ?.copyWith(color: AppTheme.blueDark, fontWeight: FontWeight.w500),
+        ),
+
         subtitle: Text(
           controladorDePedidos.formatoHoraFecha(pedido.fechaHoraPedido),
           textAlign: TextAlign.start,
@@ -35,18 +32,18 @@ class DetalleHistorial extends StatelessWidget {
                 fontWeight: FontWeight.w500,
               ),
         ),
-       // isActive: controladorDePedidos.activeStep1.value,
+        // isActive: controladorDePedidos.activeStep1.value,
         content: Container(),
       ),
       Step(
-        title: Obx(
-          () => Text(
-            'Pedido aceptado',
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                color:  AppTheme.light,
-                fontWeight: FontWeight.w500),
-          ),
+        title: Text(
+          'Pedido aceptado',
+          style: Theme.of(context)
+              .textTheme
+              .titleSmall
+              ?.copyWith(color: AppTheme.light, fontWeight: FontWeight.w500),
         ),
+
         subtitle: Text(
           controladorDePedidos.formatoHoraFecha(
               pedido.estadoPedido1?.fechaHoraEstado ?? Timestamp.now()),
@@ -90,7 +87,6 @@ class DetalleHistorial extends StatelessWidget {
         title: const Text(
           "Detalle del pedido",
         ),
-       
       ),
       body: SafeArea(
         bottom: false,
@@ -125,14 +121,14 @@ class DetalleHistorial extends StatelessWidget {
                                       color: AppTheme.blueDark,
                                       fontWeight: FontWeight.w800),
                             ),
-                            SizedBox(height: 5.0),
+                            const SizedBox(height: 5.0),
                             Row(
-                              children: [
-                                Icon(
+                              children: <Widget>[
+                                const Icon(
                                   Icons.credit_card_outlined,
                                   size: 15.0,
                                 ),
-                                SizedBox(width: 10.0),
+                                const SizedBox(width: 10.0),
                                 Text(
                                   pedido.idCliente,
                                   style: Theme.of(context)
@@ -144,14 +140,14 @@ class DetalleHistorial extends StatelessWidget {
                                 ),
                               ],
                             ),
-                            SizedBox(height: 5.0),
+                            const SizedBox(height: 5.0),
                             Row(
-                              children: [
-                                Icon(
+                              children: <Widget>[
+                                const Icon(
                                   Icons.room_outlined,
                                   size: 16.0,
                                 ),
-                                SizedBox(width: 10.0),
+                                const SizedBox(width: 10.0),
                                 Text(
                                   pedido.direccionUsuario ?? 'Sin ubicación',
                                   style: Theme.of(context)
@@ -194,7 +190,7 @@ class DetalleHistorial extends StatelessWidget {
                         )
                       ],
                     ),
-                    SizedBox(height: 5.0),
+                    const SizedBox(height: 5.0),
                     Text(
                       //"Barrio Santa Rosa a una cuadra del parque, puerta negra.",
                       pedido.notaPedido ?? "",
@@ -204,93 +200,35 @@ class DetalleHistorial extends StatelessWidget {
                             color: AppTheme.light,
                           ),
                     ),
-                    SizedBox(height: 5.0),
-                    Text(
-                      '300 m',
-                      textAlign: TextAlign.justify,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: AppTheme.light,
-                            fontWeight: FontWeight.w400,
-                          ),
-                    ),
-                    SizedBox(height: 5.0),
-                    Text(
-                      '5 min',
-                      textAlign: TextAlign.justify,
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                            color: AppTheme.light,
-                            fontWeight: FontWeight.w400,
-                          ),
-                    ),
-                    SizedBox(height: 10.0),
-                    const Divider(
-                      thickness: 1,
-                    ),
-                    Obx(
-                      () => Theme(
-                        data: Theme.of(context).copyWith(
-                            colorScheme: Theme.of(context).colorScheme.copyWith(
-                                onSurface: AppTheme.light,
-                                primary: AppTheme.light)),
-                        /*  Theme.of(context).copyWith(
-                          
-                            colorScheme: const ColorScheme.light(
-                              primary: Colors.grey,
 
-                              //onSurface: AppTheme.blueDark,
-                            )),*/
-                        child: Stepper(
-                          controlsBuilder:
-                              (BuildContext ctx, ControlsDetails dtl) {
-                            return Row(
-                              children: [Container()],
-                            );
-                          },
-                          //currentStep: controladorDePedidos.currentStep.value,
-                           currentStep:0,
-                          steps: steps,
-                          type: StepperType.vertical,
-                          onStepContinue: () {
-                            print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-                          },
-                          /*  onStepTapped: (step) {
-                                //  setState(() {
-                                current_step = step;
-                              },
-                              onStepContinue: () {
-                                //  setState(() {
-                                if (current_step < steps.length - 1) {
-                                  current_step = current_step + 1;
-                                } else {
-                                  current_step = 0;
-                                }
-                                //   });
-                              },
-                              onStepCancel: () {
-                                //   setState(() {
-                                if (current_step > 0) {
-                                  current_step = current_step - 1;
-                                } else {
-                                  current_step = 0;
-                                }
-                                //  });
-                              },*/
-                        ),
+                    const SizedBox(height: 10.0),
+
+                    Theme(
+                      data: Theme.of(context).copyWith(
+                          colorScheme: const ColorScheme.light(
+                        primary: Colors.grey,
+
+                        //onSurface: AppTheme.blueDark,
+                      )),
+                      child: Stepper(
+                        controlsBuilder:
+                            (BuildContext ctx, ControlsDetails dtl) {
+                          return Row(
+                            children: [Container()],
+                          );
+                        },
+                        //currentStep: controladorDePedidos.currentStep.value,
+                        currentStep: 0,
+                        steps: steps,
+                        type: StepperType.vertical,
                       ),
                     ),
-                    SizedBox(height: 10.0),
-                    const Divider(
-                      thickness: 1.0,
-                    ),
-                    SizedBox(height: 10.0),
-                  ///  PedidosEnEsperaPage(idPedido: e.idPedido)
+
+                    const SizedBox(height: 10.0),
+
+                    ///  PedidosEnEsperaPage(idPedido: e.idPedido)
                   ]),
                 ),
-                /*  const Spacer(),
-                  Container(
-                      margin:
-                          const EdgeInsets.symmetric(horizontal: 20, vertical: 25),
-                      child: PedidosEnEsperaPage(idPedido: e.idPedido))*/
               ]),
             ),
           ),
