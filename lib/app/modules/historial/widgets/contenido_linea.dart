@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 
 class ContenidoLinea extends StatelessWidget {
-  const ContenidoLinea();
-
+  const ContenidoLinea(this.index, this.context, {Key? key}) : super(key: key);
+  final int index;
+ final BuildContext context;
   @override
-  Widget build(BuildContext context) {
+  Widget build( context) {
     return Container(
       child: Column(
         mainAxisSize: MainAxisSize.max,

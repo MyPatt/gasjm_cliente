@@ -51,9 +51,10 @@ class PedidoProvider {
     final resultado = await _firestoreInstance
         .collection("pedido")
         .where(field, isEqualTo: dato)
+        .orderBy("fechaHoraPedido",descending: true)
         .get();
     if ((resultado.docs.isNotEmpty)) {
-      (resultado.docs)
+      return (resultado.docs)
           .map((item) => PedidoModel.fromJson(item.data()))
           .toList();
     }
@@ -104,5 +105,14 @@ class PedidoProvider {
         .limit(1)
         .get();
     return snapshot.docs.first.get("descripcionEstadoPedido").toString();
+  }
+
+    Future<String?> getNombreEstadoPedidoPorId({required String idEstado})async {
+        final snapshot = await _firestoreInstance
+        .collection('estadopedido')
+        .where("idEstadoPedido", isEqualTo: idEstado)
+        .limit(1)
+        .get();
+    return snapshot.docs.first.get("nombreEstadoPedido").toString();
   }
 }

@@ -16,4 +16,6 @@ abstract class PedidoRepository {
     required String dato2,
   });
   Future<String?> getDescripcionEstadoPedido({required String idEstado});
+
+  Future<String?> getNombreEstadoPedidoPorId({required String idEstado});
 }

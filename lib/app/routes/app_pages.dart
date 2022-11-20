@@ -97,7 +97,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.historial,
-      page: () => const HistorialPage(),
+      page: () =>  HistorialPage(),
       binding: HistorialBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),

@@ -41,4 +41,8 @@ class PedidoRepositoryImpl extends PedidoRepository {
   @override
   Future<String?> getDescripcionEstadoPedido({required String idEstado}) =>
       _provider.getDescripcionEstadoPedido(idEstado: idEstado);
+
+@override
+        Future<String?> getNombreEstadoPedidoPorId({required String idEstado})=>
+      _provider.getNombreEstadoPedidoPorId(idEstado: idEstado);
 }

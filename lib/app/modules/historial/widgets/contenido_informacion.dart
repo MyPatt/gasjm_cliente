@@ -2,13 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
+import 'package:gasjm/app/modules/historial/historial_controller.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 class ContenidoInformacion extends StatelessWidget {
-   const ContenidoInformacion(this.transaction, {Key? key}) : super(key: key);
-  final PedidoModel transaction;
+  const ContenidoInformacion(this.pedido,this.context, {Key? key}) : super(key: key);
+  final PedidoModel pedido;
+  final BuildContext context;
   @override
-  Widget build(BuildContext context) {
+  Widget build( context) {
+    final HistorialController controlador = Get.put(HistorialController());
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
@@ -28,13 +32,11 @@ class ContenidoInformacion extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         TextSubtitle(
-                          text: 'e.nombreUsuario ??\'Cliente',
+                          text: '${pedido.direccionUsuario}',
                           // style: TextoTheme.subtitleStyle2,
                         ),
                         TextSubtitle(
-                          text: '11',
-                          // text: 'e.cantidadPedido.toString()',
-                          //  style: TextoTheme.subtitleStyle2
+                          text: '${pedido.cantidadPedido}',
                         )
                       ],
                     ),
@@ -42,7 +44,8 @@ class ContenidoInformacion extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         TextDescription(
-                            text: 'e.direccionUsuario ?? \'Sin ubicación'),
+                            text: controlador
+                                .formatoHoraFecha(pedido.fechaHoraPedido)),
                         const TextDescription(text: '5 min')
                       ],
                     ),
@@ -52,7 +55,7 @@ class ContenidoInformacion extends StatelessWidget {
                         TextDescription(
                             //text: controladorDePedidos  .formatoFecha(e.fechaHoraPedido)
                             text: DateFormat("es")
-                                .format(transaction.fechaHoraPedido.toDate())),
+                                .format(pedido.fechaHoraPedido.toDate())),
                         const TextDescription(text: '300 m')
                       ],
                     ),

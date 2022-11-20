@@ -6,13 +6,13 @@ import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/historial/historial_controller.dart';
-import 'package:gasjm/app/modules/historial/widgets/contenido_informacion.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 //Pantalla de inicio del cliente
 class HistorialPage extends StatelessWidget {
-  const HistorialPage({key}) : super(key: key);
+  HistorialPage({key}) : super(key: key);
+  final HistorialController controlador = Get.put(HistorialController());
 
 //
   @override
@@ -50,64 +50,12 @@ class HistorialPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Expanded(
-                              child: Obx(() => !_
-                                      .listaPedidosRealizados.isNotEmpty
-                                  ? const Center(
-                                      child:
-                                          TextDescription(text: "Sin pedidos!"))
-                                  : ListView.builder(
-                                      itemCount:
-                                          _.listaPedidosRealizados.length,
-                                      itemBuilder: (context, index) {
-                                        PedidoModel transaction =
-                                            _.listaPedidosRealizados[index];
-                                        DateTime date = transaction
-                                            .fechaHoraEntregaPedido!
-                                            .toDate();
-                                        /*   DateTime date = DateTime.fromMillisecondsSinceEpoch(
-                              transaction.createdMillis!.toInt());*/
-                                        String dateString =
-                                            DateFormat("d MMM, y").format(date);
-
-                                        if (today == dateString) {
-                                          dateString = "Hoy";
-                                        } else if (yesterday == dateString) {
-                                          dateString = "Ayer";
-                                        }
-
-                                        bool showHeader = prevDay != dateString;
-                                        prevDay = dateString;
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: <Widget>[
-                                            showHeader
-                                                ? Container(
-                                                    padding: const EdgeInsets
-                                                            .symmetric(
-                                                        horizontal: 16,
-                                                        vertical: 16),
-                                                    child: Text(
-                                                      dateString,
-                                                      style: Theme.of(context)
-                                                          .textTheme
-                                                          .subtitle2!
-                                                          .copyWith(
-                                                            color: AppTheme
-                                                                .blueDark,
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                          ),
-                                                    ),
-                                                  )
-                                                : const Offstage(),
-                                            // buildItem(index, context, date, transaction),
-                                            ContenidoInformacion(transaction)
-                                          ],
-                                        );
-                                      },
-                                    )),
-                            )
+                                child: Obx(() => !_
+                                        .listaPedidosRealizados.isNotEmpty
+                                    ? const Center(
+                                        child: TextDescription(
+                                            text: "Sin pedidos!"))
+                                    : buildListView(_.listaPedidosRealizados)))
                           ],
                         ),
                 ),
@@ -119,14 +67,75 @@ class HistorialPage extends StatelessWidget {
     );
   }
 
+  ListView buildListView(List<PedidoModel> lista) {
+    String? prevDay;
+    String today = DateFormat("d MMM, y").format(DateTime.now());
+    String yesterday = DateFormat("d MMM, y")
+        .format(DateTime.now().add(const Duration(days: -1)));
+
+    return ListView.builder(
+      itemCount: lista.length,
+      itemBuilder: (context, index) {
+        PedidoModel transaction = lista[index];
+        DateTime date = DateTime.fromMillisecondsSinceEpoch(
+            transaction.fechaHoraPedido.millisecondsSinceEpoch
+            // controlador.listaFechas[index].millisecondsSinceEpoch
+            //transactions[index].createdMillis!.toInt()
+            );
+        String dateString = DateFormat("d MMM, y").format(date);
+
+        if (today == dateString) {
+          dateString = "Hoy";
+        } else if (yesterday == dateString) {
+          dateString = "Ayer";
+        }
+
+        bool showHeader = prevDay != dateString;
+        prevDay = dateString;
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            showHeader
+                ? Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 16),
+                    child: Text(
+                      dateString,
+                      //  '${controlador.listaFechas[index].toDate()}',
+                      style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                            color: AppTheme.blueDark,
+                            fontWeight: FontWeight.bold,
+                          ),
+                    ),
+                  )
+                : const Offstage(),
+            buildItem(index, context, date, transaction),
+          ],
+        );
+      },
+    );
+  }
+
   Widget buildItem(
-      int index, BuildContext context, DateTime date, Transaction transaction) {
+      int index, BuildContext context, DateTime date, PedidoModel transaction) {
     return IntrinsicHeight(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           const SizedBox(width: 20),
           buildLine(index, context),
+          Container(
+            alignment: Alignment.centerLeft,
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
+            // color: Theme.of(context).accentColor,
+            child: Text(
+              DateFormat("HH:mm").format(date),
+              style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                    color: AppTheme.light,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
           Expanded(
             flex: 1,
             child: buildItemInfo(transaction, context),
@@ -136,13 +145,15 @@ class HistorialPage extends StatelessWidget {
     );
   }
 
-  Card buildItemInfo(Transaction transaction, BuildContext context) {
+  Card buildItemInfo(PedidoModel pedido, BuildContext context) {
+    final HistorialController controlador = Get.put(HistorialController());
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
       ),
       //  shape: Border.all(color: AppTheme.light, width: 0.5),
-      child: Padding(
+      child: 
+      Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
@@ -156,35 +167,18 @@ class HistorialPage extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
                         TextSubtitle(
-                          text: 'e.nombreUsuario ??\'Cliente',
-                          // style: TextoTheme.subtitleStyle2,
+                          text: '${pedido.direccionUsuario}',
                         ),
                         TextSubtitle(
-                          text: '11',
-                          // text: 'e.cantidadPedido.toString()',
-                          //  style: TextoTheme.subtitleStyle2
+                          text:pedido.cantidadPedido>1? '${pedido.cantidadPedido} cilindros':'${pedido.cantidadPedido} cilindro',
                         )
                       ],
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        TextDescription(
-                          text: transaction.name.toString(),
-                        ),
-                        //text: 'e.direccionUsuario ?? \'Sin ubicación'),
-                        const TextDescription(text: '5 min')
-                      ],
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        TextDescription(
-                          text: transaction.name.toString(),
-                        ),
-
-                        // text: controladorDePedidos  .formatoFecha(e.fechaHoraPedido)),
-                        const TextDescription(text: '300 m')
+                        TextDescription(text: pedido.estadoPedidoUsuario??'Finalizado'),
+                         TextDescription(text: '\$ ${pedido.totalPedido}')
                       ],
                     ),
                   ],
@@ -192,7 +186,7 @@ class HistorialPage extends StatelessWidget {
           ],
         ),
       ),
-    );
+   );
   }
 
   Container buildLine(int index, BuildContext context) {

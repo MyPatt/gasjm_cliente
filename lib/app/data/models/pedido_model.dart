@@ -12,6 +12,7 @@ class PedidoModel {
   final Timestamp? fechaHoraEntregaPedido;
   String? nombreUsuario;
   String? direccionUsuario;
+  String? estadoPedidoUsuario;
   int? tiempoEntrega;
 
   final int cantidadPedido;
