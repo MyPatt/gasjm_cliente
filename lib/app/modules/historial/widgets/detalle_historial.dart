@@ -105,7 +105,10 @@ class DetalleHistorial extends StatelessWidget {
                     borderRadius: BorderRadius.circular(30),
                     color: Colors.white,
                   ),
-                  child: Column(children: [
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:
+                  <Widget> [
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

@@ -1,7 +1,4 @@
-import 'package:gasjm/app/modules/agenda/cliente/agenda_cliente_binding.dart';
-import 'package:gasjm/app/modules/agenda/cliente/agenda_cliente_page.dart';
-import 'package:gasjm/app/modules/agenda/cliente/local_widgets/editar/editar_binding.dart';
-import 'package:gasjm/app/modules/agenda/cliente/local_widgets/editar/editar_page.dart';
+
 import 'package:gasjm/app/modules/historial/historial_binding.dart';
 import 'package:gasjm/app/modules/historial/historial_page.dart';
 import 'package:gasjm/app/modules/identificacion/identificacion_binding.dart';

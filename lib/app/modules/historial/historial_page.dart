@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
-import 'package:gasjm/app/data/models/historial_model.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
+import 'package:gasjm/app/modules/historial/historial_binding.dart';
 import 'package:gasjm/app/modules/historial/historial_controller.dart';
 import 'package:gasjm/app/modules/historial/widgets/detalle_historial.dart';
 import 'package:get/get.dart';
@@ -18,11 +18,6 @@ class HistorialPage extends StatelessWidget {
 //
   @override
   Widget build(BuildContext context) {
-    String? prevDay;
-    String today = DateFormat("d MMM, y").format(DateTime.now());
-    String yesterday = DateFormat("d MMM, y")
-        .format(DateTime.now().add(const Duration(days: -1)));
-
     return GetBuilder<HistorialController>(
       builder: (_) => Scaffold(
         backgroundColor: AppTheme.background,
@@ -147,7 +142,6 @@ class HistorialPage extends StatelessWidget {
   }
 
   Card buildItemInfo(PedidoModel pedido, BuildContext context) {
-    final HistorialController controlador = Get.put(HistorialController());
     return Card(
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15.0),
@@ -159,15 +153,21 @@ class HistorialPage extends StatelessWidget {
           children: [
             GestureDetector(
                 onTap: () {
-             //     Navigator.push(context, route)
-                  Navigator.pushReplacement(
+                  Get.to(
+                      DetalleHistorial(
+                        pedido: pedido,
+                      ),
+                      binding: HistorialBinding(),
+                      routeName: 'detalle');
+                  //     Navigator.push(context, route)
+                  /*  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (BuildContext context) => DetalleHistorial(
                         pedido: pedido,
                       ),
                     ),
-                  );
+                  );*/
                 },
                 /*=> Get.to(DetallePedido(
                     e: e, indiceCategoriaPedido: indiceCategoriaPedido)),*/
