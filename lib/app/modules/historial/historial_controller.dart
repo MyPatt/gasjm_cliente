@@ -134,20 +134,22 @@ class HistorialController extends GetxController {
 //
   RxBool cargandoDetalle = false.obs;
   final Rx<EstadoDelPedido?> _estadoPedido1 = EstadoDelPedido(
-          idEstado: "null",
-          fechaHoraEstado: Timestamp.now(),
-          idPersona: "idPersona")
+          idEstado: "null", fechaHoraEstado: Timestamp.now(), idPersona: "")
       .obs;
   final Rx<EstadoDelPedido?> _estadoPedido3 = EstadoDelPedido(
-          idEstado: "null",
-          fechaHoraEstado: Timestamp.now(),
-          idPersona: "idPersona")
+          idEstado: "null", fechaHoraEstado: Timestamp.now(), idPersona: "")
       .obs;
   Rx<EstadoDelPedido?> get estadoPedido1 => _estadoPedido1;
   Rx<EstadoDelPedido?> get estadoPedido3 => _estadoPedido3;
   //El estadoPedido2 se usa por el repartidor
   Future<void> cargarDetalle(PedidoModel pedido) async {
     _cargarPaginaDetalle(pedido);
+    //Limpiar datos
+    _estadoPedido1.value = EstadoDelPedido(
+        idEstado: "null", fechaHoraEstado: Timestamp.now(), idPersona: "");
+    _estadoPedido3.value = EstadoDelPedido(
+        idEstado: "null", fechaHoraEstado: Timestamp.now(), idPersona: "");
+//
     try {
       cargandoDetalle.value = true;
       //

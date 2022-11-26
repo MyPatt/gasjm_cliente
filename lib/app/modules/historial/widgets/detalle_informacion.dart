@@ -24,7 +24,7 @@ class DetalleInformacion extends StatelessWidget {
                         color: AppTheme.blueDark, fontWeight: FontWeight.w800),
                   ),
                   const SizedBox(height: 5.0),
-                  Row(
+                  /*    Row(
                     children: <Widget>[
                       const Icon(
                         Icons.credit_card_outlined,
@@ -38,19 +38,20 @@ class DetalleInformacion extends StatelessWidget {
                             ),
                       ),
                     ],
-                  ),
+                  ),*/
                   const SizedBox(height: 5.0),
                   Row(
                     children: <Widget>[
                       const Icon(
                         Icons.room_outlined,
-                        size: 16.0,
+                        color: AppTheme.light,
+                        size: 18.0,
                       ),
                       const SizedBox(width: 10.0),
                       Text(
                         pedido.direccionUsuario ?? 'Sin ubicación',
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: AppTheme.blueDark,
+                              color: AppTheme.light,
                             ),
                       ),
                     ],

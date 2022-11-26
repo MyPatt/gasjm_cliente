@@ -65,8 +65,8 @@ class HistorialPage extends StatelessWidget {
 
   ListView buildListView(List<PedidoModel> lista) {
     String? prevDay;
-    String today = DateFormat("d MMM, y").format(DateTime.now());
-    String yesterday = DateFormat("d MMM, y")
+    String today = DateFormat("d MMMM, y", "es").format(DateTime.now());
+    String yesterday = DateFormat("d MMMM, y", "es")
         .format(DateTime.now().add(const Duration(days: -1)));
 
     return ListView.builder(
@@ -78,7 +78,7 @@ class HistorialPage extends StatelessWidget {
             // controlador.listaFechas[index].millisecondsSinceEpoch
             //transactions[index].createdMillis!.toInt()
             );
-        String dateString = DateFormat("d MMM, y").format(date);
+        String dateString = DateFormat("d MMMM, y", "es").format(date);
 
         if (today == dateString) {
           dateString = "Hoy";
@@ -152,7 +152,7 @@ class HistorialPage extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-                onTap: () =>controlador.cargarDetalle(pedido), 
+                onTap: () => controlador.cargarDetalle(pedido),
                 child: Column(
                   children: <Widget>[
                     Row(

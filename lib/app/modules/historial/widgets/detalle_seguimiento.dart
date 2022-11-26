@@ -1,9 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
-import 'package:gasjm/app/global_widgets/text_description.dart';
-import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/historial/historial_controller.dart';
 import 'package:get/get.dart';
 
@@ -32,13 +29,13 @@ class DetalleSeguimiento extends StatelessWidget {
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                   color: AppTheme.light,
                 )),
-        content: Container(child: TextSubtitle(text: "data")),
+        content: Container(),
       ),
       Step(
           title: Obx(
             () => Text(
                 controlador.estadoPedido1.value?.idEstado == 'null'
-                    ? 'Pedido aceptado'
+                    ? 'Pedido en espera'
                     : 'Pedido ' +
                         (controlador.estadoPedido1.value!.nombreEstado!
                             .toLowerCase()),
@@ -92,20 +89,31 @@ class DetalleSeguimiento extends StatelessWidget {
                         .toLowerCase()),
             style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 color: Colors.black38, fontWeight: FontWeight.w800))),
-        subtitle: Obx(() => Text(
-            controlador.estadoPedido3.value?.idEstado == 'null'
-                ? ''
-                : controlador.formatoHoraFecha(
-                    controlador.estadoPedido3.value!.fechaHoraEstado),
-            style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                  color: AppTheme.light,
-                ))),
-        content: Obx(() => controlador.estadoPedido3.value?.idEstado == 'null'
-            ? Container()
-            : Text('Por ' + controlador.estadoPedido3.value!.nombreUsuario!,
+        subtitle:
+            Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          Row(children: [
+            Obx(() => Text(
+                controlador.estadoPedido3.value?.idEstado == 'null'
+                    ? ''
+                    : controlador.formatoHoraFecha(
+                        controlador.estadoPedido3.value!.fechaHoraEstado),
                 style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: AppTheme.light,
                     ))),
+          ]),
+          Row(
+            children: [
+              Obx(() => controlador.estadoPedido3.value?.idEstado == 'null'
+                  ? Container()
+                  : Text(
+                      ' Por ' + controlador.estadoPedido3.value!.nombreUsuario!,
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: AppTheme.light,
+                          ))),
+            ],
+          )
+        ]),
+        content: Container(),
       ),
     ];
     return Theme(
