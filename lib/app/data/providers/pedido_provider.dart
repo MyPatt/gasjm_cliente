@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:gasjm/app/data/models/estadopedido_model.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 
 class PedidoProvider {
   //Instancia de firestore
   final _firestoreInstance = FirebaseFirestore.instance;
-
+ final usuario = FirebaseAuth.instance.currentUser;
   //
   Future<void> insertPedido({required PedidoModel pedidoModel}) async {
     final resultado =
@@ -51,7 +53,7 @@ class PedidoProvider {
     final resultado = await _firestoreInstance
         .collection("pedido")
         .where(field, isEqualTo: dato)
-        .orderBy("fechaHoraPedido",descending: true)
+        .orderBy("fechaHoraPedido", descending: true)
         .get();
     if ((resultado.docs.isNotEmpty)) {
       return (resultado.docs)
@@ -66,13 +68,14 @@ class PedidoProvider {
       {required String field, required String dato}) async {
     final resultado = await _firestoreInstance
         .collection("pedido")
-        .where(field, isEqualTo: dato)
+        .where(field, isEqualTo: dato).orderBy("fechaHoraPedido",descending: true)
         .limit(1)
         .get();
     if ((resultado.docs.isNotEmpty)) {
-      (resultado.docs)
+      return PedidoModel.fromJson(resultado.docs.first.data());
+      /*(resultado.docs)
           .map((item) => PedidoModel.fromJson(item.data()))
-          .toList();
+          .toList();*/
     }
     return null;
   }
@@ -107,12 +110,45 @@ class PedidoProvider {
     return snapshot.docs.first.get("descripcionEstadoPedido").toString();
   }
 
-    Future<String?> getNombreEstadoPedidoPorId({required String idEstado})async {
-        final snapshot = await _firestoreInstance
+  Future<String?> getNombreEstadoPedidoPorId({required String idEstado}) async {
+    final snapshot = await _firestoreInstance
         .collection('estadopedido')
         .where("idEstadoPedido", isEqualTo: idEstado)
         .limit(1)
         .get();
     return snapshot.docs.first.get("nombreEstadoPedido").toString();
   }
+
+  //Obtener los cambios de los estados
+  Future<EstadoDelPedido?> getEstadoPedidoPorField({
+    required String uid,
+    required String field,
+  }) async {
+    final resultado =
+        await _firestoreInstance.collection("pedido").doc(uid).get();
+    var datos = (resultado.get(field));
+
+    print("object ${datos}");
+
+    if ((datos != null)) {
+      print("object ${resultado.get(field)}");
+      return EstadoDelPedido.fromJson(resultado.get(field));
+    } else {
+      return null;
+    }
+  }
+
+    //
+
+  Future<void> updateEstadoPedido(
+      {required String idPedido, required String estadoPedido,required String numeroEstadoPedido }) async {
+    await _firestoreInstance
+        .collection('pedido')
+        .doc(idPedido)
+        .update({"idEstadoPedido": estadoPedido,
+        
+        numeroEstadoPedido:EstadoDelPedido(idEstado: estadoPedido  , fechaHoraEstado: Timestamp.now(), idPersona: usuario!.uid).toMap()
+ });
+  }
+
 }

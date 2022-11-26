@@ -1,7 +1,9 @@
+import 'package:gasjm/app/data/models/estadopedido_model.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/data/providers/pedido_provider.dart';
 import 'package:gasjm/app/data/repository/pedido_repository.dart';
 import 'package:get/get.dart';
+import 'package:pod/pod.dart';
 
 class PedidoRepositoryImpl extends PedidoRepository {
   final _provider = Get.find<PedidoProvider>();
@@ -42,7 +44,20 @@ class PedidoRepositoryImpl extends PedidoRepository {
   Future<String?> getDescripcionEstadoPedido({required String idEstado}) =>
       _provider.getDescripcionEstadoPedido(idEstado: idEstado);
 
-@override
-        Future<String?> getNombreEstadoPedidoPorId({required String idEstado})=>
+  @override
+  Future<String?> getNombreEstadoPedidoPorId({required String idEstado}) =>
       _provider.getNombreEstadoPedidoPorId(idEstado: idEstado);
+  //
+  @override
+  Future<EstadoDelPedido?> getEstadoPedidoPorField({
+    required String uid,
+    required String field,
+  }) =>
+      _provider.getEstadoPedidoPorField(uid: uid, field: field);
+        @override
+  Future<void> updateEstadoPedido(
+          {required String idPedido, required String estadoPedido,required String numeroEstadoPedido}) =>
+      _provider.updateEstadoPedido(
+          idPedido: idPedido, estadoPedido: estadoPedido, numeroEstadoPedido: numeroEstadoPedido);
+
 }

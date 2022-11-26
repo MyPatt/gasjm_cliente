@@ -30,8 +30,9 @@ class PersonaRepositoryImpl extends PersonaRepository {
 
   @override
   Future<List<PersonaModel>?> getPersonas() => _provider.getPersonas();
-@override
-  Future<String?> getImagenUsuarioActual()=>_provider.getImagenUsuarioActual();
+  @override
+  Future<String?> getImagenUsuarioActual() =>
+      _provider.getImagenUsuarioActual();
 
   @override
   Future<void> insertPersona({required PersonaModel persona}) =>
@@ -56,4 +57,6 @@ class PersonaRepositoryImpl extends PersonaRepository {
 
   @override
   Future<PersonaModel?> getUsuario() => _provider.getUsuarioActual();
+  @override
+  Future<String?> getNombresPersonaPorUid({required String uid})=>_provider.getNombresPersonaPorUid(uid: uid);
 }

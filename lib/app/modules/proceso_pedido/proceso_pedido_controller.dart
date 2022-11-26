@@ -12,7 +12,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ProcesoPedidoController extends GetxController {
-  final pedidoRepository = Get.find<PedidoRepository>();
+  final _pedidoRepository = Get.find<PedidoRepository>();
   //Variable para dsatos del pedido
   RxString? descripcionEstadoPedido;
   final Rx<PedidoModel> pedido = PedidoModel(
@@ -44,13 +44,13 @@ class ProcesoPedidoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
+    print("8888888888888888888888888");
     //Obtener  datos del pedido  realizado
     _cargarDatosDelPedidoRealizado();
   }
 
 //Metodo para cancelar el pedido
-  Future<void> cancelarPedido() async {
+  Future<void> _pedidoCancelado() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("pedido_esperando", false);
     //
@@ -125,9 +125,45 @@ class ProcesoPedidoController extends GetxController {
     //Obtener cedula de  usuario actual
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String cedula = prefs.getString("cedula_usuario") ?? '';
+
+    print(cedula);
     //Buscar el ultima pedido realizado
-    var pedido = await pedidoRepository.getPedidoPorField(
+    var pedido = await _pedidoRepository.getPedidoPorField(
         field: "idCliente", dato: cedula);
+
+    print(pedido?.idPedido.toString());
+    print(pedido?.idCliente.toString());
+    print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     return pedido!;
+  }
+
+  //Metodo para actualizar el estado de un pedido
+  Future<void> actualizarEstadoPedido(String idPedido) async {
+    ///en estadoPedido3 se guarda info   de si se cancela o finaliza el pedidoaceptado
+    try {
+      await _pedidoRepository.updateEstadoPedido(
+          idPedido: idPedido,
+          estadoPedido: "estado4",
+          numeroEstadoPedido: "estadoPedido3");
+      //
+      Mensajes.showGetSnackbar(
+          titulo: 'Mensaje',
+          mensaje: 'Su pedido fue cancelado!',
+          icono: const Icon(
+            Icons.info_outlined,
+            color: Colors.white,
+          ));
+      //
+      await _pedidoCancelado();
+    } catch (e) {
+      Mensajes.showGetSnackbar(
+          titulo: 'Alerta',
+          mensaje:
+              'Ha ocurrido un error, por favor inténtelo de nuevo más tarde.',
+          icono: const Icon(
+            Icons.error_outline_outlined,
+            color: Colors.white,
+          ));
+    }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:gasjm/app/data/models/estadopedido_model.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 
 abstract class PedidoRepository {
@@ -18,4 +19,12 @@ abstract class PedidoRepository {
   Future<String?> getDescripcionEstadoPedido({required String idEstado});
 
   Future<String?> getNombreEstadoPedidoPorId({required String idEstado});
+  Future<EstadoDelPedido?> getEstadoPedidoPorField({
+    required String uid,
+    required String field,
+  });
+
+   Future<void> updateEstadoPedido(
+      {required String idPedido, required String estadoPedido,required String numeroEstadoPedido});
+ 
 }

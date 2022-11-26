@@ -112,7 +112,7 @@ class PersonaProvider {
   Future<String?> getNombresPersonaPorCedula({required String cedula}) async {
     final resultado = await _firestoreInstance
         .collection("persona")
-        .where("cedula", isEqualTo: cedula)
+        .where("cedula", isEqualTo: cedula).limit(1)
         .get();
 
     if (resultado.docs.isNotEmpty) {
@@ -122,7 +122,17 @@ class PersonaProvider {
     }
     return null;
   }
+  Future<String?> getNombresPersonaPorUid({required String uid}) async {
+    final resultado = await _firestoreInstance
+        .collection("persona").doc(uid).get();
 
+    if (resultado.exists) {
+      final nombres =
+          '${resultado.get("nombre")} ${resultado.get("apellido")} ';
+      return nombres;
+    }
+    return null;
+  }
   //Obtner perfil del usuario actual
   Future<PersonaModel?> getUsuarioActual() async {
     final snapshot = await _firestoreInstance

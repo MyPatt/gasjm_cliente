@@ -60,17 +60,21 @@ class DetalleInformacion extends StatelessWidget {
               Column(
                 children: [
                   CircleAvatar(
-                      backgroundColor: AppTheme.blueBackground,
-                      radius: 20.0,
-                      child: TextSubtitle(
-                        text: pedido.cantidadPedido.toString(),
-                        color: Colors.white,
-                      )
-                      /*  child: Icon(
-                              Icons.person_outline_outlined,
-                              size: 23.0,
-                            ),*/
-                      ),
+                    backgroundColor: AppTheme.blueBackground,
+                    radius: 19.0,
+                    child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        radius: 18.0,
+                        child: TextSubtitle(
+                          text: pedido.cantidadPedido.toString(),
+                          color: AppTheme.blueDark,
+                        )
+                        /*  child: Icon(
+                                Icons.person_outline_outlined,
+                                size: 23.0,
+                              ),*/
+                        ),
+                  ),
                   Text(
                     "\$ ${pedido.totalPedido.toStringAsFixed(2)}",
                     textAlign: TextAlign.justify,
@@ -84,14 +88,18 @@ class DetalleInformacion extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 5.0),
-          Text(
-            //"Barrio Santa Rosa a una cuadra del parque, puerta negra.",
-            pedido.notaPedido ?? "",
-            textAlign: TextAlign.justify,
-            maxLines: 3,
-            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: AppTheme.light,
-                ),
+          Row(
+            children: [
+              Text(
+                //"Barrio Santa Rosa a una cuadra del parque, puerta negra.",
+                pedido.notaPedido ?? "",
+                textAlign: TextAlign.justify,
+                maxLines: 3,
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: AppTheme.light,
+                    ),
+              ),
+            ],
           ),
         ]);
   }

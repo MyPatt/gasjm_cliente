@@ -53,7 +53,7 @@ class ProcesoPedidoPage extends StatelessWidget {
                     )),
 
                     //
-                    BotonCancelar(onPressed: () => _.cancelarPedido())
+                    BotonCancelar(onPressed: () => _.actualizarEstadoPedido(_.pedido.value.idPedido!))
                   ],
                 ),
         ),

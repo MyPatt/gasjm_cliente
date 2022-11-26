@@ -6,7 +6,7 @@ import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/historial/historial_binding.dart';
 import 'package:gasjm/app/modules/historial/historial_controller.dart';
-import 'package:gasjm/app/modules/historial/widgets/detalle_historial.dart';
+import 'package:gasjm/app/modules/historial/widgets/detalle_page.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -152,25 +152,7 @@ class HistorialPage extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-                onTap: () {
-                  Get.to(
-                      DetalleHistorial(
-                        pedido: pedido,
-                      ),
-                      binding: HistorialBinding(),
-                      routeName: 'detalle');
-                  //     Navigator.push(context, route)
-                  /*  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (BuildContext context) => DetalleHistorial(
-                        pedido: pedido,
-                      ),
-                    ),
-                  );*/
-                },
-                /*=> Get.to(DetallePedido(
-                    e: e, indiceCategoriaPedido: indiceCategoriaPedido)),*/
+                onTap: () =>controlador.cargarDetalle(pedido), 
                 child: Column(
                   children: <Widget>[
                     Row(

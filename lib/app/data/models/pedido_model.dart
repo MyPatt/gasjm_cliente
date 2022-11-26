@@ -16,13 +16,13 @@ class PedidoModel {
   String? estadoPedidoUsuario;
   int? tiempoEntrega;
   //
-   EstadoPedido? estadoPedido1;
+  final EstadoDelPedido? estadoPedido1;
   //Para guardar los datos cuando el pedido esta en camino (info de quien esta camino a entregar el pedido)
 
-   EstadoPedido? estadoPedido2;
+  final EstadoDelPedido? estadoPedido2;
   //Para guardar los datos cuando el pedido se a finalizado (info de quien cancela o finaliza el pedido)
 
-   EstadoPedido? estadoPedido3;
+  final EstadoDelPedido? estadoPedido3;
 
   final int cantidadPedido;
   final String? notaPedido;
@@ -42,9 +42,9 @@ class PedidoModel {
     required this.notaPedido,
     required this.totalPedido,
     //
- /*   this.estadoPedido1,
+    this.estadoPedido1,
     this.estadoPedido2,
-    this.estadoPedido3,*/
+    this.estadoPedido3,
   });
 
   factory PedidoModel.fromJson(Map<String, dynamic> json) => PedidoModel(
@@ -60,10 +60,6 @@ class PedidoModel {
         totalPedido: json["totalPedido"],
         direccion: Direccion.fromMap(json["direccion"]),
         cantidadPedido: json["cantidadPedido"],
-        //
-      /*  estadoPedido1: EstadoPedido.fromMap(json["estadoPedido1"]),
-        estadoPedido2: EstadoPedido.fromMap(json["estadoPedido2"]),
-        estadoPedido3: EstadoPedido.fromMap(json["estadoPedido3"]),*/
       );
 
   Map<String, dynamic> toJson() => {
@@ -78,6 +74,9 @@ class PedidoModel {
         "notaPedido": notaPedido,
         "totalPedido": totalPedido,
         "direccion": direccion.toMap(),
+        "estadoPedido1": null,
+        "estadoPedido2": null,
+        "estadoPedido3": null,
         "cantidadPedido": cantidadPedido,
       };
 }
