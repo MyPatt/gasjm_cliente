@@ -41,31 +41,29 @@ class DetalleHistorial extends StatelessWidget {
                 color: Colors.white,
               ),
               child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,    crossAxisAlignment:
-                                          CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
-                      const CircleAvatar(
-                                          backgroundColor: AppTheme.light,
-                                          child: CircleAvatar(
-                                            backgroundColor: Colors.white,
-                                            child: Icon(
-                                              Icons.route_outlined,
-                                              color: AppTheme.blueDark,
-                                              size: 50,
-                                            ),
-                                            radius: 55.0,
-                                          ),
-                                          radius: 56.0,
-                                        ),
-                                        SizedBox(
-                                            height: Responsive.getScreenSize(
-                                                        context)
-                                                    .height *
-                                                .05),
+                    const CircleAvatar(
+                      backgroundColor: AppTheme.light,
+                      child: CircleAvatar(
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.route_outlined,
+                          color: AppTheme.blueDark,
+                          size: 50,
+                        ),
+                        radius: 55.0,
+                      ),
+                      radius: 56.0,
+                    ),
+                    SizedBox(
+                        height: Responsive.getScreenSize(context).height * .05),
                     DetalleInformacion(pedido: pedido),
                     Obx(() => !_.cargandoDetalle.value
                         ? DetalleSeguimiento(pedido: pedido)
-                        :const Expanded(child:  Center(child:  CircularProgress())))
+                        : const Expanded(
+                            child: Center(child: CircularProgress())))
                   ]),
             ),
           ),

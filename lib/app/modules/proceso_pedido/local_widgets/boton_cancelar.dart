@@ -17,6 +17,11 @@ class BotonCancelar extends StatelessWidget {
               color: AppTheme.blueBackground,
               borderRadius: BorderRadius.circular(25.0),
             ),
-            child: PrimaryButton(texto: "Cancelar", onPressed: onPressed)));
+            child: PrimaryButton(texto: "Cancelar", onPressed:
+            
+            
+            
+            
+             onPressed)));
   }
 }

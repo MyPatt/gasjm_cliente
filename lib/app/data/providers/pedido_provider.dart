@@ -128,10 +128,8 @@ class PedidoProvider {
         await _firestoreInstance.collection("pedido").doc(uid).get();
     var datos = (resultado.get(field));
 
-    print("object ${datos}");
 
     if ((datos != null)) {
-      print("object ${resultado.get(field)}");
       return EstadoDelPedido.fromJson(resultado.get(field));
     } else {
       return null;

@@ -5,7 +5,6 @@ import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/data/repository/pedido_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
-import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -44,7 +43,6 @@ class ProcesoPedidoController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    print("8888888888888888888888888");
     //Obtener  datos del pedido  realizado
     _cargarDatosDelPedidoRealizado();
   }
@@ -126,14 +124,10 @@ class ProcesoPedidoController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String cedula = prefs.getString("cedula_usuario") ?? '';
 
-    print(cedula);
     //Buscar el ultima pedido realizado
     var pedido = await _pedidoRepository.getPedidoPorField(
         field: "idCliente", dato: cedula);
 
-    print(pedido?.idPedido.toString());
-    print(pedido?.idCliente.toString());
-    print("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     return pedido!;
   }
 

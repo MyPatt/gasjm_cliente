@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
-import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/actions_proceso_pedido.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
-import 'package:gasjm/app/global_widgets/cliente/menu_appbar.dart';
-import 'package:gasjm/app/global_widgets/menu_lateral.dart';
-import 'package:gasjm/app/global_widgets/primary_button.dart';
+import 'package:gasjm/app/global_widgets/modal_alert.dart';
 import 'package:gasjm/app/modules/proceso_pedido/local_widgets/boton_cancelar.dart';
 import 'package:gasjm/app/modules/proceso_pedido/local_widgets/contenido_mapa.dart';
 import 'package:gasjm/app/modules/proceso_pedido/local_widgets/contenido_pedido.dart';
@@ -53,7 +50,22 @@ class ProcesoPedidoPage extends StatelessWidget {
                     )),
 
                     //
-                    BotonCancelar(onPressed: () => _.actualizarEstadoPedido(_.pedido.value.idPedido!))
+                    BotonCancelar(
+                        onPressed: () => showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (context) {
+                                return Obx(
+                                  () => ModalAlert(
+                                      titulo: 'Cancelar pedido',
+                                      mensaje:
+                                          '¿Está seguro de cancelar su pedido?',
+                                      icono: Icons.cancel_outlined,
+                                      onPressed: () => _.actualizarEstadoPedido(
+                                          _.pedido.value.idPedido!)),
+                                );
+                              },
+                            ))
                   ],
                 ),
         ),
