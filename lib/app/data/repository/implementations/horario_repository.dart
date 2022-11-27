@@ -9,4 +9,7 @@ class HorarioRepositoryImpl extends HorarioRepository {
   @override
   Future<HorarioModel> getHorarioPorIdDia({required int idDiaHorario}) =>
       _provider.getHorarioPorIdDia(idDiaHorario: idDiaHorario);
+
+  @override
+  Future<List<HorarioModel>> getListaHorarios() => _provider.getListaHorarios();
 }

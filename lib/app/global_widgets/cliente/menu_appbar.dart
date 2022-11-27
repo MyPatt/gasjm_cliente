@@ -13,7 +13,7 @@ class MenuAppBar extends StatelessWidget {
         //Opcion agenda
         IconButton(
             //
-            onPressed: () {},
+            onPressed: () => Get.toNamed(AppRoutes.horario),
             //  onPressed: _.cargarAgenda,
             icon: const Icon(Icons.date_range_outlined)),
 

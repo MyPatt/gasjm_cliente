@@ -18,7 +18,7 @@ class HistorialPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<HistorialController>(
       builder: (_) => Scaffold(
-        backgroundColor: AppTheme.background,
+        backgroundColor: Color.fromARGB(255, 50, 51, 56),
         appBar: AppBar(
           elevation: 0,
           shape: const RoundedRectangleBorder(

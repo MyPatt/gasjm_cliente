@@ -1,6 +1,8 @@
 
 import 'package:gasjm/app/modules/historial/historial_binding.dart';
 import 'package:gasjm/app/modules/historial/historial_page.dart';
+import 'package:gasjm/app/modules/horario/horario_binding.dart';
+import 'package:gasjm/app/modules/horario/horario_page.dart';
 import 'package:gasjm/app/modules/identificacion/identificacion_binding.dart';
 import 'package:gasjm/app/modules/identificacion/identificacion_page.dart';
 import 'package:gasjm/app/modules/inicio/inicio_binding.dart';
@@ -99,12 +101,12 @@ class AppPages {
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
-  /*  GetPage(
+     GetPage(
       name: AppRoutes.horario,
-      page: () => const EditarAgendaPage(),
-      binding: EditarPedidoAgendadoBinding(),
+      page: () => const HorarioPage(),
+      binding: HorarioBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
-    ),*/
+    ),
   ];
 }
