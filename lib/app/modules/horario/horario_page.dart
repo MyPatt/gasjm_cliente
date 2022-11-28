@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
-import 'package:gasjm/app/data/models/horario_model.dart';
-import 'package:gasjm/app/global_widgets/text_description.dart';
-import 'package:gasjm/app/global_widgets/text_subtitle.dart';
+import 'package:gasjm/app/core/utils/responsive.dart';
+
 import 'package:gasjm/app/modules/horario/horario_controller.dart';
+import 'package:gasjm/app/modules/horario/local_widgets/form_horario.dart';
 import 'package:get/get.dart';
 
 class HorarioPage extends StatelessWidget {
@@ -27,52 +27,56 @@ class HorarioPage extends StatelessWidget {
                 "Horario de atención",
               ),
             ),
-            body: Container(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: <Widget>[
-                  Obx(
-                    () => Expanded(
-                      child: ListView.builder(
-                          // scrollDirection: Axis.horizontal,
-                          itemCount: _.listaHorarios.length,
-                          itemBuilder: (context, index) {
-                            return Card(
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15.0),
-                              ),
-                              //  shape: Border.all(color: AppTheme.light, width: 0.5),
-                              child: Padding(
-                                padding: const EdgeInsets.all(16.0),
-                                child: Row(
-                                  children: [
-                                    Column(children: <Widget>[
-                                      TextSubtitle(
-                                        text: HorarioModel.diasSemana[_
-                                                    .listaHorarios[index]
-                                                    .idDiaHorario -
-                                                1]['nombreDia']
-                                            .toString(),
+            body: SafeArea(
+                bottom: false,
+                child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 25, vertical: 25),
+                    child: SizedBox(
+                        height: Responsive.hp(context) * 0.83,
+                        child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30),
+                              color: Colors.white,
+                            ),
+                            height: 350,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            alignment: Alignment.center,
+                            // height: Responsive.hp(context),
+                            child: Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: <Widget>[
+                                  SizedBox(
+                                      height: Responsive.getScreenSize(context)
+                                              .height *
+                                          .05),
+                                  const CircleAvatar(
+                                    backgroundColor: AppTheme.light,
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      child: Icon(
+                                        Icons.backup_table_rounded,
+                                        color: AppTheme.blueDark,
+                                        size: 50,
                                       ),
-                                    ]),
-                                    Spacer(),
-                                    Column(
-                                      children: <Widget>[
-                                        TextDescription(
-                                            text:
-                                                '${_.listaHorarios[index].aperturaHorario} - ${_.listaHorarios[index].cierreHorario}'),
-                                      ],
+                                      radius: 55.0,
                                     ),
-                                  ],
-                                ),
-                              ),
-                            );
-                          }),
-                    ),
-                  ),
-                ],
-              ),
-            )));
+                                    radius: 56.0,
+                                  ),
+                                  SizedBox(
+                                      height: Responsive.getScreenSize(context)
+                                              .height *
+                                          .05),
+                                  Obx(() => Expanded(
+                                      child: ListView.builder(
+                                          // scrollDirection: Axis.horizontal,
+                                          itemCount: _.listaHorarios.length,
+                                          itemBuilder: (context, index) {
+                                            return FormHorario(
+                                                horario:
+                                                    _.listaHorarios[index]);
+                                          })))
+                                ])))))));
   }
 }
