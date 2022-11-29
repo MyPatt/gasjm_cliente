@@ -1,4 +1,6 @@
 
+import 'package:gasjm/app/modules/gasjm/gasjm_binding.dart';
+import 'package:gasjm/app/modules/gasjm/gasjm_page.dart';
 import 'package:gasjm/app/modules/historial/historial_binding.dart';
 import 'package:gasjm/app/modules/historial/historial_page.dart';
 import 'package:gasjm/app/modules/horario/horario_binding.dart';
@@ -101,6 +103,13 @@ class AppPages {
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
+      GetPage(
+      name: AppRoutes.gasjm,
+      page: () => const GasJMPage(),
+      binding: GasJMBinding(),
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 500),
+    ), 
      GetPage(
       name: AppRoutes.horario,
       page: () => const HorarioPage(),

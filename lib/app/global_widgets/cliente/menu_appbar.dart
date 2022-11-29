@@ -10,13 +10,14 @@ class MenuAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
+        /*
         //Opcion agenda
         IconButton(
             //
             onPressed: () => Get.toNamed(AppRoutes.horario),
             //  onPressed: _.cargarAgenda,
             icon: const Icon(Icons.date_range_outlined)),
-
+*/
         //Opcion historial
         IconButton(
             onPressed: () => Get.toNamed(AppRoutes.historial),
