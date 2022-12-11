@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
-import 'package:gasjm/app/global_widgets/actions_proceso_pedido.dart';
-import 'package:gasjm/app/global_widgets/circular_progress.dart';
+ import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/modal_alert.dart';
 import 'package:gasjm/app/modules/proceso_pedido/local_widgets/boton_cancelar.dart';
 import 'package:gasjm/app/modules/proceso_pedido/local_widgets/contenido_mapa.dart';
 import 'package:gasjm/app/modules/proceso_pedido/local_widgets/contenido_pedido.dart';
-import 'package:gasjm/app/modules/proceso_pedido/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/proceso_pedido/proceso_pedido_controller.dart';import 'package:gasjm/app/core/utils/globals.dart' as globals;
 import 'package:get/get.dart';
 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
@@ -31,7 +30,18 @@ class ProcesoPedidoPage extends StatelessWidget {
             ),
           ),
           backgroundColor: AppTheme.blueBackground,
-          actions: const [ActionsProcesoPedido()],
+        // actions: const [ActionsProcesoPedido()],
+        actions:<Widget> [
+            IconButton(
+                    onPressed: () {
+                      globals.existeNotificacion.value = false;
+                    },
+                    icon: Obx(
+                      () => Icon(globals.existeNotificacion.value
+                          ? Icons.notifications_active_outlined
+                          : Icons.notifications_none_outlined),
+                    )),
+        ],
           title: const Text('Gas J&M'),
         ),
         //Body
