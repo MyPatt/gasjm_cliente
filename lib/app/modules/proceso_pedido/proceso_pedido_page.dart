@@ -65,15 +65,18 @@ class ProcesoPedidoPage extends StatelessWidget {
                               context: context,
                               barrierDismissible: true,
                               builder: (context) {
-                                return Obx(
-                                  () => ModalAlert(
+                                return //Obx
+                                (
+                                  //() =>
+                                   ModalAlert(
                                       titulo: 'Cancelar pedido',
                                       mensaje:
                                           '¿Está seguro de cancelar su pedido?',
                                       icono: Icons.cancel_outlined,
                                       onPressed: () => _.actualizarEstadoPedido(
-                                          _.pedido.value.idPedido!)),
-                                );
+                                          _.pedido.value.idPedido!))
+                                )
+                                ;
                               },
                             ))
                   ],
