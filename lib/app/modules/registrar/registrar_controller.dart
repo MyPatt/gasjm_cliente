@@ -81,7 +81,7 @@ class RegistrarController extends GetxController {
     final nombre = nombreTextoController.text;
     final apellido = apellidoTextoController.text;
     final correo = correoElectronicoTextoController.text;
-    final contrasena = contrasenaTextoController.text;
+    String contrasena = '';
 //
     try {
       cargandoParaCorreo.value = true;

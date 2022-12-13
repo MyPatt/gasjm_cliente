@@ -5,8 +5,9 @@ import 'package:gasjm/app/data/models/notificacion_model.dart';
 class NotificacionProvider {
   //Instancia de firestore
   final _firestoreInstance = FirebaseFirestore.instance;
- final _usuario = FirebaseAuth.instance.currentUser;
-
+  final _usuario = FirebaseAuth.instance.currentUser;
+  //
+  Timestamp fechaHoraActual = Timestamp.now();
   //
   Future<void> insertNotificacion(
       {required Notificacion notificacionModel}) async {
@@ -22,7 +23,8 @@ class NotificacionProvider {
 //
   Future<List<Notificacion>?> getNotificaciones() async {
     final resultado = await _firestoreInstance
-        .collection('notificacion').where("idEmisorNotificacion", isEqualTo: _usuario!.uid)
+        .collection('notificacion')
+        .where("idEmisorNotificacion", isEqualTo: _usuario!.uid)
         .orderBy("fechaNotificacion", descending: true)
         .get();
     //. limit(5);

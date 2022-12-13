@@ -5,8 +5,8 @@ import 'package:gasjm/app/data/models/pedido_model.dart';
 
 class PedidoProvider {
   //Instancia de firestore
-  final _firestoreInstance = FirebaseFirestore.instance;
- final usuario = FirebaseAuth.instance.currentUser;
+  final _firestoreInstance = FirebaseFirestore.instance;  
+ final usuario = FirebaseAuth.instance.currentUser; 
   //
   Future<void> insertPedido({required PedidoModel pedidoModel}) async {
     final resultado =

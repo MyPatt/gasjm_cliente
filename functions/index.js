@@ -21,8 +21,8 @@ newData=change.data;
  
   // Notification details.
   var payload = {
-    notification: {   title:change.data().name,    body:'Push body',},
-    data:{click_action:'FLUTTER_NOTIFICATION_CLICK',  message: 'Hola'},
+    notification: {   title:change.data().tituloNotificacion,    body:'Por '+change.data().textoNotificacion,},
+    //data:{click_action:'FLUTTER_NOTIFICATION_CLICK',  message: 'Hola'},
 
      // icon: follower.photoURL
     }
