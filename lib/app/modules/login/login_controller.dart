@@ -108,7 +108,7 @@ class LoginController extends GetxController {
     String? _correo = prefs.getString("correo_usuario");
 
     _correo ??= prefs.getString("correo_usuario");
-    correoTextoController.text = _correo!;
+    correoTextoController.text = (_correo??= prefs.getString("correo_usuario"))!;
 
      //
     print("$_correo````````````````");
