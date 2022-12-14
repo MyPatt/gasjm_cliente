@@ -43,23 +43,24 @@ class HistorialController extends GetxController {
   Future<void> cargarListaPedidosRealizadosPorCliente() async {
     try {
       cargandoPedidos.value = true;
-      //Obtener cedula del usuario actual
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String cedulaCliente = prefs.getString("cedula_usuario") ?? '';
+      //Obtener uid del usuario actual
+      String _idCliente = _personaRepository.idUsuarioActual;
+      String _nombreCliente = _personaRepository.nombreUsuarioActual;
+       
       //Guardar en una var auxilar la lista
       var lista = await _pedidosRepository.getListaPedidosPorField(
-              field: "idCliente", dato: cedulaCliente) ??
+              field: "idCliente", dato: _idCliente) ??
           [];
-//
-
+      //
+     
       //Obtener datos del usuario y guardar
       for (var i = 0; i < lista.length; i++) {
-        final nombre = await _getNombresCliente(lista[i].idCliente);
+      //  final nombre = await _getNombresCliente(lista[i].idCliente);
         final direccion = await _getDireccionXLatLng(
             LatLng(lista[i].direccion.latitud, lista[i].direccion.longitud));
         final estado = await _getNombreEstado(lista[i].idEstadoPedido);
 
-        lista[i].nombreUsuario = nombre;
+        lista[i].nombreUsuario = _nombreCliente;
         lista[i].direccionUsuario = direccion;
         lista[i].estadoPedidoUsuario = estado;
         //
@@ -84,20 +85,14 @@ class HistorialController extends GetxController {
     }
     cargandoPedidos.value = false;
   }
-
-  //
-  Future<String> _getNombresCliente(String cedula) async {
-    final nombre =
-        await _personaRepository.getNombresPersonaPorCedula(cedula: cedula);
-    return nombre ?? 'Usuario';
-  }
-
+ 
+ //
   Future<String> _getDireccionXLatLng(LatLng posicion) async {
     List<Placemark> placemark =
         await placemarkFromCoordinates(posicion.latitude, posicion.longitude);
     Placemark lugar = placemark[0];
 
-//
+ 
     return _getDireccion(lugar);
   }
 

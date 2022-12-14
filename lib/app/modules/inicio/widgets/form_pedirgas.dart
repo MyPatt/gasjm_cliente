@@ -115,8 +115,7 @@ class FormPedirGas extends StatelessWidget {
                                   //FilteringTextInputFormatter.allow(RegExp(r'\d{1,2}')),
                                 ],
                                 validator: Validacion.validarCantidadGas,
-                                onChanged: _.onChangedCantidad,
-                                filled: false,
+                                onChanged: _.onChangedCantidad, 
                               ),
                               Obx(
                                 () => InputText(

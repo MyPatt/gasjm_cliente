@@ -3,6 +3,9 @@ import 'dart:io';
 import 'package:gasjm/app/data/models/persona_model.dart';
 
 abstract class PersonaRepository {
+    DateTime get fechaHoraActual;
+  String get idUsuarioActual;
+  String get nombreUsuarioActual;
   Future<void> insertPersona({required PersonaModel persona});
   Future<void> updatePersona({required PersonaModel persona, File? image});
   Future<bool> updateContrasenaPersona(

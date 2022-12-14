@@ -7,6 +7,14 @@ import 'package:get/get.dart';
 
 class PersonaRepositoryImpl extends PersonaRepository {
   final _provider = Get.find<PersonaProvider>();
+    @override
+  DateTime get fechaHoraActual => _provider.fechaHoraActual.toDate();
+
+  @override
+  String get idUsuarioActual => _provider.idUsuarioActual;
+  @override
+  String get nombreUsuarioActual => _provider.nombreUsuarioActual;
+
   @override
   Future<void> deletePersona({required String persona}) =>
       _provider.deletePersona(persona: persona);

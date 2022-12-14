@@ -116,22 +116,25 @@ class DetalleSeguimiento extends StatelessWidget {
         content: Container(),
       ),
     ];
-    return Theme(
-      data: Theme.of(context).copyWith(
-          colorScheme: const ColorScheme.light(
-        onSurface: Colors.black38,
-        onPrimary: AppTheme.blueDark,
-      )),
-      child: Stepper(
-        controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
-          return Row(
-            children: [Container()],
-          );
-        },
-        currentStep: 1,
-        steps: steps,
-        type: StepperType.vertical,
-      ),
+    return  
+    
+       Theme(
+        data: Theme.of(context).copyWith(
+            colorScheme: const ColorScheme.light(
+          onSurface: Colors.black38,
+          onPrimary: AppTheme.blueDark,
+        )),
+        child: Stepper(
+          controlsBuilder: (BuildContext ctx, ControlsDetails dtl) {
+            return Row(
+              children: [Container()],
+            );
+          },
+          currentStep: 1,
+          steps: steps,
+          type: StepperType.vertical,
+        ),
+      
     );
   }
 }

@@ -4,6 +4,7 @@ import 'package:gasjm/app/core/utils/map_style.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/data/repository/pedido_repository.dart';
+import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -120,13 +121,13 @@ class ProcesoPedidoController extends GetxController {
   }
 
   Future<PedidoModel> _getDatosPedido() async {
-    //Obtener cedula de  usuario actual
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String cedula = prefs.getString("cedula_usuario") ?? '';
+    //Obtener uid de  usuario actual
+    final _personaRepository = Get.find<PersonaRepository>(); 
+      String _idCliente = _personaRepository.idUsuarioActual;
 
     //Buscar el ultima pedido realizado
     var pedido = await _pedidoRepository.getPedidoPorField(
-        field: "idCliente", dato: cedula);
+        field: "idCliente", dato: _idCliente);
 
     return pedido!;
   }

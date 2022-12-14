@@ -17,7 +17,11 @@ class PersonaProvider {
     if (usuario == null) throw Exception('Excepción no autenticada');
     return usuario;
   }
-
+  //
+  Timestamp get fechaHoraActual => Timestamp.now();
+  String get idUsuarioActual => usuarioActual.uid;
+  String get nombreUsuarioActual => usuarioActual.displayName ?? 'usuario';
+  //
   Future<void> insertPersona({required PersonaModel persona}) async {
     await _firestoreInstance.collection('persona').add(persona.toMap());
   }
