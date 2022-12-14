@@ -154,7 +154,7 @@ class FormLogin extends StatelessWidget {
                                     context, AppRoutes.identificacion)
                               },
                               child: Text(
-                                "Crear una cuenta nueva",
+                                "Crear una cuenta",
                                 style: Theme.of(context)
                                     .textTheme
                                     .subtitle2
