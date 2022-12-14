@@ -54,6 +54,6 @@ class PersonaModel {
         "fechaNacimiento": fechaNaciPersona,
         "estado": estadoPersona,
         "idPerfil": idPerfil,
-        "contrasena": contrasenaPersona
+        "contrasena": '.....'
       };
 }

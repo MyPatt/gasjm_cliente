@@ -43,6 +43,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   //Inyectando implentacion del repositorio de autenticacion
+
   Get.put<AutenticacionRepository>(AutenticacionRepositoryImpl());
   Get.put<MyUserRepository>(MyUserRepositoryImp());
 //Agregar Providers y Repositories

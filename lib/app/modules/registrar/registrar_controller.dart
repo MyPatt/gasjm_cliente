@@ -23,7 +23,7 @@ class RegistrarController extends GetxController {
   final contrasenaTextoController = TextEditingController();
 
   //Variable para guardar la cedula
-  late String cedula = '';
+  String cedula = '';
   //late String perfil = '';
   final perfil = "cliente";
 
@@ -81,7 +81,7 @@ class RegistrarController extends GetxController {
     final nombre = nombreTextoController.text;
     final apellido = apellidoTextoController.text;
     final correo = correoElectronicoTextoController.text;
-    String contrasena = '';
+    String contrasena = contrasenaTextoController.text;
 //
     try {
       cargandoParaCorreo.value = true;
@@ -103,7 +103,6 @@ class RegistrarController extends GetxController {
           contrasenaPersona: contrasena,
           correoPersona: correo,
           direccionPersona: direccionPersona);
-      
 
 //Testear
       await Future.delayed(const Duration(seconds: 1));
@@ -128,7 +127,7 @@ class RegistrarController extends GetxController {
         errorParaCorreo.value =
             'La cuenta ya existe para ese correo electrónico';
       } else {
-        errorParaCorreo.value = "Se produjo un error inesperado.";
+       errorParaCorreo.value = "Se produjo un error inesperado."; 
       }
     } catch (e) {
       Mensajes.showGetSnackbar(
@@ -148,9 +147,9 @@ class RegistrarController extends GetxController {
   _obtenerCedulaYPerfil() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final s = prefs.getString("cedula_usuario");
+    String? _cedula = prefs.getString("cedula_usuario");
     //final p = await prefs.getString("perfil_usuario");
-    cedula = s ?? '';
-    //perfil = p ?? '';
+    _cedula ??= prefs.getString("cedula_usuario");
+    cedula = _cedula!; 
   }
 }

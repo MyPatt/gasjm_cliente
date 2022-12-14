@@ -1,6 +1,5 @@
-
 import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/utils/mensajes.dart'; 
+import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,6 +21,14 @@ class IdentificacionController extends GetxController {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("cedula_usuario", cedulaTextoController.text);
+    //
+    String? cedula =  prefs.getString("cedula_usuario");
+
+    if (cedula == null) {
+      await prefs.setString("cedula_usuario", cedulaTextoController.text);
+    }
+    //
+    
   }
 
   //Guardar correo de forma local
@@ -32,7 +39,16 @@ class IdentificacionController extends GetxController {
     final correo = await _userRepository.getDatoPersonaPorField(
         field: "cedula", dato: cedulaTextoController.text, getField: "correo");
     await prefs.setString("correo_usuario", correo.toString());
-     
+    //
+    String? _correo = await prefs.getString("correo_usuario");
+
+    if (_correo == null) {
+      final correo = await _userRepository.getDatoPersonaPorField(
+          field: "cedula",
+          dato: cedulaTextoController.text,
+          getField: "correo");
+      await prefs.setString("correo_usuario", correo.toString());
+    }
   }
 
 //Buscar si tiene cuenta o no
@@ -55,6 +71,7 @@ class IdentificacionController extends GetxController {
           getField: "idPerfil");
 
       if (dato == null) {
+        _guardarCedula();
         Get.offNamed(AppRoutes.registrar);
       } else {
         //Cedula ya registrada ir a la pagina de inicio de sesion
