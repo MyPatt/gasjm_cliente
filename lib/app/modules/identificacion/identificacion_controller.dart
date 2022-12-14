@@ -22,13 +22,12 @@ class IdentificacionController extends GetxController {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("cedula_usuario", cedulaTextoController.text);
     //
-    String? cedula =  prefs.getString("cedula_usuario");
+    String? cedula = prefs.getString("cedula_usuario");
 
     if (cedula == null) {
       await prefs.setString("cedula_usuario", cedulaTextoController.text);
     }
     //
-    
   }
 
   //Guardar correo de forma local
@@ -40,7 +39,7 @@ class IdentificacionController extends GetxController {
         field: "cedula", dato: cedulaTextoController.text, getField: "correo");
     await prefs.setString("correo_usuario", correo.toString());
     //
-    String? _correo = await prefs.getString("correo_usuario");
+    String? _correo = prefs.getString("correo_usuario");
 
     if (_correo == null) {
       final correo = await _userRepository.getDatoPersonaPorField(
@@ -49,6 +48,8 @@ class IdentificacionController extends GetxController {
           getField: "correo");
       await prefs.setString("correo_usuario", correo.toString());
     }
+    //
+    print("````````````````$correo````````````````");
   }
 
 //Buscar si tiene cuenta o no

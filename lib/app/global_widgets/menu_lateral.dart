@@ -80,10 +80,7 @@ class MenuLateral extends StatelessWidget {
                       ProgressDialog.show(context, "Cerrando sesión");
 
                       Get.find<AutenticacionController>().cerrarSesion();
-                      SharedPreferences prefs =
-                          await SharedPreferences.getInstance();
-                      await prefs.remove("cedula_usuario");
-                      await prefs.clear();
+                    
                     },
                     titulo: 'Cerrar sesión',
                     mensaje: '¿Está seguro de cerrar sesión en la aplicación?',

@@ -31,8 +31,7 @@ class LoginController extends GetxController {
 
   @override
   void onReady() {
-    super.onReady();
-    Future.wait([_obtenerCorreo()]);
+    super.onReady(); 
   }
 
   @override
@@ -109,7 +108,10 @@ class LoginController extends GetxController {
     String? _correo = prefs.getString("correo_usuario");
 
     _correo ??= prefs.getString("correo_usuario");
-    correoTextoController.text = _correo ?? ' ';
+    correoTextoController.text = _correo!;
+
+     //
+    print("$_correo````````````````");
   }
 
   //Remover correo de forma local
