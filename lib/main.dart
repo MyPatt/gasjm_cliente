@@ -16,9 +16,9 @@ import 'package:gasjm/app/data/repository/usuario_repository.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
 import 'package:gasjm/app/data/repository/implementations/authenticacion_repository.dart';
 
-import 'package:gasjm/app/modules/ubicacion/blocs/gps/gps_bloc.dart'; 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
-import 'package:flutter_bloc/flutter_bloc.dart'; 
+import 'package:gasjm/app/modules/ubicacion/blocs/gps/gps_bloc.dart';
+
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gasjm/app/core/utils/globals.dart' as globals;
 // TODO: Add stream controller
 import 'package:rxdart/rxdart.dart';
@@ -29,6 +29,7 @@ final _messageStreamController = BehaviorSubject<RemoteMessage>();
 // TODO: Define the background message handler
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
+  globals.existeNotificacion.value = true;
 
   if (kDebugMode) {
     print("Handling a background message: ${message.messageId}");
@@ -86,7 +87,6 @@ Future<void> main() async {
       print('Message notification: ${message.notification?.title}');
       print('Message notification: ${message.notification?.body}');
     }
-
     _messageStreamController.sink.add(message);
   });
 
@@ -126,7 +126,7 @@ class _MyAppState extends State<MyApp> {
               '\n\nTitle=${message.notification?.title},'
               '\n\nBody=${message.notification?.body},'
               '\n\nData=${message.data}';
-          globals.globalString = message.notification?.title;
+
           globals.existeNotificacion.value = true;
         } else {
           _lastMessage = 'Received a data message: ${message.data}';

@@ -11,6 +11,7 @@ class NotificacionRepositoryImpl extends NotificacionRepository {
       _provider.insertNotificacion(notificacionModel: notificacionModel);
 
   @override
-  Future<List<Notificacion>?> getNotificaciones() =>
-      _provider.getNotificaciones();
+  Future<List<Notificacion>>? getNotificacionesPorField(
+          {required String field, required String dato}) =>
+      _provider.getNotificacionesPorField(field: field, dato: dato);
 }

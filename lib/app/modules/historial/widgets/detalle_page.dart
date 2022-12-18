@@ -9,13 +9,12 @@ import 'package:gasjm/app/modules/historial/widgets/detalle_seguimiento.dart';
 import 'package:get/get.dart';
 
 class DetalleHistorial extends StatelessWidget {
-  const DetalleHistorial({Key? key, required this.pedido}) : super(key: key);
+  const DetalleHistorial({Key? key, required this.pedido, required this.cargandoDetalle}) : super(key: key);
   final PedidoModel pedido;
-
+  final RxBool cargandoDetalle;
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<HistorialController>(
-      builder: (_) => Scaffold(
+    return   Scaffold(
         backgroundColor: AppTheme.background,
         appBar: AppBar(
           elevation: 0,
@@ -60,7 +59,7 @@ class DetalleHistorial extends StatelessWidget {
                     SizedBox(
                         height: Responsive.getScreenSize(context).height * .05),
                     DetalleInformacion(pedido: pedido),
-                    Obx(() => !_.cargandoDetalle.value
+                    Obx(() => !cargandoDetalle.value
                         ? DetalleSeguimiento(pedido: pedido)
                         : const Expanded(
                             child: Center(child: CircularProgress())))
@@ -68,7 +67,7 @@ class DetalleHistorial extends StatelessWidget {
             ),
           ),
         ),
-      ),
+    
     );
   }
 }

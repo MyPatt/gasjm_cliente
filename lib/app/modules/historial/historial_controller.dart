@@ -10,7 +10,6 @@ import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HistorialController extends GetxController {
   final _pedidosRepository = Get.find<PedidoRepository>();
@@ -46,16 +45,16 @@ class HistorialController extends GetxController {
       //Obtener uid del usuario actual
       String _idCliente = _personaRepository.idUsuarioActual;
       String _nombreCliente = _personaRepository.nombreUsuarioActual;
-       
+
       //Guardar en una var auxilar la lista
       var lista = await _pedidosRepository.getListaPedidosPorField(
               field: "idCliente", dato: _idCliente) ??
           [];
       //
-     
+
       //Obtener datos del usuario y guardar
       for (var i = 0; i < lista.length; i++) {
-      //  final nombre = await _getNombresCliente(lista[i].idCliente);
+        //  final nombre = await _getNombresCliente(lista[i].idCliente);
         final direccion = await _getDireccionXLatLng(
             LatLng(lista[i].direccion.latitud, lista[i].direccion.longitud));
         final estado = await _getNombreEstado(lista[i].idEstadoPedido);
@@ -85,14 +84,13 @@ class HistorialController extends GetxController {
     }
     cargandoPedidos.value = false;
   }
- 
- //
+
+  //
   Future<String> _getDireccionXLatLng(LatLng posicion) async {
     List<Placemark> placemark =
         await placemarkFromCoordinates(posicion.latitude, posicion.longitude);
     Placemark lugar = placemark[0];
 
- 
     return _getDireccion(lugar);
   }
 
@@ -170,15 +168,8 @@ class HistorialController extends GetxController {
       //
 
     } catch (e) {
-      Exception("");
-      /*  Mensajes.showGetSnackbar(
-          titulo: "Alerta",
-          mensaje:
-              "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.",
-          icono: const Icon(
-            Icons.error_outline_outlined,
-            color: Colors.white,
-          ));*/
+        Exception("Error al cargar detalle del pedido"); 
+
     }
     cargandoDetalle.value = false;
   }
@@ -187,6 +178,7 @@ class HistorialController extends GetxController {
     Get.to(
         DetalleHistorial(
           pedido: pedido,
+          cargandoDetalle: cargandoDetalle,
         ),
         routeName: 'detalle');
   }
