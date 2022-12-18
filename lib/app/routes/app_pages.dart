@@ -1,4 +1,6 @@
 
+import 'package:gasjm/app/modules/configuracion/configuracion_binding.dart';
+import 'package:gasjm/app/modules/configuracion/configuracion_page.dart';
 import 'package:gasjm/app/modules/gasjm/gasjm_binding.dart';
 import 'package:gasjm/app/modules/gasjm/gasjm_page.dart';
 import 'package:gasjm/app/modules/historial/historial_binding.dart';
@@ -107,6 +109,12 @@ class AppPages {
       name: AppRoutes.gasjm,
       page: () => const GasJMPage(),
       binding: GasJMBinding(),
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),  GetPage(
+      name: AppRoutes.configuracion,
+      page: () => const ConfiguracionPage(),
+      binding: ConfiguracionBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ), 

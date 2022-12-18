@@ -6,6 +6,9 @@ class InicioBinding implements Bindings {
   @override
   void dependencies() {
    
+     //Get.put<Confi>(NotificacionProvider());
+
+    //Get.put<HorarioRepository>(HorarioRepositoryImpl());
 
     Get.lazyPut(() => InicioController());
   }
