@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
-import 'package:gasjm/app/global_widgets/circular_progress.dart';
-import 'package:gasjm/app/modules/historial/historial_controller.dart';
+import 'package:gasjm/app/global_widgets/circular_progress.dart'; 
 import 'package:gasjm/app/modules/historial/widgets/detalle_informacion.dart';
 import 'package:gasjm/app/modules/historial/widgets/detalle_seguimiento.dart';
 import 'package:get/get.dart';
@@ -39,9 +38,9 @@ class DetalleHistorial extends StatelessWidget {
                 borderRadius: BorderRadius.circular(30),
                 color: Colors.white,
               ),
-              child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+              child: ListView(
+              /*    mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,*/
                   children: <Widget>[
                     const CircleAvatar(
                       backgroundColor: AppTheme.light,

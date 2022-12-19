@@ -60,11 +60,7 @@ class ProcesoPedidoController extends GetxController {
     //
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-    
-  }
+ 
 
 //Metodo para cancelar el pedido
   Future<void> _pedidoCancelado() async {
@@ -95,12 +91,11 @@ class ProcesoPedidoController extends GetxController {
       _posicionCliente.value = LatLng(
           pedido.value.direccion.latitud, pedido.value.direccion.longitud);
 
-      //Mostrar el marcador del cliente en el mapa
-
+      //Mostrar el marcador del cliente en el mapa 
       _agregarMarcadorCliente(_posicionCliente.value);
 
-      //
-    cargarListaNotificaciones();
+      //Cargar los datos de la notificacion
+    _cargarListaNotificaciones();
       
     } on FirebaseException catch (e) {
       Mensajes.showGetSnackbar(
@@ -184,31 +179,25 @@ class ProcesoPedidoController extends GetxController {
     }
   }
 
-  Future<void> cargarListaNotificaciones() async {
+  Future<void> _cargarListaNotificaciones() async {
     try {
-      print("***************************${pedido.value.idPedido}");
+    
 
       //CARGAR DATOS DEL PEDIDO
       List<Notificacion>? aux =
           await _notificacionRepository.getNotificacionesPorField(
               field: "idPedidoNotificacion", dato: pedido.value.idPedido!);
       _notificaciones.clear();
-
-      print(aux?.length.toInt());
+ 
       if (aux!.length.toInt() > 0) {
         for (var element in aux) {
           _notificaciones.add("${element.tituloNotificacion}, por ${element.textoNotificacion},${formatoHoraFecha(element.fechaNotificacion)}");
-        }
-
-        print("${aux[0].textoNotificacion} ......................");
+        } 
       }
-
-      //
-      print("***************************${notificaciones.length}");
-      //Datos de la posicion del cliente
+ 
 
     } catch (e) {
-      //
+ //
     }
   }
 

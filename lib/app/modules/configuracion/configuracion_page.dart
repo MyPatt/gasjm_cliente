@@ -23,7 +23,7 @@ class ConfiguracionPage extends StatelessWidget {
                 ),
                 backgroundColor: AppTheme.blueBackground,
                 automaticallyImplyLeading: true,
-                title: const Text("Gas J&M"),
+                title: const Text("Configuración"),
               ),
               body:   
                       ContenidoConfiguracion()

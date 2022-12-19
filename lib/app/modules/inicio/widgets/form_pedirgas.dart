@@ -84,20 +84,23 @@ class FormPedirGas extends StatelessWidget {
                                   height:
                                       Responsive.getScreenSize(context).height *
                                           .02),
-                              Obx(() => InputText(
-                                    iconPrefix: Icons.calendar_today_outlined,
-                                    keyboardType: TextInputType.none,
-                                    controller:
-                                        _.diaDeEntregaPedidoController.value,
-                                    labelText: "Fecha",
-                                    readOnly: true,
-                                    onTap: () {
-                                      /* showDialog(
-                                              context: context,
-                                              //backgroundColor: Colors.transparent,
-                                              builder: (_) => const DiaPicker());*/
-                                    },
-                                  )),
+                              Visibility(
+                                visible: false,
+                                child: Obx(() => InputText(
+                                      iconPrefix: Icons.calendar_today_outlined,
+                                      keyboardType: TextInputType.none,
+                                      controller:
+                                          _.diaDeEntregaPedidoController.value,
+                                      labelText: "Fecha",
+                                      readOnly: true,
+                                      onTap: () {
+                                        /* showDialog(
+                                                context: context,
+                                                //backgroundColor: Colors.transparent,
+                                                builder: (_) => const DiaPicker());*/
+                                      },
+                                    )),
+                              ),
                               SizedBox(
                                   height:
                                       Responsive.getScreenSize(context).height *

@@ -119,7 +119,7 @@ class Validacion {
     if (value == null) {
       return null;
     }
-    if (value.isEmpty) {
+    if (value.isEmpty || int.parse(value)<1) {
       return 'Ingrese una cantidad';
     }  
     return null;

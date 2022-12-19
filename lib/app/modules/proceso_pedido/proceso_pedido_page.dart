@@ -34,7 +34,7 @@ class ProcesoPedidoPage extends StatelessWidget {
           backgroundColor: AppTheme.blueBackground,
           // actions: const [ActionsProcesoPedido()],
           actions: <Widget>[
-                 IconButton(
+            /*  IconButton(
                 onPressed: () {
                  // globals.existeNotificacion.value = false;
                  _.cargarListaNotificaciones();
@@ -44,16 +44,13 @@ class ProcesoPedidoPage extends StatelessWidget {
                   () => Icon(globals.existeNotificacion.value
                       ? Icons.notifications_active_outlined
                       : Icons.notifications_none_outlined),
-                )),
+                )),*/
             Obx(
-            ()=> PopuMenuNotificacion( 
-                  icono:  (
-                      Icon(globals.existeNotificacion.value
-                        ? Icons.notifications_active_outlined
-                        : Icons.notifications_none_outlined)
-                  )),
+              () => PopuMenuNotificacion(
+                  icono: (Icon(globals.existeNotificacion.value
+                      ? Icons.notifications_active_outlined
+                      : Icons.notifications_none_outlined))),
             ),
-       
           ],
           title: const Text('Gas J&M'),
         ),
@@ -66,12 +63,16 @@ class ProcesoPedidoPage extends StatelessWidget {
                     //Widget Mapa
                     Positioned.fill(
                         child: Column(
-                      children: <Widget>[
-                        Obx(() => ContenidoPedido(pedido: _.pedido.value)),
-                        const ContenidoMapa()
+                      children: const <Widget>[
+                        //    Obx(() => ContenidoPedido(pedido: _.pedido.value)),
+                        ContenidoMapa()
                       ],
                     )),
-
+                    Positioned(
+                      top: 5,
+                      left: 15,
+                      child: Obx(() => ContenidoPedido(pedido: _.pedido.value)),
+                    ),
                     //
                     BotonCancelar(
                         onPressed: () => showDialog(

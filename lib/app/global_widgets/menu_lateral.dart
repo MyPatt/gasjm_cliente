@@ -5,8 +5,7 @@ import 'package:gasjm/app/global_widgets/dialogs/progress_dialog.dart';
 import 'package:gasjm/app/global_widgets/modal_alert.dart';
 
 import 'package:gasjm/app/routes/app_routes.dart';
-import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart'; 
 
 //Menú deslizable a la izquierda con opciones del  usuario
 class MenuLateral extends StatelessWidget {
@@ -50,7 +49,7 @@ class MenuLateral extends StatelessWidget {
           _buildDrawerItem(
               icon: Icons.person_outline,
               text: 'Mi cuenta',
-              onTap: () => Get.offNamed(AppRoutes.perfil)),
+              onTap: () => Get.toNamed(AppRoutes.perfil)),
           _buildDrawerItem(
               icon: Icons.manage_accounts_outlined,
               text: 'Gas J&M',
@@ -58,9 +57,7 @@ class MenuLateral extends StatelessWidget {
           _buildDrawerItem(
               icon: Icons.settings_outlined,
               text: 'Configuración',
-              onTap: () => {
-                    Navigator.pushReplacementNamed(context, AppRoutes.ubicacion)
-                  }),
+              onTap: () => Get.toNamed(AppRoutes.configuracion)),
           _buildDrawerItem(
               icon: Icons.help_outline,
               text: 'Ayuda',

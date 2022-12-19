@@ -16,57 +16,52 @@ class PopuMenuNotificacion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProcesoPedidoController>(
-      builder: (_) => GestureDetector(
-        onTap: () {
-          print("object");
+      builder: (_) => PopupMenuButton(
+        offset: Offset(0.0, AppBar().preferredSize.height),
+        icon: icono,
+        itemBuilder: (ctx) => _.notificaciones
+            .map((e) => PopupMenuItem(
+              onTap: ()=>_.cargarDetalle(_.pedido.value.idPedido!),
+                    child: Column( 
+                  children: [
+                    Row(
+                      children: [
+                        TextSubtitle(
+                            text: e.split(',')[0], color: Colors.black38),
+                        //   TextDescription(text: e.split(',')[1]),
+                        Text(
+                          e.split(',')[1],
+                          style: Theme.of(context)
+                              .textTheme
+                              .caption
+                              ?.copyWith(
+                                  color: Colors.black38,
+                                  fontWeight: FontWeight.normal),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                          e.split(',')[2],
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall
+                              ?.copyWith(
+                                  color: Colors.black38,
+                                  fontWeight: FontWeight.normal),
+                        ),
+                      ],
+                    )
+                  ],
+                )))
+            .toList(),
+        // [const PopupMenuItem(child: Text("Sin notificaciones"))],
+        //enabled: popupsNotificacion?.isNotEmpty ?? false,
+        onSelected: (value) {
+          print(value as int);
+          //   _.cargarDetalle(  _.notificaciones![value as int].idPedidoNotificacion ?? '');
         },
-        //=> _.cargarListaNotificaciones(),
-        child: PopupMenuButton(
-          offset: Offset(0.0, AppBar().preferredSize.height),
-          icon: icono,
-          itemBuilder: (ctx) => _.notificaciones
-              .map((e) => PopupMenuItem(
-                      child: Column( 
-                    children: [
-                      Row(
-                        children: [
-                          TextSubtitle(
-                              text: e.split(',')[0], color: Colors.black38),
-                          //   TextDescription(text: e.split(',')[1]),
-                          Text(
-                            e.split(',')[1],
-                            style: Theme.of(context)
-                                .textTheme
-                                .caption
-                                ?.copyWith(
-                                    color: Colors.black38,
-                                    fontWeight: FontWeight.normal),
-                          )
-                        ],
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            e.split(',')[2],
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodySmall
-                                ?.copyWith(
-                                    color: Colors.black38,
-                                    fontWeight: FontWeight.normal),
-                          ),
-                        ],
-                      )
-                    ],
-                  )))
-              .toList(),
-          // [const PopupMenuItem(child: Text("Sin notificaciones"))],
-          //enabled: popupsNotificacion?.isNotEmpty ?? false,
-          onSelected: (value) {
-            print(value as int);
-            //   _.cargarDetalle(  _.notificaciones![value as int].idPedidoNotificacion ?? '');
-          },
-        ),
       ),
     );
   }
