@@ -10,6 +10,7 @@ import 'package:gasjm/app/data/repository/pedido_repository.dart';
 import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/modules/historial/widgets/detalle_page.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
@@ -37,12 +38,14 @@ class ProcesoPedidoController extends GetxController {
   final cargandoPedidos = true.obs;
 
   //Variables para el mapa
+  // ignore: unused_field
   GoogleMapController? _mapaController;
 
   final Rx<LatLng> _posicionCliente = const LatLng(-0.2053476, -79.4894387).obs;
 
 //
-  final RxList<String> _notificaciones = ["Sin notificaciones, , "].obs;
+  final RxList<String> _notificaciones =
+      ["Sin notificaciones, ,En este momento"].obs;
   RxList<String> get notificaciones => _notificaciones;
 
   Rx<LatLng> get posicionCliente => _posicionCliente.value.obs;
@@ -55,12 +58,11 @@ class ProcesoPedidoController extends GetxController {
   void onInit() {
     super.onInit();
     //Obtener  datos del pedido  realizado
-    _cargarDatosDelPedidoRealizado();
+    Future.wait([_cargarDatosDelPedidoRealizado()]);
 
     //
+    _cargarDireccion();
   }
-
- 
 
 //Metodo para cancelar el pedido
   Future<void> _pedidoCancelado() async {
@@ -78,25 +80,42 @@ class ProcesoPedidoController extends GetxController {
   }
 
   //Metodo que obtiene el ultimo pedido realizado y aun no se a finalizado
+  RxString direccion = ''.obs;
   Future<void> _cargarDatosDelPedidoRealizado() async {
     try {
       cargandoPedidos.value = true;
 
       //CARGAR DATOS DEL PEDIDO
-      pedido.value = await _getDatosPedido();
+      var aux = await _getDatosPedido();
+      print(".......................");
+      print(aux.direccion.latitud);
+      print(aux.direccion.longitud);
+      String _nombreCliente = _personaRepository.nombreUsuarioActual;
+
+      var estado = await _getNombreEstado(aux.idEstadoPedido);
+
       //
+      aux.nombreUsuario = _nombreCliente;
+
+      //   aux.direccionUsuario = direccion;
+      aux.estadoPedidoUsuario = estado;
+
+      pedido.value = aux;
 
       //Datos de la posicion del cliente
 
       _posicionCliente.value = LatLng(
           pedido.value.direccion.latitud, pedido.value.direccion.longitud);
 
-      //Mostrar el marcador del cliente en el mapa 
+      direccion.value = await _getDireccionXLatLng(LatLng(
+          _posicionCliente.value.latitude, _posicionCliente.value.longitude));
+      pedido.value.direccionUsuario = direccion.value;
+
+      //Mostrar el marcador del cliente en el mapa
       _agregarMarcadorCliente(_posicionCliente.value);
 
       //Cargar los datos de la notificacion
-    _cargarListaNotificaciones();
-      
+      _cargarListaNotificaciones();
     } on FirebaseException catch (e) {
       Mensajes.showGetSnackbar(
           titulo: 'Alerta',
@@ -113,6 +132,8 @@ class ProcesoPedidoController extends GetxController {
 
   //Diseno mapa
   void onMapaCreado(GoogleMapController controller) {
+    controller.showMarkerInfoWindow(MarkerId(id));
+
     _mapaController = controller;
     controller.setMapStyle(estiloMapa);
   }
@@ -128,11 +149,18 @@ class ProcesoPedidoController extends GetxController {
     );
 
     final marker = Marker(
-      markerId: markerId,
-      position: posicion,
-      draggable: true,
-      icon: _marcadorCliente,
-    );
+        markerId: markerId,
+        position: posicion,
+        draggable: true,
+        icon: _marcadorCliente,
+        infoWindow: InfoWindow(
+          title: pedido.value.estadoPedidoUsuario,
+          snippet: ('\$${pedido.value.totalPedido} de ') +
+              (pedido.value.cantidadPedido > 1
+                  ? '${pedido.value.cantidadPedido} cilindros'
+                  : '${pedido.value.cantidadPedido} cilindro') +
+              ' para ${pedido.value.direccionUsuario}',
+        ));
 
     _marcadores[markerId] = marker;
   }
@@ -181,43 +209,41 @@ class ProcesoPedidoController extends GetxController {
 
   Future<void> _cargarListaNotificaciones() async {
     try {
-    
-
       //CARGAR DATOS DEL PEDIDO
       List<Notificacion>? aux =
           await _notificacionRepository.getNotificacionesPorField(
               field: "idPedidoNotificacion", dato: pedido.value.idPedido!);
-      _notificaciones.clear();
- 
-      if (aux!.length.toInt() > 0) {
-        for (var element in aux) {
-          _notificaciones.add("${element.tituloNotificacion}, por ${element.textoNotificacion},${formatoHoraFecha(element.fechaNotificacion)}");
-        } 
-      }
- 
 
+      if (aux!.length.toInt() > 0) {
+        _notificaciones.clear();
+
+        for (var element in aux) {
+          _notificaciones.add(
+              "${element.tituloNotificacion}, por ${element.textoNotificacion},${formatoHoraFecha(element.fechaNotificacion)}");
+        }
+      }
+      print(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
     } catch (e) {
- //
+      //
     }
   }
 
 //
   RxBool cargandoDetalle = false.obs;
-  final Rx<EstadoDelPedido?> _estadoPedido1 = EstadoDelPedido(
+  final Rx<EstadoDelPedido> _estadoPedido1 = EstadoDelPedido(
           idEstado: "null", fechaHoraEstado: Timestamp.now(), idPersona: "")
       .obs;
-  final Rx<EstadoDelPedido?> _estadoPedido3 = EstadoDelPedido(
+  final Rx<EstadoDelPedido> _estadoPedido3 = EstadoDelPedido(
           idEstado: "null", fechaHoraEstado: Timestamp.now(), idPersona: "")
       .obs;
-  Rx<EstadoDelPedido?> get estadoPedido1 => _estadoPedido1;
-  Rx<EstadoDelPedido?> get estadoPedido3 => _estadoPedido3;
+  Rx<EstadoDelPedido> get estadoPedido1 => _estadoPedido1;
+  Rx<EstadoDelPedido> get estadoPedido3 => _estadoPedido3;
 
   //El estadoPedido2 se usa por el repartidor
-  Future<void> cargarDetalle(String idPedido) async {
-    PedidoModel? pedido = await _pedidoRepository.getPedidoPorField(
-        field: "idPedido", dato: idPedido);
+  Future<void> cargarDetalle() async {
+    PedidoModel? pedidoAux = pedido.value;
 
-    _cargarPaginaDetalle(pedido!);
+  
     //Limpiar datos
     _estadoPedido1.value = EstadoDelPedido(
         idEstado: "null", fechaHoraEstado: Timestamp.now(), idPersona: "");
@@ -228,9 +254,9 @@ class ProcesoPedidoController extends GetxController {
       cargandoDetalle.value = true;
       //
       var aux1 = await _pedidoRepository.getEstadoPedidoPorField(
-          uid: pedido.idPedido!, field: "estadoPedido1");
+          uid: pedidoAux.idPedido!, field: "estadoPedido1");
       var aux3 = await _pedidoRepository.getEstadoPedidoPorField(
-          uid: pedido.idPedido!, field: "estadoPedido3");
+          uid: pedidoAux.idPedido!, field: "estadoPedido3");
 
       if (aux1 != null) {
         aux1.nombreEstado = await _getNombreEstado(aux1.idEstado);
@@ -247,7 +273,7 @@ class ProcesoPedidoController extends GetxController {
       }
 
       //
-
+  _cargarPaginaDetalle(pedidoAux);
     } catch (e) {
       Exception("Error al cargar detalle del pedido");
     }
@@ -259,7 +285,7 @@ class ProcesoPedidoController extends GetxController {
     Get.to(
         DetalleHistorial(
           pedido: pedido,
-          cargandoDetalle: cargandoDetalle,
+          cargandoDetalle: cargandoDetalle, formatoHoraFecha:formatoHoraFecha, estadoPedido1: estadoPedido1,estadoPedido3: estadoPedido3,
         ),
         routeName: 'detalle');
   }
@@ -271,9 +297,33 @@ class ProcesoPedidoController extends GetxController {
     return nombre ?? 'Pedido';
   }
 
- String formatoHoraFecha(Timestamp fecha) {
+  String formatoHoraFecha(Timestamp fecha) {
     String formatoFecha = DateFormat.yMd("es").format(fecha.toDate());
     String formatoHora = DateFormat.Hm("es").format(fecha.toDate());
     return "$formatoHora $formatoFecha";
+  }
+
+  //
+  Future<String> _getDireccionXLatLng(LatLng posicion) async {
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(posicion.latitude, posicion.longitude);
+    Placemark lugar = placemark[0];
+
+    return _getDireccion(lugar);
+  }
+
+  String _getDireccion(Placemark lugar) {
+    //
+    if (lugar.subLocality?.isEmpty == true) {
+      return lugar.street.toString();
+    } else {
+      return '${lugar.street}, ${lugar.subLocality}';
+    }
+  }
+
+  Future<void> _cargarDireccion() async {
+    direccion.value = await _getDireccionXLatLng(LatLng(
+        _posicionCliente.value.latitude, _posicionCliente.value.longitude));
+    pedido.value.direccionUsuario = direccion.value;
   }
 }

@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+
 class HeaderLogo extends StatelessWidget {
   const HeaderLogo({Key? key}) : super(key: key);
 
@@ -16,7 +17,7 @@ class HeaderLogo extends StatelessWidget {
             ),
             decoration: BoxDecoration(
               border: Border.all(
-                color: Colors.transparent,
+                color: Colors.white,
                 width: 1.0,
               ),
               shape: BoxShape.circle,

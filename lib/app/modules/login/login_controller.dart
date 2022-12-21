@@ -24,15 +24,12 @@ class LoginController extends GetxController {
 //
   @override
   void onInit() {
-    Future.wait([_obtenerCorreo()]);
+    Future.wait([obtenerCorreo()]);
 
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    super.onReady(); 
-  }
+ 
 
   @override
   void onClose() {
@@ -102,7 +99,7 @@ class LoginController extends GetxController {
   }
 
   //Obtener correo de forma local
-  Future<void> _obtenerCorreo() async {
+  Future<void> obtenerCorreo() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
     String? _correo = prefs.getString("correo_usuario");

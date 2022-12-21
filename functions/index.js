@@ -14,7 +14,7 @@ exports.enviarNotificacionAlActualizarEstadoPedido = functions.firestore.documen
       }  
  
   // Datos de la notificacion
-  var payload = {    notification: {   title:snapshot.data().tituloNotificacion,    body:'Por '+snapshot.data().textoNotificacion,}, }  ;
+  var payload = {    notification: {   title:'GasJ&M',    body:snapshot.data().tituloNotificacion +' por '+snapshot.data().textoNotificacion,}, }  ;
 
  // Obtener el uid del receptor de la notificacion
  var uidPersona=snapshot.data().idRemitenteNotificacion;
@@ -34,6 +34,7 @@ try {
   await limpiarTokensNoValidos(response, listaTokens,uidPersona);
   console.log(">>>>Enviado");
 } catch (error) {
+  console.log( error.code);
   console.log(">>>>Error "+error.message);
   
 } 

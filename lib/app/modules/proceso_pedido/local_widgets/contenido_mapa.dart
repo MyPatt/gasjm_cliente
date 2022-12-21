@@ -25,6 +25,7 @@ class ContenidoMapa extends StatelessWidget {
                           target: _.posicionCliente.value, zoom: 15),
                       myLocationButtonEnabled: true,
                       compassEnabled: false,
+                      
                     ),
             )));
   }

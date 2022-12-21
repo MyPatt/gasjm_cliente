@@ -150,7 +150,7 @@ class HistorialPage extends StatelessWidget {
         child: Column(
           children: [
             GestureDetector(
-                onTap: () => controlador.cargarDetalle(pedido),
+                onTap: () => controlador.cargarDetalle(pedido,),
                 child: Column(
                   children: <Widget>[
                     Row(

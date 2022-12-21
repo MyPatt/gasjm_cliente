@@ -54,13 +54,17 @@ class FormLogin extends StatelessWidget {
                             height:
                                 Responsive.getScreenSize(context).height * .05),
 
-                        InputText(
-                          controller: _.correoTextoController,
-                          iconPrefix: Icons.email_outlined,
-                          keyboardType: TextInputType.emailAddress,
-                          readOnly: true,
-                          validator: Validacion.validarCorreoElectronico,
-                          labelText: "Correo electrónico",
+                        GestureDetector(
+                          onTap: () => _.obtenerCorreo(),
+                          child: InputText(
+                            controller: _.correoTextoController,
+                            iconPrefix: Icons.email_outlined,
+                            keyboardType: TextInputType.emailAddress,
+                            //readOnly: true,
+                            validator: Validacion.validarCorreoElectronico,
+                            labelText: "Correo electrónico",
+                            enabled: false,
+                          ),
                         ),
 
                         SizedBox(
@@ -118,7 +122,6 @@ class FormLogin extends StatelessWidget {
                                   onPressed: () {
                                     if (_.formKey.currentState?.validate() ==
                                         true) {
-                           
                                       //TODO: OJO falta implementar by meedu
                                       //ProgressDialog.show(context);
                                       _.iniciarSesionConCorreoYContrasena();

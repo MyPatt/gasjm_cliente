@@ -174,7 +174,7 @@ class InicioController extends GetxController {
     try {
       procensandoElNuevoPedido.value = true;
       const idProducto = "glp";
-      final idCliente = usuario.value?.uidPersona ?? '';
+      final idCliente = _usuarioRepository.idUsuarioActual;
       const idRepartidor = "SinAsignar";
       final direccion = Direccion(
           latitud: _posicionInicialCliente.value.latitude,

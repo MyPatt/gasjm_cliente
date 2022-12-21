@@ -68,11 +68,11 @@ class ProcesoPedidoPage extends StatelessWidget {
                         ContenidoMapa()
                       ],
                     )),
-                    Positioned(
+                   /* Positioned(
                       top: 5,
                       left: 15,
                       child: Obx(() => ContenidoPedido(pedido: _.pedido.value)),
-                    ),
+                    ),*/
                     //
                     BotonCancelar(
                         onPressed: () => showDialog(

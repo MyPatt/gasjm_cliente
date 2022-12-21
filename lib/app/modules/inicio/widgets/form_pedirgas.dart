@@ -100,11 +100,12 @@ class FormPedirGas extends StatelessWidget {
                                                 builder: (_) => const DiaPicker());*/
                                       },
                                     )),
-                              ),
-                              SizedBox(
+                                    /*         SizedBox(
                                   height:
                                       Responsive.getScreenSize(context).height *
-                                          .02),
+                                          .02),*/
+                              ),
+                    
                               InputText(
                                 controller: _.cantidadTextoController,
                                 iconPrefix: Icons.pin_outlined,

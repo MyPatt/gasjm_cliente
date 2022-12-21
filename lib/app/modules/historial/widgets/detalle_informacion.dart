@@ -12,95 +12,78 @@ class DetalleInformacion extends StatelessWidget {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    pedido.nombreUsuario ?? 'Cliente',
-                    style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: AppTheme.blueDark, fontWeight: FontWeight.w800),
-                  ),
-                  const SizedBox(height: 5.0),
-                  /*    Row(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.credit_card_outlined,
-                        size: 15.0,
-                      ),
-                      const SizedBox(width: 10.0),
-                      Text(
-                        pedido.idCliente,
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: AppTheme.blueDark,
-                            ),
-                      ),
-                    ],
-                  ),*/
-                  const SizedBox(height: 5.0),
-                  Row(
-                    children: <Widget>[
-                      const Icon(
-                        Icons.room_outlined,
-                        color: AppTheme.light,
-                        size: 18.0,
-                      ),
-                      const SizedBox(width: 10.0),
-                      Text(
-                        pedido.direccionUsuario ?? 'Sin ubicación',
-                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              color: AppTheme.light,
-                            ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Column(
-                children: [
-                  CircleAvatar(
-                    backgroundColor: AppTheme.blueBackground,
-                    radius: 19.0,
-                    child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        radius: 18.0,
-                        child: TextSubtitle(
-                          text: pedido.cantidadPedido.toString(),
-                          color: AppTheme.blueDark,
-                        )
-                        /*  child: Icon(
+          CircleAvatar(
+            backgroundColor: AppTheme.blueBackground,
+            radius: 19.0,
+            child: CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 18.0,
+                child: TextSubtitle(
+                  text: pedido.cantidadPedido.toString(),
+                  color: AppTheme.light,
+                )
+                /*  child: Icon(
                                 Icons.person_outline_outlined,
                                 size: 23.0,
                               ),*/
-                        ),
-                  ),
-                  Text(
-                    "\$ ${pedido.totalPedido.toStringAsFixed(2)}",
-                    textAlign: TextAlign.justify,
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                          color: AppTheme.blueDark,
-                          fontWeight: FontWeight.w400,
-                        ),
-                  ),
-                ],
-              )
-            ],
+                ),
           ),
+          Text(
+            "\$ ${pedido.totalPedido.toStringAsFixed(2)}",
+            textAlign: TextAlign.justify,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: AppTheme.light,
+                  fontWeight: FontWeight.w400,
+                ),
+          ),
+          const SizedBox(height: 10.0),
+          Text(
+            pedido.nombreUsuario ?? 'Cliente',
+            style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                color: AppTheme.blueDark, fontWeight: FontWeight.w800),
+          ),
+          /*    Row(
+            children: <Widget>[
+              const Icon(
+                Icons.credit_card_outlined,
+                size: 15.0,
+              ),
+              const SizedBox(width: 10.0),
+              Text(
+                pedido.idCliente,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                      color: AppTheme.blueDark,
+                    ),
+              ),
+            ],
+          ),*/
           const SizedBox(height: 5.0),
           Row(
-            children: [
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Icon(
+                Icons.room_outlined,
+                color: AppTheme.light,
+                size: 18.0,
+              ),
+              const SizedBox(width: 10.0),
               Text(
-                //"Barrio Santa Rosa a una cuadra del parque, puerta negra.",
-                pedido.notaPedido ?? "",
-                textAlign: TextAlign.justify,
-                maxLines: 3,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                pedido.direccionUsuario ?? 'Sin ubicación',
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
                       color: AppTheme.light,
                     ),
               ),
             ],
+          ),
+          const SizedBox(height: 5.0),
+          Text(
+            //"Barrio Santa Rosa a una cuadra del parque, puerta negra.",
+            pedido.notaPedido ?? "",
+            textAlign: TextAlign.justify,
+            maxLines: 3,
+            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: AppTheme.light,
+                ),
           ),
         ]);
   }
