@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
+import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/proceso_pedido/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
@@ -17,18 +18,20 @@ class PopuMenuNotificacion extends StatelessWidget {
     return GetBuilder<ProcesoPedidoController>(
       builder: (_) => PopupMenuButton(
         padding: const EdgeInsets.all(0.0),
-       
         offset: Offset(0.0, AppBar().preferredSize.height),
         icon: icono,
         itemBuilder: (ctx) => _.notificaciones
             .map((e) => PopupMenuItem(
                 padding: const EdgeInsets.all(0.0),
                 onTap: () => _.cargarDetalle(),
-                child: Card(
-                  elevation: 0.4,
-                  child: ListTile(
-                    title: Row(
+                enabled: false,
+                child: Container(
+                  decoration: BoxDecoration(  border: Border.all(color: Colors.black38)),
+                  child: Column(
+                    
+                   children:[ Row(
                       children: [
+                        Icon(Icons.info_outline,color: AppTheme.blueDark,),
                         TextSubtitle(
                             text: e.split(',')[0], color: Colors.black38),
                         //   TextDescription(text: e.split(',')[1]),
@@ -40,23 +43,20 @@ class PopuMenuNotificacion extends StatelessWidget {
                         )
                       ],
                     ),
-                    subtitle: Row(
+                    Row(
                       children: [
                         Text(
                           e.split(',')[2],
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall
-                              ?.copyWith(
-                                  color: Colors.black38,
-                                  fontWeight: FontWeight.normal),
+                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                              color: Colors.black38,
+                              fontWeight: FontWeight.normal),
                         ),
                       ],
                     ),
+                   ]
                   ),
                 )))
             .toList(),
-      
       ),
     );
   }

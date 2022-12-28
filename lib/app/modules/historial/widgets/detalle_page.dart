@@ -7,6 +7,7 @@ import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/modules/historial/widgets/detalle_informacion.dart';
 import 'package:gasjm/app/modules/historial/widgets/detalle_seguimiento.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 class DetalleHistorial extends StatelessWidget {
@@ -51,25 +52,18 @@ class DetalleHistorial extends StatelessWidget {
               borderRadius: BorderRadius.circular(30),
               color: Colors.white,
             ),
-            child: ListView(
+            child: Column(
                 /*    mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.stretch,*/
                 children: <Widget>[
-                  /*  const CircleAvatar(
-                      backgroundColor: AppTheme.light,
-                      child: CircleAvatar(
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.route_outlined,
-                          color: AppTheme.blueDark,
-                          size: 50,
-                        ),
-                        radius: 55.0,
-                      ),
-                      radius: 56.0,
-                    ),
-                    SizedBox(
-                        height: Responsive.getScreenSize(context).height * .05),*/
+                  CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: SvgPicture.asset("assets/icons/detalle.svg",
+                        semanticsLabel: 'Pedido'),
+                    radius: 56.0,
+                  ),
+                  SizedBox(
+                      height: Responsive.getScreenSize(context).height * .05),
                   DetalleInformacion(pedido: pedido),
                   Obx(() => !cargandoDetalle.value
                       ? DetalleSeguimiento(

@@ -1,4 +1,6 @@
-class TipoVehiculoModel {
+import 'package:equatable/equatable.dart';
+
+class TipoVehiculoModel extends Equatable {
     TipoVehiculoModel({
         required this.idTipoVehiculo,
         required this.nombreTipoVehiculo,
@@ -16,4 +18,8 @@ class TipoVehiculoModel {
         "idTipoVehiculo": idTipoVehiculo,
         "nombreTipoVehiculo": nombreTipoVehiculo,
     };
+    
+      @override
+      // TODO: implement props
+      List<Object?> get props => [];
 }

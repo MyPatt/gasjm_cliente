@@ -23,15 +23,14 @@ class NotificacionProvider {
 //
   Future<List<Notificacion>>? getNotificacionesPorField(
       {required String field, required String dato}) async {
-    print("===========================${_usuario!.uid}");
+ 
     final resultado = await _firestoreInstance
         .collection('notificacion')
         .where("idRemitenteNotificacion", isEqualTo: _usuario!.uid)
         .where(field, isEqualTo: dato)
         .orderBy("fechaNotificacion", descending: true)
         .get();
-    //. limit(5);
-    print("===========================${resultado.docs.isEmpty}");
+  
 
     if (resultado.docs.isEmpty) {
       return [];

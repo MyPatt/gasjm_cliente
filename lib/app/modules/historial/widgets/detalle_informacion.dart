@@ -12,21 +12,11 @@ class DetalleInformacion extends StatelessWidget {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          CircleAvatar(
-            backgroundColor: AppTheme.blueBackground,
-            radius: 19.0,
-            child: CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 18.0,
-                child: TextSubtitle(
-                  text: pedido.cantidadPedido.toString(),
-                  color: AppTheme.light,
-                )
-                /*  child: Icon(
-                                Icons.person_outline_outlined,
-                                size: 23.0,
-                              ),*/
-                ),
+          TextSubtitle(
+            text: pedido.cantidadPedido > 1
+                ? '${pedido.cantidadPedido} cilindros'
+                : '${pedido.cantidadPedido} cilindro',
+            color: AppTheme.light,
           ),
           Text(
             "\$ ${pedido.totalPedido.toStringAsFixed(2)}",
