@@ -22,39 +22,46 @@ class PopuMenuNotificacion extends StatelessWidget {
         icon: icono,
         itemBuilder: (ctx) => _.notificaciones
             .map((e) => PopupMenuItem(
-                padding: const EdgeInsets.all(0.0),
                 onTap: () => _.cargarDetalle(),
                 enabled: false,
-                child: Container(
-                  decoration: BoxDecoration(  border: Border.all(color: Colors.black38)),
-                  child: Column(
-                    
-                   children:[ Row(
-                      children: [
-                        Icon(Icons.info_outline,color: AppTheme.blueDark,),
-                        TextSubtitle(
-                            text: e.split(',')[0], color: Colors.black38),
-                        //   TextDescription(text: e.split(',')[1]),
-                        Text(
-                          e.split(',')[1],
-                          style: Theme.of(context).textTheme.caption?.copyWith(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.normal),
-                        )
-                      ],
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.info_outline,
+                      color: AppTheme.blueDark,
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          e.split(',')[2],
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: Colors.black38,
-                              fontWeight: FontWeight.normal),
-                        ),
-                      ],
-                    ),
-                   ]
-                  ),
+                    Column(children: [
+                      Row(
+                        children: [
+                          TextSubtitle(
+                              text: e.split(',')[0], color: Colors.black38),
+                          //   TextDescription(text: e.split(',')[1]),
+                          Text(
+                            e.split(',')[1],
+                            style: Theme.of(context)
+                                .textTheme
+                                .caption
+                                ?.copyWith(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.normal),
+                          )
+                        ],
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            e.split(',')[2],
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodySmall
+                                ?.copyWith(
+                                    color: Colors.black38,
+                                    fontWeight: FontWeight.normal),
+                          ),
+                        ],
+                      ),
+                    ]),
+                  ],
                 )))
             .toList(),
       ),

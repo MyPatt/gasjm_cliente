@@ -11,10 +11,12 @@ import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/modules/historial/widgets/detalle_page.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class ProcesoPedidoController extends GetxController {
   final _pedidoRepository = Get.find<PedidoRepository>();
@@ -62,6 +64,10 @@ class ProcesoPedidoController extends GetxController {
 
     //
     _cargarDireccion();
+
+    getPolyPoints();
+    getUbicacionUsuario();
+    setCustomMarkerIcon();
   }
 
 //Metodo para cancelar el pedido
@@ -112,7 +118,7 @@ class ProcesoPedidoController extends GetxController {
       pedido.value.direccionUsuario = direccion.value;
 
       //Mostrar el marcador del cliente en el mapa
-      _agregarMarcadorCliente(_posicionCliente.value);
+      // _agregarMarcadorCliente(_posicionCliente.value);
 
       //Cargar los datos de la notificacion
       _cargarListaNotificaciones();
@@ -222,7 +228,6 @@ class ProcesoPedidoController extends GetxController {
               "${element.tituloNotificacion}, por ${element.textoNotificacion},${formatoHoraFecha(element.fechaNotificacion)}");
         }
       }
-      print(";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
     } catch (e) {
       //
     }
@@ -243,7 +248,6 @@ class ProcesoPedidoController extends GetxController {
   Future<void> cargarDetalle() async {
     PedidoModel? pedidoAux = pedido.value;
 
-  
     //Limpiar datos
     _estadoPedido1.value = EstadoDelPedido(
         idEstado: "null", fechaHoraEstado: Timestamp.now(), idPersona: "");
@@ -273,7 +277,7 @@ class ProcesoPedidoController extends GetxController {
       }
 
       //
-  _cargarPaginaDetalle(pedidoAux);
+      _cargarPaginaDetalle(pedidoAux);
     } catch (e) {
       Exception("Error al cargar detalle del pedido");
     }
@@ -285,7 +289,10 @@ class ProcesoPedidoController extends GetxController {
     Get.to(
         DetalleHistorial(
           pedido: pedido,
-          cargandoDetalle: cargandoDetalle, formatoHoraFecha:formatoHoraFecha, estadoPedido1: estadoPedido1,estadoPedido3: estadoPedido3,
+          cargandoDetalle: cargandoDetalle,
+          formatoHoraFecha: formatoHoraFecha,
+          estadoPedido1: estadoPedido1,
+          estadoPedido3: estadoPedido3,
         ),
         routeName: 'detalle');
   }
@@ -326,4 +333,148 @@ class ProcesoPedidoController extends GetxController {
         _posicionCliente.value.latitude, _posicionCliente.value.longitude));
     pedido.value.direccionUsuario = direccion.value;
   }
+
+  //Variables para la vista previa de la ruta en tiempo real -1.325901, -78.870296
+  LatLng sourceLocation = LatLng(-1.353455, -78.866747);
+  LatLng destination = LatLng(-1.325901, -78.870296);
+
+  static const google_api_key = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
+
+  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+  void setCustomMarkerIcon() {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/icons/marcadorRepartidor.png")
+        .then(
+      (icon) {
+        sourceIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/icons/marcadorCliente.png")
+        .then(
+      (icon) {
+        destinationIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/icons/camiongasjm.png")
+        .then(
+      (icon) {
+        currentLocationIcon = icon;
+      },
+    );
+  }
+
+  //Metodo para dibujar la dirección de la ruta
+  List<LatLng> polylineCoordinates = [];
+  void getPolyPoints() async {
+    print("aaaaaaaaaaaaaaaaaaaaaaa");
+    PolylinePoints polylinePoints = PolylinePoints();
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+      google_api_key, // Your Google Map Key
+      PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
+      PointLatLng(destination.latitude, destination.longitude),
+    );
+    if (result.points.isNotEmpty) {
+      for (var point in result.points) {
+        polylineCoordinates.add(
+          LatLng(point.latitude, point.longitude),
+        );
+
+        print(point);
+      }
+      // setState(() {});
+    }
+
+    print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+  }
+
+//
+  final Rx<LatLng> posicionInicialCliente =
+      const LatLng(-12.122711, -77.027475).obs;
+
+  final RxDouble rotacionMarcadorRepartidor = 0.0.obs;
+  //
+  Future<void> getUbicacionUsuario() async {
+    if (!(await Geolocator.isLocationServiceEnabled())) {
+      //si la ubicacion esta deshabilitado tiene activarse
+      await Geolocator.openLocationSettings();
+      return Future.error('Servicio de ubicación deshabilitada.');
+    } else {
+      LocationPermission permission;
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          //Si la ubicacion sigue dehabilitado mostrar sms
+          return Future.error('Permiso de ubicación denegado.');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        //Permiso denegado por siempre
+        return Future.error(
+            'Permiso de ubicación denegado de forma permanente.');
+      }
+
+      Position position = await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high);
+
+      posicionInicialCliente.value =
+          LatLng(position.latitude, position.longitude);
+
+      Geolocator.getPositionStream().listen((event) async {
+        //
+        double rotation = Geolocator.bearingBetween(
+            posicionInicialCliente.value.latitude,
+            posicionInicialCliente.value.longitude,
+            event.latitude,
+            event.longitude);
+
+        //
+        rotacionMarcadorRepartidor.value = rotation; 
+        //
+        posicionInicialCliente.value = LatLng(event.latitude, event.longitude);
+
+        //
+
+        //
+        if (_mapaController != null) {
+          final zoom = await _mapaController!.getZoomLevel();
+          final cameraUpdate = CameraUpdate.newLatLngZoom(
+              LatLng(
+                event.latitude,
+                event.longitude,
+              ),
+              zoom);
+
+          //
+          _mapaController?.animateCamera(cameraUpdate);
+        }
+      });
+
+      //
+
+/*
+      List<Placemark> placemark =
+          await placemarkFromCoordinates(position.latitude, position.longitude);
+      _posicionInicialCliente.value =
+          LatLng(position.latitude, position.longitude);
+*/
+      //  direccionTextController.text = placemark[0].name!;
+      // direccion.value = placemark[0].name!;
+
+      //  _agregarMarcadorCliente(    _posicionInicialCliente.value, placemark[0].name!);
+      /*
+      _mapaController
+          ?.moveCamera(CameraUpdate.newLatLng(_posicionInicialCliente.value));*/
+
+      //  notifyListeners();
+    }
+  }
+
+  //Actualizaciones de ubicación en tiempo real en el mapa
+
 }

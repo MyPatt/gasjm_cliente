@@ -60,22 +60,20 @@ class ProcesoPedidoPage extends StatelessWidget {
               ? const Center(child: CircularProgress())
               : Stack(
                   children: [
-                    //Widget Mapa
+
+                    //Widget de Mapa  para la vista previa de la ruta en tiempo real
                     Positioned.fill(
-                        child: Column(
-                      children: const <Widget>[
-                        //    Obx(() => ContenidoPedido(pedido: _.pedido.value)),
-                        ContenidoMapa()
-                      ],
+                        child: ContenidoMapa(
+                      marcadores: _.marcadores,
+                      target: _.sourceLocation,
+                      onMapCreated: (controller) => _.onMapaCreado(controller), points:_.polylineCoordinates,
                     )),
-                   /* Positioned(
-                      top: 5,
-                      left: 15,
-                      child: Obx(() => ContenidoPedido(pedido: _.pedido.value)),
-                    ),*/
-                    //
+                    
+                    //Boton para que el usuario cancele su pedido
                     BotonCancelar(
-                        onPressed: () => showDialog(
+                        onPressed: () => 
+                        //modal para confirmar si desea cancelar
+                        showDialog(
                               context: context,
                               barrierDismissible: true,
                               builder: (context) {
@@ -88,6 +86,7 @@ class ProcesoPedidoPage extends StatelessWidget {
                                                 '¿Está seguro de cancelar su pedido?',
                                             icono: Icons.cancel_outlined,
                                             onPressed: () =>
+                                            //en caso de confirmar se actualiza el estado como cancelado
                                                 _.actualizarEstadoPedido(
                                                     _.pedido.value.idPedido!)));
                               },

@@ -27,6 +27,7 @@ dependencies:
   flutter_clean_calendar: ^1.1.0
   flutter_facebook_auth: ^4.0.1
   flutter_localization: ^0.1.8
+  flutter_polyline_points: ^1.0.0
   flutter_secure_storage: ^4.2.0
   flutter_spinkit: null
   flutter_svg: ^0.22.0
