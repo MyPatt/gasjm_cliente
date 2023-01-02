@@ -24,7 +24,11 @@ abstract class PedidoRepository {
     required String field,
   });
 
-   Future<void> updateEstadoPedido(
-      {required String idPedido, required String estadoPedido,required String numeroEstadoPedido});
- 
+  Future<void> updateEstadoPedido(
+      {required String idPedido,
+      required String estadoPedido,
+      required String numeroEstadoPedido});
+
+  Future<Direccion> getUbicacionActualDelRepartidor(
+      {required String idRepartidor});
 }

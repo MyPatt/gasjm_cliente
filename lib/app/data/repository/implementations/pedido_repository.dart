@@ -53,6 +53,7 @@ class PedidoRepositoryImpl extends PedidoRepository {
     required String field,
   }) =>
       _provider.getEstadoPedidoPorField(uid: uid, field: field);
+
   @override
   Future<void> updateEstadoPedido(
           {required String idPedido,
@@ -62,4 +63,9 @@ class PedidoRepositoryImpl extends PedidoRepository {
           idPedido: idPedido,
           estadoPedido: estadoPedido,
           numeroEstadoPedido: numeroEstadoPedido);
+
+  @override
+  Future<Direccion> getUbicacionActualDelRepartidor(
+          {required String idRepartidor}) =>
+      _provider.getUbicacionActualDelRepartidor(idRepartidor: idRepartidor);
 }

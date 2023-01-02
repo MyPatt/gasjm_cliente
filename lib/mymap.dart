@@ -18,6 +18,7 @@ class _MyMapState extends State<MyMap> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder( 
+          //collection('persona').doc(idUsuarioActual).update({"ubicacionActual": ubicacionActual.toMap()})
       stream: FirebaseFirestore.instance.collection('location').snapshots(),
       builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (_added) {

@@ -27,35 +27,36 @@ class ContenidoMapa extends StatelessWidget {
             child: Obx(
           () => GoogleMap(
             initialCameraPosition: CameraPosition(
-              target: LatLng(_.posicionInicialCliente.value.latitude,
-                  _.posicionInicialCliente.value.longitude),
+              target: LatLng(_.posicionOrigenVehiculoRepartidor.value.latitude,
+                  _.posicionOrigenVehiculoRepartidor.value.longitude),
               zoom: 15,
             ),
             markers: {
               Marker(
                   markerId: const MarkerId("currentLocation"),
                   icon: _.currentLocationIcon,
-                  position: LatLng(_.posicionInicialCliente.value.latitude,
-                      _.posicionInicialCliente.value.longitude),
-                  rotation: _.rotacionMarcadorRepartidor.value),
+                  position: LatLng(
+                      _.posicionOrigenVehiculoRepartidor.value.latitude,
+                      _.posicionOrigenVehiculoRepartidor.value.longitude),
+                  rotation: _.rotacionMarcadorVehiculoRepartidor.value),
               Marker(
-                markerId: MarkerId("source"),
-                icon: _.sourceIcon,
-                position: _.sourceLocation,
-              ),
+                  markerId: MarkerId("source"),
+                  icon: _.iconoOrigenMarcadorVehiculoRepartidor,
+                  position: _.posicionOrigenVehiculoRepartidor.value,
+                  rotation: _.rotacionMarcadorVehiculoRepartidor.value),
               Marker(
                 markerId: MarkerId("destination"),
-                icon: _.destinationIcon,
-                position: _.destination,
+                icon: _.iconoDestinoMarcadorDestinoPedido,
+                position: _.posicionDestinoPedidoCliente.value,
               ),
             },
             onMapCreated: (controller) => _.onMapaCreado(controller),
             polylines: {
               Polyline(
                 polylineId: const PolylineId("ruta"),
-                points: points,
+                points: _.polylineCoordinates,
                 color: AppTheme.blueBackground,
-                width: 3  ,
+                width: 3,
               ),
             },
 

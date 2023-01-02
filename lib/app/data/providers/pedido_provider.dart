@@ -5,8 +5,8 @@ import 'package:gasjm/app/data/models/pedido_model.dart';
 
 class PedidoProvider {
   //Instancia de firestore
-  final _firestoreInstance = FirebaseFirestore.instance;  
- final usuario = FirebaseAuth.instance.currentUser; 
+  final _firestoreInstance = FirebaseFirestore.instance;
+  final usuario = FirebaseAuth.instance.currentUser;
   //
   Future<void> insertPedido({required PedidoModel pedidoModel}) async {
     final resultado =
@@ -68,7 +68,8 @@ class PedidoProvider {
       {required String field, required String dato}) async {
     final resultado = await _firestoreInstance
         .collection("pedido")
-        .where(field, isEqualTo: dato).orderBy("fechaHoraPedido",descending: true)
+        .where(field, isEqualTo: dato)
+        .orderBy("fechaHoraPedido", descending: true)
         .limit(1)
         .get();
     if ((resultado.docs.isNotEmpty)) {
@@ -128,7 +129,6 @@ class PedidoProvider {
         await _firestoreInstance.collection("pedido").doc(uid).get();
     var datos = (resultado.get(field));
 
-
     if ((datos != null)) {
       return EstadoDelPedido.fromJson(resultado.get(field));
     } else {
@@ -136,17 +136,27 @@ class PedidoProvider {
     }
   }
 
-    //
+  //Obtner ubicacion actual del repartidor del pedido
+  Future<Direccion> getUbicacionActualDelRepartidor(
+      {required String idRepartidor}) async {
+    final snapshot =
+        await _firestoreInstance.collection('persona').doc(idRepartidor).get();
+
+    return Direccion.fromMap(snapshot.get("ubicacionActual"));
+  }
+  //
 
   Future<void> updateEstadoPedido(
-      {required String idPedido, required String estadoPedido,required String numeroEstadoPedido }) async {
-    await _firestoreInstance
-        .collection('pedido')
-        .doc(idPedido)
-        .update({"idEstadoPedido": estadoPedido,
-        
-        numeroEstadoPedido:EstadoDelPedido(idEstado: estadoPedido  , fechaHoraEstado: Timestamp.now(), idPersona: usuario!.uid).toMap()
- });
+      {required String idPedido,
+      required String estadoPedido,
+      required String numeroEstadoPedido}) async {
+    await _firestoreInstance.collection('pedido').doc(idPedido).update({
+      "idEstadoPedido": estadoPedido,
+      numeroEstadoPedido: EstadoDelPedido(
+              idEstado: estadoPedido,
+              fechaHoraEstado: Timestamp.now(),
+              idPersona: usuario!.uid)
+          .toMap()
+    });
   }
-
 }

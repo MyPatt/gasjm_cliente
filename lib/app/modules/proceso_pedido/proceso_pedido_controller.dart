@@ -19,11 +19,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 class ProcesoPedidoController extends GetxController {
+  //Repositorios
   final _pedidoRepository = Get.find<PedidoRepository>();
   final _personaRepository = Get.find<PersonaRepository>();
   final _notificacionRepository = Get.find<NotificacionRepository>();
+
   //Variable para dsatos del pedido
-  RxString? descripcionEstadoPedido;
   final Rx<PedidoModel> pedido = PedidoModel(
           idProducto: "",
           idCliente: "",
@@ -36,38 +37,60 @@ class ProcesoPedidoController extends GetxController {
           notaPedido: "",
           totalPedido: 0)
       .obs;
-  //Variable para mostrar el avance de la consulta desde firestore
-  final cargandoPedidos = true.obs;
 
-  //Variables para el mapa
+  //Variable para mostrar el avance de la consulta desde firestore
+  final cargandoDatosDelPedidoRealizado = true.obs;
+
+  //Contralador del mapa
   // ignore: unused_field
   GoogleMapController? _mapaController;
 
-  final Rx<LatLng> _posicionCliente = const LatLng(-0.2053476, -79.4894387).obs;
+  //Posicion del destino final para entregar el pedido que es el cliente, inicializado
+  final Rx<LatLng> _posicionDestinoCliente =
+      const LatLng(-0.2053476, -79.4894387).obs;
+  Rx<LatLng> get posicionDestinoPedidoCliente =>
+      _posicionDestinoCliente.value.obs;
 
-//
+  //Lista observable que muestra las notificaciones del pedido, inicializado sin notificaciones.
+  // En caso de que haya notificaciones se carga los datos
   final RxList<String> _notificaciones =
       ["Sin notificaciones, ,En este momento"].obs;
   RxList<String> get notificaciones => _notificaciones;
 
-  Rx<LatLng> get posicionCliente => _posicionCliente.value.obs;
-
+  //Lista de marcadores (vehiculo y cliente)
   final Map<MarkerId, Marker> _marcadores = {};
   Set<Marker> get marcadores => _marcadores.values.toSet();
 
+  //Borrar
   late String id = 'MakerIdCliente';
+
+  //Variable observable que muestra la direccion/ destino para entregar el pedido, esto se visualiza en un modal
+  RxString direccion = ''.obs;
+
+  //Varriable que describe en el estado del pedido, esto se visualiza en un modal
+  RxString? descripcionEstadoPedido;
+
+  //Variable de rotacion que muestra el sentido en que va el vehiculo repartidor
+  final RxDouble rotacionMarcadorVehiculoRepartidor = 0.0.obs;
+
+  //METODOS PROPIOS GETX
   @override
   void onInit() {
     super.onInit();
     //Obtener  datos del pedido  realizado
     Future.wait([_cargarDatosDelPedidoRealizado()]);
 
-    //
-    _cargarDireccion();
+    //Obtiene el nombre de direccion del destino del pediod a partir de la posicion en LatLng
+    _cargarDireccionDestinoDelPedido();
 
-    getPolyPoints();
+    //Obtener la ruta del viaje a partir de la ubicacion actual del vehiculo repartidor hasta el destino del pedido
+    cargarPuntosDeLaRutaDelPedido();
+
+    //TODO: obtner ubicacion actual del repartidor no del cliente
     getUbicacionUsuario();
-    setCustomMarkerIcon();
+
+    //Se asigna los iconos personalizados a los marcadores del mapa (detinopedido y vehiculo)
+    cargarIconosMarcadoresDelMapa();
   }
 
 //Metodo para cancelar el pedido
@@ -86,10 +109,10 @@ class ProcesoPedidoController extends GetxController {
   }
 
   //Metodo que obtiene el ultimo pedido realizado y aun no se a finalizado
-  RxString direccion = ''.obs;
+
   Future<void> _cargarDatosDelPedidoRealizado() async {
     try {
-      cargandoPedidos.value = true;
+      cargandoDatosDelPedidoRealizado.value = true;
 
       //CARGAR DATOS DEL PEDIDO
       var aux = await _getDatosPedido();
@@ -110,11 +133,12 @@ class ProcesoPedidoController extends GetxController {
 
       //Datos de la posicion del cliente
 
-      _posicionCliente.value = LatLng(
+      _posicionDestinoCliente.value = LatLng(
           pedido.value.direccion.latitud, pedido.value.direccion.longitud);
 
       direccion.value = await _getDireccionXLatLng(LatLng(
-          _posicionCliente.value.latitude, _posicionCliente.value.longitude));
+          _posicionDestinoCliente.value.latitude,
+          _posicionDestinoCliente.value.longitude));
       pedido.value.direccionUsuario = direccion.value;
 
       //Mostrar el marcador del cliente en el mapa
@@ -133,7 +157,7 @@ class ProcesoPedidoController extends GetxController {
           ));
     }
 
-    cargandoPedidos.value = false;
+    cargandoDatosDelPedidoRealizado.value = false;
   }
 
   //Diseno mapa
@@ -328,34 +352,39 @@ class ProcesoPedidoController extends GetxController {
     }
   }
 
-  Future<void> _cargarDireccion() async {
+  Future<void> _cargarDireccionDestinoDelPedido() async {
     direccion.value = await _getDireccionXLatLng(LatLng(
-        _posicionCliente.value.latitude, _posicionCliente.value.longitude));
+        _posicionDestinoCliente.value.latitude,
+        _posicionDestinoCliente.value.longitude));
     pedido.value.direccionUsuario = direccion.value;
   }
 
   //Variables para la vista previa de la ruta en tiempo real -1.325901, -78.870296
-  LatLng sourceLocation = LatLng(-1.353455, -78.866747);
+  /*LatLng sourceLocation = LatLng(-1.353455, -78.866747);
   LatLng destination = LatLng(-1.325901, -78.870296);
-
+*/
   static const google_api_key = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
 
-  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+  //Varriables de los iconos para marcadores del mapa
+  BitmapDescriptor iconoOrigenMarcadorVehiculoRepartidor =
+      BitmapDescriptor.defaultMarker;
+  BitmapDescriptor iconoDestinoMarcadorDestinoPedido =
+      BitmapDescriptor.defaultMarker;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
-  void setCustomMarkerIcon() {
+
+  void cargarIconosMarcadoresDelMapa() {
     BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/icons/marcadorRepartidor.png")
+            ImageConfiguration.empty, "assets/icons/camiongasjm.png")
         .then(
       (icon) {
-        sourceIcon = icon;
+        iconoOrigenMarcadorVehiculoRepartidor = icon;
       },
     );
     BitmapDescriptor.fromAssetImage(
             ImageConfiguration.empty, "assets/icons/marcadorCliente.png")
         .then(
       (icon) {
-        destinationIcon = icon;
+        iconoDestinoMarcadorDestinoPedido = icon;
       },
     );
     BitmapDescriptor.fromAssetImage(
@@ -368,23 +397,31 @@ class ProcesoPedidoController extends GetxController {
   }
 
   //Metodo para dibujar la dirección de la ruta
-  List<LatLng> polylineCoordinates = [];
-  void getPolyPoints() async {
+  final RxList<LatLng> _polylineCoordinates = <LatLng>[].obs;
+  RxList<LatLng> get polylineCoordinates => _polylineCoordinates;
+
+  void cargarPuntosDeLaRutaDelPedido() async {
     print("aaaaaaaaaaaaaaaaaaaaaaa");
     PolylinePoints polylinePoints = PolylinePoints();
+
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
       google_api_key, // Your Google Map Key
-      PointLatLng(sourceLocation.latitude, sourceLocation.longitude),
-      PointLatLng(destination.latitude, destination.longitude),
+      PointLatLng(posicionOrigenVehiculoRepartidor.value.latitude,
+          posicionOrigenVehiculoRepartidor.value.longitude),
+      PointLatLng(posicionDestinoPedidoCliente.value.latitude,
+          posicionDestinoPedidoCliente.value.longitude),
     );
     if (result.points.isNotEmpty) {
+      List<LatLng> aux = [];
       for (var point in result.points) {
-        polylineCoordinates.add(
+        aux.add(
           LatLng(point.latitude, point.longitude),
         );
 
         print(point);
       }
+
+      _polylineCoordinates.value = aux;
       // setState(() {});
     }
 
@@ -392,10 +429,9 @@ class ProcesoPedidoController extends GetxController {
   }
 
 //
-  final Rx<LatLng> posicionInicialCliente =
+  final Rx<LatLng> posicionOrigenVehiculoRepartidor =
       const LatLng(-12.122711, -77.027475).obs;
 
-  final RxDouble rotacionMarcadorRepartidor = 0.0.obs;
   //
   Future<void> getUbicacionUsuario() async {
     if (!(await Geolocator.isLocationServiceEnabled())) {
@@ -422,24 +458,25 @@ class ProcesoPedidoController extends GetxController {
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
-      posicionInicialCliente.value =
+      posicionOrigenVehiculoRepartidor.value =
           LatLng(position.latitude, position.longitude);
 
       Geolocator.getPositionStream().listen((event) async {
         //
         double rotation = Geolocator.bearingBetween(
-            posicionInicialCliente.value.latitude,
-            posicionInicialCliente.value.longitude,
+            posicionOrigenVehiculoRepartidor.value.latitude,
+            posicionOrigenVehiculoRepartidor.value.longitude,
             event.latitude,
             event.longitude);
 
         //
-        rotacionMarcadorRepartidor.value = rotation; 
+        rotacionMarcadorVehiculoRepartidor.value = rotation;
         //
-        posicionInicialCliente.value = LatLng(event.latitude, event.longitude);
+        posicionOrigenVehiculoRepartidor.value =
+            LatLng(event.latitude, event.longitude);
 
         //
-
+        cargarPuntosDeLaRutaDelPedido();
         //
         if (_mapaController != null) {
           final zoom = await _mapaController!.getZoomLevel();

@@ -1,158 +1,120 @@
-import 'package:gasjm/app/data/controllers/autenticacion_controller.dart';
-import 'package:get/get.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart';
-import 'package:gasjm/app/routes/app_pages.dart';
-import 'package:gasjm/app/modules/splash/splash_binding.dart';
-import 'package:gasjm/app/modules/splash/splash_page.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-
-import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:gasjm/app/core/utils/dependency_injection.dart';
-import 'package:gasjm/app/data/repository/implementations/usuario_repository.dart';
-import 'package:gasjm/app/data/repository/usuario_repository.dart';
-import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
-import 'package:gasjm/app/data/repository/implementations/authenticacion_repository.dart';
+import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gasjm/app/data/models/pedido_model.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-import 'package:gasjm/app/modules/ubicacion/blocs/gps/gps_bloc.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gasjm/app/core/utils/globals.dart' as globals;
-// TODO: Add stream controller
-import 'package:rxdart/rxdart.dart';
-
-// for passing messages from event handler to the UI
-final _messageStreamController = BehaviorSubject<RemoteMessage>();
-
-// TODO: Define the background message handler
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  globals.existeNotificacion.value = true;
-
-  if (kDebugMode) {
-    print("Handling a background message: ${message.messageId}");
-    print('Message data: ${message.data}');
-    print('Message notification: ${message.notification?.title}');
-    print('Message notification: ${message.notification?.body}');
-  }
-}
-
-Future<void> main() async {
-  //Inicializar Firebase
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  //Inyectando implentacion del repositorio de autenticacion
-
-  Get.put<AutenticacionRepository>(AutenticacionRepositoryImpl());
-  Get.put<MyUserRepository>(MyUserRepositoryImp());
-//Agregar Providers y Repositories
-  DependencyInjection.load();
-
-  //////////////////////////////////////////////////
-
-  // TODO: Request permission
-  final messaging = FirebaseMessaging.instance;
-
-  // Web/iOS app users need to grant permission to receive messages
-  final settings = await messaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  if (kDebugMode) {
-    print('Permission granted: ${settings.authorizationStatus}');
-  }
-  // TODO: Register with FCM
-  // use the registration token to send messages to users from your trusted server environment
-  String? token;
-
-  token = await messaging.getToken();
-
-  if (kDebugMode) {
-    print('Registration Token=$token');
-  }
-
-  // TODO: Set up foreground message handler
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    if (kDebugMode) {
-      print('Handling a foreground message: ${message.messageId}');
-      print('Message data: ${message.data}');
-      print('Message notification: ${message.notification?.title}');
-      print('Message notification: ${message.notification?.body}');
-    }
-    _messageStreamController.sink.add(message);
-  });
-
-  // TODO: Set up background message handler
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-//////////////////////////////////////////////////
-
-  //Para obtener estado del GPS
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context) => GpsBloc(),
-      ),
-    ],
-    child: MyApp(),
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    title: 'geolocation',
+    home: Home(),
   ));
 }
-//
 
-class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
-
+class Home extends StatefulWidget {
   @override
-  State<MyApp> createState() => _MyAppState();
+  State<Home> createState() => HomeSampleState();
 }
 
-class _MyAppState extends State<MyApp> {
-  //controlador de autenticacion
-  final autenticacionController = Get.put(AutenticacionController());
-  String _lastMessage = "";
-  _MyAppState() {
-    // subscribe to the message stream fed by foreground message handler
-    _messageStreamController.listen((message) {
-      setState(() {
-        if (message.notification != null) {
-          _lastMessage = 'Received a notification message:'
-              '\n\nTitle=${message.notification?.title},'
-              '\n\nBody=${message.notification?.body},'
-              '\n\nData=${message.data}';
+class HomeSampleState extends State<Home> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: FutureBuilder(
+        future: Firebase.initializeApp(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) return Text("Ugh oh! Something went wrong");
 
-          globals.existeNotificacion.value = true;
-        } else {
-          _lastMessage = 'Received a data message: ${message.data}';
-        }
-      });
-    });
+          if (!snapshot.hasData) return Text("Got no data :(");
+
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done)
+            return HomeView();
+
+          return Text("Loading please...");
+        },
+      ),
+    );
   }
+}
+
+const double ZOOM = 16;
+
+class HomeView extends StatelessWidget {
+  static GoogleMapController? _googleMapController;
+  Set<Marker> markers = Set();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<AutenticacionController>(
-        init: autenticacionController,
-        builder: (_) {
-          return GetMaterialApp(
-            localizationsDelegates: GlobalMaterialLocalizations.delegates,
-            supportedLocales: const [Locale('en'), Locale('es')],
-            debugShowCheckedModeBanner: false,
-            title: 'Gas J&M',
-            theme: ThemeData(
-                primarySwatch: Colors.blue,
-                textSelectionTheme: const TextSelectionThemeData(
-                    cursorColor: AppTheme.blueBackground)),
-            home: const SplashPage(),
-            initialBinding: SplashBinding(),
-            getPages: AppPages.pages,
+    var a = FirebaseFirestore.instance
+        .collection('ubicacionRepartidor')
+        .doc('IXvTa9j5pZbYjpC0Ttgh0OXNcCD3')
+        .snapshots();
+    var b = FirebaseFirestore.instance.collection('location').snapshots();
+
+    return SafeArea(
+      child: StreamBuilder<DocumentSnapshot>(
+        stream: a,
+        builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+          if (snapshot.hasData) {
+            //Extract the location from document
+            print("/-\\");
+            var data1 = snapshot.data?.get("ubicacionActual");
+            print(data1);
+
+            Direccion ubicacionActualRepartidor =
+                Direccion.fromMap(snapshot.data?.get("ubicacionActual"));
+            print(
+                "${ubicacionActualRepartidor.latitud},${ubicacionActualRepartidor.longitud}");
+            print("====");
+            /* print(snapshot.data!.docs.length);
+            var data = snapshot.data;
+            print(data!.docs.first.get('location').toString());*/
+            // GeoPoint location = snapshot.data!.first.get("location");
+            //  GeoPoint location = data1['location'];
+            // Check if location is valid
+            if (data1.toString().isEmpty) {
+              return Text("There was no location data");
+            }
+
+            // Remove any existing markers
+            markers.clear();
+
+            final latLng = LatLng(ubicacionActualRepartidor.latitud,
+                ubicacionActualRepartidor.longitud);
+
+            // Add new marker with markerId.
+            markers
+                .add(Marker(markerId: MarkerId("location"), position: latLng));
+
+            // If google map is already created then update camera position with animation
+            _googleMapController?.animateCamera(CameraUpdate.newCameraPosition(
+              CameraPosition(
+                target: latLng,
+                zoom: ZOOM,
+              ),
+            ));
+
+            return GoogleMap( 
+              initialCameraPosition: CameraPosition(
+                  zoom: 15,
+                  target: LatLng(ubicacionActualRepartidor.latitud,
+                      ubicacionActualRepartidor.longitud)),
+              // Markers to be pointed
+              markers: markers,
+              onMapCreated: (controller) {
+                // Assign the controller value to use it later
+                _googleMapController = controller;
+              },
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(),
           );
-        });
+        },
+      ),
+    );
   }
 }
