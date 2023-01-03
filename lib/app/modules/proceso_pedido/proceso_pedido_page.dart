@@ -62,11 +62,7 @@ class ProcesoPedidoPage extends StatelessWidget {
                   children: [
                     //Widget de Mapa  para la vista previa de la ruta en tiempo real
                     Positioned.fill(
-                        child: ContenidoMapa(
-                      marcadores: _.marcadores,
-                      target: _.posicionOrigenVehiculoRepartidor.value,
-                      onMapCreated: (controller) => _.onMapaCreado(controller),
-                      points: _.polylineCoordinates,
+                        child: ContenidoMapa(  
                     )),
 
                     //Boton para que el usuario cancele su pedido

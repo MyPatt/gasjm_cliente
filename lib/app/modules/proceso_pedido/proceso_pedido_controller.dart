@@ -39,11 +39,12 @@ class ProcesoPedidoController extends GetxController {
       .obs;
 
   //Variable para mostrar el avance de la consulta desde firestore
-  final cargandoDatosDelPedidoRealizado = true.obs;
+  final cargandoDatosDelPedidoRealizado = false.obs;
 
   //Contralador del mapa
   // ignore: unused_field
-  GoogleMapController? _mapaController;
+  GoogleMapController? controladorGoogleMap;
+ 
 
   //Posicion del destino final para entregar el pedido que es el cliente, inicializado
   final Rx<LatLng> _posicionDestinoCliente =
@@ -83,11 +84,11 @@ class ProcesoPedidoController extends GetxController {
     //Obtiene el nombre de direccion del destino del pediod a partir de la posicion en LatLng
     _cargarDireccionDestinoDelPedido();
 
-    //Obtener la ruta del viaje a partir de la ubicacion actual del vehiculo repartidor hasta el destino del pedido
-    cargarPuntosDeLaRutaDelPedido();
-
     //TODO: obtner ubicacion actual del repartidor no del cliente
-    getUbicacionUsuario();
+
+    //Obtener la ruta del viaje a partir de la ubicacion actual del vehiculo repartidor hasta el destino del pedido
+    // cargarPuntosDeLaRutaDelPedido();
+    //getUbicacionUsuario();
 
     //Se asigna los iconos personalizados a los marcadores del mapa (detinopedido y vehiculo)
     cargarIconosMarcadoresDelMapa();
@@ -164,7 +165,7 @@ class ProcesoPedidoController extends GetxController {
   void onMapaCreado(GoogleMapController controller) {
     controller.showMarkerInfoWindow(MarkerId(id));
 
-    _mapaController = controller;
+    controladorGoogleMap = controller;
     controller.setMapStyle(estiloMapa);
   }
 
@@ -368,7 +369,7 @@ class ProcesoPedidoController extends GetxController {
   //Varriables de los iconos para marcadores del mapa
   BitmapDescriptor iconoOrigenMarcadorVehiculoRepartidor =
       BitmapDescriptor.defaultMarker;
-  BitmapDescriptor iconoDestinoMarcadorDestinoPedido =
+  BitmapDescriptor iconoDestinoMarcadorPedidoCliente =
       BitmapDescriptor.defaultMarker;
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
 
@@ -384,7 +385,7 @@ class ProcesoPedidoController extends GetxController {
             ImageConfiguration.empty, "assets/icons/marcadorCliente.png")
         .then(
       (icon) {
-        iconoDestinoMarcadorDestinoPedido = icon;
+        iconoDestinoMarcadorPedidoCliente = icon;
       },
     );
     BitmapDescriptor.fromAssetImage(
@@ -478,8 +479,8 @@ class ProcesoPedidoController extends GetxController {
         //
         cargarPuntosDeLaRutaDelPedido();
         //
-        if (_mapaController != null) {
-          final zoom = await _mapaController!.getZoomLevel();
+        if (controladorGoogleMap != null) {
+          final zoom = await controladorGoogleMap!.getZoomLevel();
           final cameraUpdate = CameraUpdate.newLatLngZoom(
               LatLng(
                 event.latitude,
@@ -488,7 +489,7 @@ class ProcesoPedidoController extends GetxController {
               zoom);
 
           //
-          _mapaController?.animateCamera(cameraUpdate);
+          controladorGoogleMap?.animateCamera(cameraUpdate);
         }
       });
 
