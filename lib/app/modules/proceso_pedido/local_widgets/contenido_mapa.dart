@@ -22,7 +22,8 @@ class ContenidoMapa extends StatelessWidget {
             child: StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('ubicacionRepartidor')
-                    .doc('IXvTa9j5pZbYjpC0Ttgh0OXNcCD3')
+                 //   .doc('IXvTa9j5pZbYjpC0Ttgh0OXNcCD3')
+                 .doc(_.pedido.value.idRepartidor)
                     .snapshots(),
                 builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
                   if (snapshot.hasData) {
@@ -40,7 +41,7 @@ class ContenidoMapa extends StatelessWidget {
                         snapshot.data?.get("rotacionActual");
 
                     //
-                    _.cargarPuntosDeLaRutaDelPedido();
+                   // _.cargarPuntosDeLaRutaDelPedido();
                     //
                     final cameraUpdate = CameraUpdate.newLatLng(
                       _.posicionOrigenVehiculoRepartidor.value,
@@ -48,8 +49,20 @@ class ContenidoMapa extends StatelessWidget {
                     _.controladorGoogleMap?.animateCamera(cameraUpdate);
 
                     //
-                    return Obx(() => _.polylineCoordinates.length > 0
+                    return Obx(() => _.polylineCoordinates.isNotEmpty
                         ? GoogleMap(
+                          myLocationButtonEnabled: true,
+                          compassEnabled: true,
+                          zoomControlsEnabled: false,
+                          zoomGesturesEnabled: true,
+                          mapToolbarEnabled: false,
+                          trafficEnabled: false,
+                          tiltGesturesEnabled: false,
+                          scrollGesturesEnabled: true,
+                          rotateGesturesEnabled: false,
+                          myLocationEnabled: true,
+                          liteModeEnabled: false,
+                          indoorViewEnabled: false,
                             initialCameraPosition: CameraPosition(
                               target: LatLng(
                                   _.posicionOrigenVehiculoRepartidor.value
