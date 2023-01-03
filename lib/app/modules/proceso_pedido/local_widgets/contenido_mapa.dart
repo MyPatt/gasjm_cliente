@@ -31,13 +31,16 @@ class ContenidoMapa extends StatelessWidget {
                         snapshot.data?.get("ubicacionActual"));
 
                     //
-
                     _.posicionOrigenVehiculoRepartidor.value = LatLng(
                         ubicacionActualRepartidor.latitud,
                         ubicacionActualRepartidor.longitud);
 
                     //
+                    double rotacionActualRepartidor =
+                        snapshot.data?.get("rotacionActual");
 
+                    //
+                    _.cargarPuntosDeLaRutaDelPedido();
                     //
                     final cameraUpdate = CameraUpdate.newLatLng(
                       _.posicionOrigenVehiculoRepartidor.value,
@@ -45,30 +48,45 @@ class ContenidoMapa extends StatelessWidget {
                     _.controladorGoogleMap?.animateCamera(cameraUpdate);
 
                     //
-                    return GoogleMap(
-                       
-                      initialCameraPosition: CameraPosition(
-                        target: LatLng(
-                            _.posicionOrigenVehiculoRepartidor.value.latitude,
-                            _.posicionOrigenVehiculoRepartidor.value.longitude),
-                        zoom: 15,
-                      ),
-                      markers: {
-                        Marker(
-                            markerId:
-                                MarkerId("OrigenMarcadorVehiculoRepartidor"),
-                            icon: _.iconoOrigenMarcadorVehiculoRepartidor,
-                            position: _.posicionOrigenVehiculoRepartidor.value,
-                            rotation:
-                                _.rotacionMarcadorVehiculoRepartidor.value),
-                        Marker(
-                          markerId: MarkerId("DestinoMarcadorPedidoCliente"),
-                          icon: _.iconoDestinoMarcadorPedidoCliente,
-                          position: _.posicionDestinoPedidoCliente.value,
-                        ),
-                      },
-                      onMapCreated: (controller) => _.onMapaCreado(controller),
-                    );
+                    return Obx(() => _.polylineCoordinates.length > 0
+                        ? GoogleMap(
+                            initialCameraPosition: CameraPosition(
+                              target: LatLng(
+                                  _.posicionOrigenVehiculoRepartidor.value
+                                      .latitude,
+                                  _.posicionOrigenVehiculoRepartidor.value
+                                      .longitude),
+                              zoom: 15,
+                            ),
+                            markers: {
+                              Marker(
+                                  markerId: const MarkerId(
+                                      "OrigenMarcadorVehiculoRepartidor"),
+                                  icon: _.iconoOrigenMarcadorVehiculoRepartidor,
+                                  position:
+                                      _.posicionOrigenVehiculoRepartidor.value,
+                                  rotation: rotacionActualRepartidor),
+                              Marker(
+                                markerId: const MarkerId(
+                                    "DestinoMarcadorPedidoCliente"),
+                                icon: _.iconoDestinoMarcadorPedidoCliente,
+                                position: _.posicionDestinoPedidoCliente.value,
+                              ),
+                            },
+                            polylines: {
+                              Polyline(
+                                polylineId: const PolylineId("ruta"),
+                                points: _.polylineCoordinates,
+                                color: AppTheme.blueBackground,
+                                width: 4,
+                              ),
+                            },
+                            onMapCreated: (controller) =>
+                                _.onMapaCreado(controller),
+                          )
+                        : const Center(
+                            child: CircularProgress(),
+                          ));
                   }
                   //
                   return const Center(

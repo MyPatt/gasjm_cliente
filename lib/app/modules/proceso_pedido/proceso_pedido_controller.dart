@@ -44,7 +44,6 @@ class ProcesoPedidoController extends GetxController {
   //Contralador del mapa
   // ignore: unused_field
   GoogleMapController? controladorGoogleMap;
- 
 
   //Posicion del destino final para entregar el pedido que es el cliente, inicializado
   final Rx<LatLng> _posicionDestinoCliente =
@@ -358,6 +357,8 @@ class ProcesoPedidoController extends GetxController {
         _posicionDestinoCliente.value.latitude,
         _posicionDestinoCliente.value.longitude));
     pedido.value.direccionUsuario = direccion.value;
+
+    //  cargarPuntosDeLaRutaDelPedido();
   }
 
   //Variables para la vista previa de la ruta en tiempo real -1.325901, -78.870296
@@ -476,8 +477,7 @@ class ProcesoPedidoController extends GetxController {
         posicionOrigenVehiculoRepartidor.value =
             LatLng(event.latitude, event.longitude);
 
-        //
-        cargarPuntosDeLaRutaDelPedido();
+        //  cargarPuntosDeLaRutaDelPedido();
         //
         if (controladorGoogleMap != null) {
           final zoom = await controladorGoogleMap!.getZoomLevel();
