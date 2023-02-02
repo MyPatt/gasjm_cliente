@@ -164,9 +164,9 @@ class PerfilController extends GetxController {
             ),
             textButtonTheme: TextButtonThemeData(
               style: TextButton.styleFrom(
-                primary: const Color.fromRGBO(33, 116, 212, 1),
-                // button text color
-              ),
+                  //primary: const Color.fromRGBO(33, 116, 212, 1),
+                  // button text color
+                  ),
             ),
           ),
           child: child!,

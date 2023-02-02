@@ -17,8 +17,6 @@ class IdentificacionController extends GetxController {
 
 //Guardar cedula de forma local
   Future<void> _guardarCedula() async {
-    await Future.delayed(const Duration(seconds: 1));
-
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString("cedula_usuario", cedulaTextoController.text);
     //
@@ -73,7 +71,7 @@ class IdentificacionController extends GetxController {
 
       if (dato == null) {
         _guardarCedula();
-        Get.offNamed(AppRoutes.registrar);
+        Get.toNamed(AppRoutes.registrar);
       } else {
         //Cedula ya registrada ir a la pagina de inicio de sesion
         if (dato.toLowerCase() == "cliente") {
@@ -91,7 +89,7 @@ class IdentificacionController extends GetxController {
               ));
           await Future.delayed(const Duration(seconds: 1));
 
-          Get.offNamed(AppRoutes.login);
+          Get.toNamed(AppRoutes.login);
         } else {
           Mensajes.showGetSnackbar(
               titulo: 'Alerta',

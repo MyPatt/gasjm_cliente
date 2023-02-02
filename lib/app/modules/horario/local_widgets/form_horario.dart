@@ -33,6 +33,5 @@ class FormHorario extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }

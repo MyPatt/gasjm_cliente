@@ -4,13 +4,12 @@ import 'package:gasjm/app/data/models/horario_model.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:flutter/material.dart';
-import 'package:gasjm/app/modules/gasjm/gasjm_controller.dart'; 
+import 'package:gasjm/app/modules/gasjm/gasjm_controller.dart';
 import 'package:get/get.dart';
 
 class FormRuta extends StatelessWidget {
-  const FormRuta({Key? key, required this.horario})
-      : super(key: key);
-  final HorarioModel horario; 
+  const FormRuta({Key? key, required this.horario}) : super(key: key);
+  final HorarioModel horario;
   @override
   Widget build(BuildContext context) {
     return GetBuilder<GasJMController>(
@@ -24,7 +23,7 @@ class FormRuta extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0.0),
           //
-          child: ListTile( 
+          child: ListTile(
             title: Column(
               children: [
                 Row(
@@ -36,8 +35,8 @@ class FormRuta extends StatelessWidget {
                           .toString(),
                       // style: TextoTheme.subtitleStyle2,
                     ),
-                    Spacer(),
-                    TextSubtitle(
+                    const Spacer(),
+                    const TextSubtitle(
                       text: "Freddy Bonilla",
                       //  style: TextoTheme.subtitleStyle2
                     )
@@ -47,17 +46,17 @@ class FormRuta extends StatelessWidget {
                     height: Responsive.getScreenSize(context).height * .05),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                  children: const <Widget>[
                     TextSubtitle(
                       text: "Mañana", color: Colors.black38,
                       // style: TextoTheme.subtitleStyle2,
                     ),
                   ],
                 ),
-                Divider(),
+                const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                  children: const <Widget>[
                     TextDescription(
                       text: "Santa Rosa",
                       // style: TextoTheme.subtitleStyle2,
@@ -68,17 +67,17 @@ class FormRuta extends StatelessWidget {
                     height: Responsive.getScreenSize(context).height * .05),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                  children: const <Widget>[
                     TextSubtitle(
                       text: "Tarde",
                       color: Colors.black38,
                     ),
                   ],
                 ),
-                Divider(),
+                const Divider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                  children: const <Widget>[
                     TextDescription(
                       text: "Santa Rosa",
                       // style: TextoTheme.subtitleStyle2,

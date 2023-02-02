@@ -1,6 +1,4 @@
-
 import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/models/horario_model.dart';
 import 'package:gasjm/app/data/repository/horario_repository.dart';
 import 'package:get/get.dart';
@@ -15,7 +13,6 @@ class GasJMController extends GetxController {
   final horaAperturaTextController = TextEditingController();
   final horaCierreTextController = TextEditingController();
   RxList<HorarioModel> get listaHorarios => _lista;
-   
 
   //
   @override
@@ -33,5 +30,4 @@ class GasJMController extends GetxController {
       //
     }
   }
-
 }
