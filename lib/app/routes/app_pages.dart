@@ -38,7 +38,7 @@ class AppPages {
       name: AppRoutes.ubicacion,
       page: () => const UbicacionPage(),
       binding: UbicacionBinding(),
-      transition: Transition.fade,
+      // transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
     GetPage(
