@@ -1,4 +1,3 @@
-
 import 'package:gasjm/app/modules/configuracion/configuracion_binding.dart';
 import 'package:gasjm/app/modules/configuracion/configuracion_page.dart';
 import 'package:gasjm/app/modules/gasjm/gasjm_binding.dart';
@@ -11,8 +10,8 @@ import 'package:gasjm/app/modules/identificacion/identificacion_binding.dart';
 import 'package:gasjm/app/modules/identificacion/identificacion_page.dart';
 import 'package:gasjm/app/modules/inicio/inicio_binding.dart';
 import 'package:gasjm/app/modules/inicio/inicio_page.dart';
-import 'package:gasjm/app/modules/proceso_pedido/proceso_pedido_binding.dart';
-import 'package:gasjm/app/modules/proceso_pedido/proceso_pedido_page.dart';
+import 'package:gasjm/app/modules/pedido/proceso_pedido_binding.dart';
+import 'package:gasjm/app/modules/pedido/proceso_pedido_page.dart';
 import 'package:gasjm/app/modules/login/login_binding.dart';
 import 'package:gasjm/app/modules/login/login_page.dart';
 import 'package:gasjm/app/modules/registrar/registrar_binding.dart';
@@ -100,25 +99,26 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.historial,
-      page: () =>  HistorialPage(),
+      page: () => HistorialPage(),
       binding: HistorialBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),
-      GetPage(
+    GetPage(
       name: AppRoutes.gasjm,
       page: () => const GasJMPage(),
       binding: GasJMBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
-    ),  GetPage(
+    ),
+    GetPage(
       name: AppRoutes.configuracion,
       page: () => const ConfiguracionPage(),
       binding: ConfiguracionBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
-    ), 
-     GetPage(
+    ),
+    GetPage(
       name: AppRoutes.horario,
       page: () => const HorarioPage(),
       binding: HorarioBinding(),
