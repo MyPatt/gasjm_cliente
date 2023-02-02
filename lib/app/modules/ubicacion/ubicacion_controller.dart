@@ -4,8 +4,6 @@ import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
 class UbicacionController extends GetxController {
-  final RxBool _isOscure = true.obs;
-  RxBool get isOscure => _isOscure;
   //
   final cargando = RxBool(false);
   //PermissionStatus _status;
