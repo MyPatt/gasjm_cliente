@@ -122,8 +122,7 @@ class FormLogin extends StatelessWidget {
                                   onPressed: () {
                                     if (_.formKey.currentState?.validate() ==
                                         true) {
-                                      //TODO: OJO falta implementar by meedu
-                                      //ProgressDialog.show(context);
+                                      
                                       _.iniciarSesionConCorreoYContrasena();
                                     }
                                   },

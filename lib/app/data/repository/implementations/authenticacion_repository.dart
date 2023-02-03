@@ -51,13 +51,11 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
   @override
   Future<void> cerrarSesion() async {
     await Future.delayed(const Duration(seconds: 2));
-  //Borrar token
+    //Borrar token
     await _borrarTokenParaFCM();
     await _firebaseAutenticacion.signOut();
     //Limpiar memoria de datos guardados de forma local
     await _borrarDatosGuardados();
-
-  
   }
 
   @override
@@ -126,7 +124,7 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
 
   Future<void> _borrarDatosGuardados() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("cedula_usuario");
+
     await prefs.clear();
   }
 }

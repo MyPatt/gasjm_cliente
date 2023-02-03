@@ -6,8 +6,7 @@ import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
-import 'package:location/location.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart'; 
 
 class RegistrarController extends GetxController {
   //Variables para ocultar el texto de la contrasena
@@ -34,7 +33,8 @@ class RegistrarController extends GetxController {
 
   @override
   void onInit() {
-    _obtenerCedulaYPerfil();
+    //Obtener argumento cedula
+    cedula = Get.arguments;
 
     super.onInit();
   }
@@ -127,7 +127,7 @@ class RegistrarController extends GetxController {
         errorParaCorreo.value =
             'La cuenta ya existe para ese correo electrónico';
       } else {
-       errorParaCorreo.value = "Se produjo un error inesperado."; 
+        errorParaCorreo.value = "Se produjo un error inesperado.";
       }
     } catch (e) {
       Mensajes.showGetSnackbar(
@@ -141,15 +141,5 @@ class RegistrarController extends GetxController {
           ));
     }
     cargandoParaCorreo.value = false;
-  }
-
-//Obtener cedula de forma local
-  _obtenerCedulaYPerfil() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? _cedula = prefs.getString("cedula_usuario");
-    //final p = await prefs.getString("perfil_usuario");
-    _cedula ??= prefs.getString("cedula_usuario");
-    cedula = _cedula!; 
   }
 }

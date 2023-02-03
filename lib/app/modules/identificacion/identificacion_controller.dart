@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/repository/persona_repository.dart';
-import 'package:gasjm/app/routes/app_routes.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:gasjm/app/routes/app_routes.dart'; 
 import 'package:get/get.dart';
 
 class IdentificacionController extends GetxController {
@@ -15,40 +14,9 @@ class IdentificacionController extends GetxController {
   final cargando = RxBool(false);
   final formKey = GlobalKey<FormState>();
 
-//Guardar cedula de forma local
-  Future<void> _guardarCedula() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString("cedula_usuario", cedulaTextoController.text);
-    //
-    String? cedula = prefs.getString("cedula_usuario");
+ 
 
-    if (cedula == null) {
-      await prefs.setString("cedula_usuario", cedulaTextoController.text);
-    }
-    //
-  }
 
-  //Guardar correo de forma local
-  Future<void> _guardarCorreo() async {
-    await Future.delayed(const Duration(seconds: 1));
-
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    final correo = await _userRepository.getDatoPersonaPorField(
-        field: "cedula", dato: cedulaTextoController.text, getField: "correo");
-    await prefs.setString("correo_usuario", correo.toString());
-    //
-    String? _correo = prefs.getString("correo_usuario");
-
-    if (_correo == null) {
-      final correo = await _userRepository.getDatoPersonaPorField(
-          field: "cedula",
-          dato: cedulaTextoController.text,
-          getField: "correo");
-      await prefs.setString("correo_usuario", correo.toString());
-    }
-    //
-    print("````````````````$correo````````````````");
-  }
 
 //Buscar si tiene cuenta o no
   /*Future<void> ggetUsuarioPorCedula() async {
@@ -57,44 +25,47 @@ class IdentificacionController extends GetxController {
   }
 */
 //
-  cargarRegistroOLogin() async {
-    final String? dato;
-
+  Future<void> cargarRegistroOLogin() async {
     try {
       cargando.value = true;
+
+              //Obtener cedula para el registro
+        String _cedula=cedulaTextoController.text;
       await Future.delayed(const Duration(seconds: 1));
 
-      dato = await _userRepository.getDatoPersonaPorField(
-          field: "cedula",
-          dato: cedulaTextoController.text,
-          getField: "idPerfil");
+      //Obtener idPerfil si existe un usuario con la cedula ingresada
+      final String? obtenerIdPerfil =
+          await _userRepository.getDatoPersonaPorField(
+              field: "cedula",
+              dato: cedulaTextoController.text,
+              getField: "idPerfil");
 
-      if (dato == null) {
-        _guardarCedula();
-        Get.toNamed(AppRoutes.registrar);
+      //Verificar si se obtuvo el idPerfil, si es null aun no existe el usuario
+      if (obtenerIdPerfil == null) {
+
+     
+        Get.toNamed(AppRoutes.registrar,arguments: _cedula);
       } else {
         //Cedula ya registrada ir a la pagina de inicio de sesion
-        if (dato.toLowerCase() == "cliente") {
-          Future.wait([_guardarCorreo(), _guardarCedula()]);
-
-          await Future.delayed(const Duration(seconds: 1));
+        if (obtenerIdPerfil.toLowerCase() == "cliente") {
+    
           Mensajes.showGetSnackbar(
               titulo: 'Información',
               mensaje:
                   'Cédula ya registrada, ingrese su contraseña para iniciar sesión.',
-              duracion: const Duration(seconds: 7),
+              duracion: const Duration(seconds: 6),
               icono: const Icon(
                 Icons.info_outlined,
                 color: Colors.white,
               ));
-          await Future.delayed(const Duration(seconds: 1));
+   
 
-          Get.toNamed(AppRoutes.login);
+          Get.toNamed(AppRoutes.login, arguments: _cedula);
         } else {
           Mensajes.showGetSnackbar(
               titulo: 'Alerta',
               mensaje:
-                  'Cédula ya registrada como ${dato.toLowerCase()}, instale la aplicación  o ingrese una cédula diferente para  iniciar sesión.',
+                  'Cédula ya registrada como ${obtenerIdPerfil.toLowerCase()}, instale la aplicación  o ingrese una cédula diferente para  iniciar sesión.',
               duracion: const Duration(seconds: 7),
               icono: const Icon(
                 Icons.error_outline_outlined,

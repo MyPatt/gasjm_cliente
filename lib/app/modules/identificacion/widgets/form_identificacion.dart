@@ -77,6 +77,7 @@ class FormIdentificacion extends StatelessWidget {
                           child: PrimaryButton(
                               texto: "Siguiente",
                               onPressed: () {
+                                //Validar datos
                                 if (_.formKey.currentState?.validate() ==
                                     true) {
                                   _.cargarRegistroOLogin();

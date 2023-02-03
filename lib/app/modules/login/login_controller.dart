@@ -2,10 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
+import 'package:gasjm/app/data/repository/persona_repository.dart';
 
-import 'package:get/get.dart';
-
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:get/get.dart'; 
 
 class LoginController extends GetxController {
   ///
@@ -29,14 +28,12 @@ class LoginController extends GetxController {
     super.onInit();
   }
 
- 
-
   @override
   void onClose() {
-    //
-    _removerCorreo();
     super.onClose();
     //
+    correoTextoController.clear();
+    contrasenaTextoController.clear();
     correoTextoController.dispose();
     contrasenaTextoController.dispose();
   }
@@ -98,22 +95,12 @@ class LoginController extends GetxController {
     cargandoParaCorreo.value = false;
   }
 
-  //Obtener correo de forma local
+  //Obtener correo
   Future<void> obtenerCorreo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? _correo = prefs.getString("correo_usuario");
-
-    _correo ??= prefs.getString("correo_usuario");
-    correoTextoController.text = (_correo??= prefs.getString("correo_usuario"))!;
-
-     //
-    print("$_correo````````````````");
-  }
-
-  //Remover correo de forma local
-  _removerCorreo() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.remove("correo_usuario");
+    final String cedula = Get.arguments;
+    final correo = await Get.find<PersonaRepository>().getDatoPersonaPorField(
+        field: "cedula", dato: cedula, getField: "correo");
+    //
+    correoTextoController.text = correo ?? '';
   }
 }

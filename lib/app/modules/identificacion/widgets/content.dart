@@ -11,11 +11,7 @@ class Contenido extends StatelessWidget {
         child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 20),
             child: const FormIdentificacion()),
-      ),
-      /* Stack(
-        alignment: Alignment.bottomLeft,
-        children: [WavyFooter(), CircleSecond(), CircleFirst()],
-      )*/
+      ), 
     ]);
   }
 }

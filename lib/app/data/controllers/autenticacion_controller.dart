@@ -47,7 +47,7 @@ class AutenticacionController extends GetxController {
       //2. ver que la aplicacion tenga permiso de ubicacion
       switch (await askGpsAccess()) {
         case true:
-          Get.offAllNamed(AppRoutes.procesopedido);
+          await verificarpPedidoEnProceso();
 
           break;
 
@@ -125,7 +125,7 @@ class AutenticacionController extends GetxController {
       if (habilitadoUbicacion) {
         return true;
       }
-    }else {
+    } else {
       return true;
     }
     return false;
