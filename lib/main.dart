@@ -14,11 +14,7 @@ import 'package:gasjm/app/core/utils/dependency_injection.dart';
 import 'package:gasjm/app/data/repository/implementations/usuario_repository.dart';
 import 'package:gasjm/app/data/repository/usuario_repository.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
-import 'package:gasjm/app/data/repository/implementations/authenticacion_repository.dart';
-
-import 'package:gasjm/app/modules/ubicacion/blocs/gps/gps_bloc.dart';
-
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gasjm/app/data/repository/implementations/authenticacion_repository.dart'; 
 import 'package:gasjm/app/core/utils/globals.dart' as globals;
 // TODO: Add stream controller
 import 'package:rxdart/rxdart.dart';
@@ -95,14 +91,8 @@ Future<void> main() async {
 //////////////////////////////////////////////////
 
   //Para obtener estado del GPS
-  runApp(MultiBlocProvider(
-    providers: [
-      BlocProvider(
-        create: (context) => GpsBloc(),
-      ),
-    ],
-    child: MyApp(),
-  ));
+  runApp(  MyApp(),
+   );
 }
 //
 

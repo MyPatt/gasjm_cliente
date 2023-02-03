@@ -1,12 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter/material.dart'; 
 import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
-import 'package:gasjm/app/core/utils/responsive.dart';
-import 'package:gasjm/app/modules/ubicacion/blocs/blocs.dart';
+import 'package:gasjm/app/core/utils/responsive.dart'; 
 import 'package:gasjm/app/modules/ubicacion/ubicacion_controller.dart';
+import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 
 class FormUbicacion extends StatelessWidget {
@@ -53,13 +52,17 @@ class FormUbicacion extends StatelessWidget {
                         child: PrimaryButton(
                           texto: "Permitir",
                           onPressed: () async {
-                              await Future.delayed(const Duration(seconds: 1));
+                            await Future.delayed(const Duration(seconds: 1));
 
                             try {
                               _.cargando.value = true;
-
-                              final gpsBloc = BlocProvider.of<GpsBloc>(context);
-                              gpsBloc.askGpsAccess(context);
+                              var aux = await _.askGpsAccess();
+                              switch (aux) {
+                                case true:
+                                  Get.toNamed(AppRoutes.identificacion);
+                                  break;
+                                default:
+                              }
                             } catch (e) {
                               Mensajes.showGetSnackbar(
                                   titulo: 'Alerta',

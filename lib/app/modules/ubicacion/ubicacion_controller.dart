@@ -72,6 +72,8 @@ class UbicacionController extends GetxController {
       if (habilitadoUbicacion) {
         return true;
       }
+    } else {
+      return true;
     }
     return false;
   }
