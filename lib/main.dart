@@ -16,13 +16,13 @@ import 'package:gasjm/app/data/repository/usuario_repository.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
 import 'package:gasjm/app/data/repository/implementations/authenticacion_repository.dart'; 
 import 'package:gasjm/app/core/utils/globals.dart' as globals;
-// TODO: Add stream controller
+//   Add stream controller
 import 'package:rxdart/rxdart.dart';
 
 // for passing messages from event handler to the UI
 final _messageStreamController = BehaviorSubject<RemoteMessage>();
 
-// TODO: Define the background message handler
+//  Define the background message handler
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   globals.existeNotificacion.value = true;
@@ -48,7 +48,7 @@ Future<void> main() async {
 
   //////////////////////////////////////////////////
 
-  // TODO: Request permission
+  //   Request permission
   final messaging = FirebaseMessaging.instance;
 
   // Web/iOS app users need to grant permission to receive messages
@@ -65,7 +65,7 @@ Future<void> main() async {
   if (kDebugMode) {
     print('Permission granted: ${settings.authorizationStatus}');
   }
-  // TODO: Register with FCM
+  //  Register with FCM
   // use the registration token to send messages to users from your trusted server environment
   String? token;
 
@@ -75,7 +75,7 @@ Future<void> main() async {
     print('Registration Token=$token');
   }
 
-  // TODO: Set up foreground message handler
+  //  Set up foreground message handler
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     if (kDebugMode) {
       print('Handling a foreground message: ${message.messageId}');
@@ -86,7 +86,7 @@ Future<void> main() async {
     _messageStreamController.sink.add(message);
   });
 
-  // TODO: Set up background message handler
+  //   Set up background message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 //////////////////////////////////////////////////
 
@@ -97,7 +97,7 @@ Future<void> main() async {
 //
 
 class MyApp extends StatefulWidget {
-  MyApp({Key? key}) : super(key: key);
+  const MyApp({Key? key}) : super(key: key);
 
   @override
   State<MyApp> createState() => _MyAppState();

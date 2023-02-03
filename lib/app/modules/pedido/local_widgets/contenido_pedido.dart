@@ -34,7 +34,7 @@ class ContenidoPedido extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      TextSubtitle(text: 'Pedido realizado '),
+                      const TextSubtitle(text: 'Pedido realizado '),
                       TextDescription(
                           text: (pedido?.totalPedido == null
                                   ? ' '

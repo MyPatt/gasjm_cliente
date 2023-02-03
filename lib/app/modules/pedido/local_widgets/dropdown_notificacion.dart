@@ -26,7 +26,7 @@ class PopuMenuNotificacion extends StatelessWidget {
                 enabled: false,
                 child: Column(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.info_outline,
                       color: AppTheme.blueDark,
                     ),

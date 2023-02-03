@@ -26,7 +26,7 @@ class ConfiguracionPage extends StatelessWidget {
                 title: const Text("Configuración"),
               ),
               body:   
-                      ContenidoConfiguracion()
+                      const ContenidoConfiguracion()
                  ));
   }
 }

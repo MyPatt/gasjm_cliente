@@ -35,7 +35,7 @@ class NotificacionProvider {
     if (resultado.docs.isEmpty) {
       return [];
     } else {
-      print("////////////${resultado.docs.length}");
+  
       return (resultado.docs.map((item) => Notificacion.fromMap(item.data())))
           .toList();
     }

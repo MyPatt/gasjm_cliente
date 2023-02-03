@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 
 class ButtonSmall extends StatelessWidget {
-  ButtonSmall(
-      {required this.texto,
+  const ButtonSmall(
+      {Key? key, required this.texto,
       required this.onPressed,
       this.width = 145,
-      this.color = AppTheme.blueBackground});
+      this.color = AppTheme.blueBackground}) : super(key: key);
   final void Function() onPressed;
   final String texto;
   final double? width;

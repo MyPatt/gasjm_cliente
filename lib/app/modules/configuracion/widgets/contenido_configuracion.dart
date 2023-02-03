@@ -1,11 +1,8 @@
-import 'package:flutter/material.dart';
-import 'package:gasjm/app/modules/configuracion/configuracion_controller.dart';
+import 'package:flutter/material.dart'; 
 import 'package:gasjm/app/modules/configuracion/widgets/item_configuracion.dart';
-import 'package:get/get.dart';
-
+ 
 class ContenidoConfiguracion extends StatelessWidget {
-  ContenidoConfiguracion({Key? key}) : super(key: key);
-  final ConfiguracionController _ = Get.put(ConfiguracionController());
+  const ContenidoConfiguracion({Key? key}) : super(key: key); 
   @override
   Widget build(BuildContext context) {
     return Stack(
