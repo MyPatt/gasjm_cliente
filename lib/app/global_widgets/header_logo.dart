@@ -12,6 +12,7 @@ class HeaderLogo extends StatelessWidget {
             height: 96.0,
             width: 96.0,
             child: const CircleAvatar(
+              backgroundColor: Colors.white,
               backgroundImage: AssetImage("assets/icons/gasjm.png"),
               radius: 50,
             ),
