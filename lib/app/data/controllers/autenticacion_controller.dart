@@ -3,7 +3,9 @@ import 'dart:async';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:location/location.dart' as loc;
 
 enum EstadosDeAutenticacion { sesionNoIniciada, sesionIniciada }
 
@@ -39,19 +41,33 @@ class AutenticacionController extends GetxController {
 
       //diferente de null cargar la pagina de inicio
     } else {
+      //1. Actualizar estado de autenticacion
       autenticacionEstado.value = EstadosDeAutenticacion.sesionIniciada;
 
-      //Verificar si el cliente no tiene un pedido en espera
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      bool pedidoEsperando = prefs.getBool("pedido_esperando") ?? false;
+      //2. ver que la aplicacion tenga permiso de ubicacion
+      switch (await askGpsAccess()) {
+        case true:
+          Get.offAllNamed(AppRoutes.procesopedido);
 
-      if (pedidoEsperando == true) {
-        Get.offAllNamed(AppRoutes.procesopedido);
-      } else {
-        Get.offAllNamed(AppRoutes.inicio);
+          break;
+
+        default:
+          //Verificar si el cliente no tiene un pedido en espera
+          await verificarpPedidoEnProceso();
       }
     }
     autenticacionUsuario.value = usuario;
+  }
+
+  Future<void> verificarpPedidoEnProceso() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool pedidoEsperando = prefs.getBool("pedido_esperando") ?? false;
+
+    if (pedidoEsperando == true) {
+      Get.offAllNamed(AppRoutes.procesopedido);
+    } else {
+      Get.offAllNamed(AppRoutes.inicio);
+    }
   }
 
   Future<void> cerrarSesion() async {
@@ -62,5 +78,54 @@ class AutenticacionController extends GetxController {
   void onClose() {
     _autenticacionSuscripcion.cancel();
     super.onClose();
+  }
+
+  //
+  Future<bool> askGpsAccess() async {
+    var aux = false;
+
+    //Variable para verificar el permiso de la aplicacion para acceder al dispositivo
+    final permisoDeUbicacionParaAplicacion =
+        await Permission.location.request();
+
+    switch (permisoDeUbicacionParaAplicacion) {
+
+      //Permiso otorgado
+      case PermissionStatus.granted:
+        aux = await obtenerEstadoUbicacionDispositivo();
+        break;
+      // se supone que es denegado
+      default:
+        loc.Location location = loc.Location();
+
+        var aux1 = await location.requestPermission();
+        var aux2 = await obtenerEstadoUbicacionDispositivo();
+        if (aux1 == PermissionStatus.granted) {
+          if (aux2) {
+            aux = true;
+          }
+        }
+    }
+
+    return aux;
+  }
+
+  Future<bool> obtenerEstadoUbicacionDispositivo() async {
+    //Variable para verificar si el dipositovo tiene habilitado la ubicacion
+    loc.Location location = loc.Location();
+
+    bool habilitadoUbicacionDispositivo = await location.serviceEnabled();
+
+    //ubicacion deshabilitado
+    if (!habilitadoUbicacionDispositivo) {
+      //Mostrar alert para habilitar
+      bool habilitadoUbicacion = await location.requestService();
+
+      //Verificar si se ha habilitado
+      if (habilitadoUbicacion) {
+        return true;
+      }
+    }
+    return false;
   }
 }
