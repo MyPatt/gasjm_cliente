@@ -1,6 +1,7 @@
 //Estados de sutenticacion
 import 'dart:async';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
+import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -18,6 +19,8 @@ class AutenticacionController extends GetxController {
       Rx(EstadosDeAutenticacion.sesionNoIniciada);
 
   final Rx<AutenticacionUsuario?> autenticacionUsuario = Rx(null);
+  //Variable  para imagen de perfil
+  RxString imagenUsuario = ''.obs;
 
   @override
   void onInit() async {
@@ -27,7 +30,8 @@ class AutenticacionController extends GetxController {
     _autenticacionSuscripcion = _autenticacionRepository
         .enEstadDeAutenticacionCambiado
         .listen(_estadoAutenticacionCambiado);
-
+//
+   await _cargarFotoPerfil();
     super.onInit();
   }
 
@@ -129,5 +133,12 @@ class AutenticacionController extends GetxController {
       return true;
     }
     return false;
+  }
+
+  //Obtener foto de perfil del usuario
+  Future<void> _cargarFotoPerfil() async {
+    final _getImagenUsuarioActual =
+        Get.find<PersonaRepository>().getImagenUsuarioActual();
+    imagenUsuario.value = (await _getImagenUsuarioActual) ?? '';
   }
 }
