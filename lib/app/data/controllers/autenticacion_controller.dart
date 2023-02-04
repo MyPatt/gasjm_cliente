@@ -48,16 +48,18 @@ class AutenticacionController extends GetxController {
       //1. Actualizar estado de autenticacion
       autenticacionEstado.value = EstadosDeAutenticacion.sesionIniciada;
 
-      //2. ver que la aplicacion tenga permiso de ubicacion
+      //2. ver que la aplicacion tenga permiso y habilitado  ubicacion
       switch (await askGpsAccess()) {
+
+        //Cargar la pagina de inicio
         case true:
           await verificarpPedidoEnProceso();
 
           break;
 
+        //Si ubicacion esta  deshabilitado y denegado pagina de ubicacion 
         default:
-          //Verificar si el cliente no tiene un pedido en espera
-          await verificarpPedidoEnProceso();
+            Get.offAllNamed(AppRoutes.ubicacion);
       }
     }
     autenticacionUsuario.value = usuario;

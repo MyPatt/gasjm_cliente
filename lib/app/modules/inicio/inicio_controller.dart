@@ -5,8 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/map_style.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/models/horario_model.dart';
-import 'package:gasjm/app/data/models/pedido_model.dart';
-import 'package:gasjm/app/data/models/persona_model.dart';
+import 'package:gasjm/app/data/models/pedido_model.dart'; 
 import 'package:gasjm/app/data/repository/horario_repository.dart';
 import 'package:gasjm/app/data/repository/pedido_repository.dart';
 import 'package:gasjm/app/data/repository/persona_repository.dart';
@@ -20,20 +19,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class InicioController extends GetxController {
   //Repositorio de usuario
-  final _usuarioRepository = Get.find<PersonaRepository>();
-
-  /* Variables para obtener datos del usuario */
-  Rx<PersonaModel?> usuario = Rx(null);
- 
+  final _usuarioRepository = Get.find<PersonaRepository>();  
   //Repositorio de pedidos
-  final _pedidoRepository = Get.find<PedidoRepository>();
-  final _personaRepository = Get.find<PersonaRepository>();
-
+  final _pedidoRepository = Get.find<PedidoRepository>(); 
   //Repositorio de productos
-  final _productoRepository = Get.find<ProductoRepository>();
-  final RxDouble precioGlp = 1.60.obs;
-//Repositorio para horario
+  final _productoRepository = Get.find<ProductoRepository>(); 
+  //Repositorio para horario
   final _horarioRepository = Get.find<HorarioRepository>();
+ 
+  final RxDouble precioGlp = 1.60.obs;
 
   /* Variables para el form */
   final formKey = GlobalKey<FormState>();
@@ -42,9 +36,7 @@ class InicioController extends GetxController {
   var cantidadTextoController = TextEditingController();
   Rx<TextEditingController> totalTextoController = TextEditingController().obs;
   final diaDeEntregaPedidoController = TextEditingController().obs;
-  final itemSeleccionadoDia = 0.obs;
 
-  final grupoSeleccionadoFecha = "Ahora".obs;
 
   // //Mientras se inserta el pedido mostrar circuleprobres se carga si o no
   final procensandoElNuevoPedido = RxBool(false);
@@ -54,27 +46,20 @@ class InicioController extends GetxController {
 
   GoogleMapController? _mapaController;
 
-  final Rx<LatLng> _posicionInicialCliente =
-      const LatLng(-12.122711, -77.027475).obs;
 
   final direccion = 'Buscando dirección...'.obs;
 
+  final Rx<LatLng> _posicionInicialCliente =
+      const LatLng(-12.122711, -77.027475).obs; 
   Rx<LatLng> get posicionInicialCliente => _posicionInicialCliente.value.obs;
 
   final Map<MarkerId, Marker> _marcadores = {};
   Set<Marker> get marcadores => _marcadores.values.toSet();
 
-  late String id = 'MakerIdCliente';
 /*METODOS PROPIOS */
   @override
   void onInit() {
- 
-    //Obtiene ubicacion actual del dispositivo
-
-    //Obtener datos del producto
-
-    Future.wait([
-      getUsuarioActual(),
+    Future.wait([ 
       getUbicacionUsuario(),
       getPrecioProducto(),
     ]);
@@ -104,23 +89,24 @@ class InicioController extends GetxController {
   }
 
   /* OTROS METODOS */
+
  
-//Obtener informacion del cliente conectado
-  Future<void> getUsuarioActual() async {
-    usuario.value = await _usuarioRepository.getUsuario();
-  }
 
   //Obtener informacion del producto
   Future<void> getPrecioProducto() async {
     precioGlp.value = await _productoRepository.getPrecioPorProducto(id: "glp");
   }
 
-  //Obtener informacion del horario
+ //Obtener informacion del horario
   Timestamp horarioApertura = Timestamp.now();
   Timestamp horarioActual = Timestamp.now();
   Timestamp horarioCierre = Timestamp.now();
   RxString cadenaHorarioAtencion = ''.obs;
   Future<void> getHorario() async {
+
+
+ 
+
     //Obtener hora actual
     horarioActual = Timestamp.now();
     DateTime horaActualConvertida = DateTime.fromMillisecondsSinceEpoch(
@@ -226,26 +212,16 @@ class InicioController extends GetxController {
 
 /* MANEJO DE RUTAS DEL MENU */
   //Ir a la pantalla de agenda
-  cargarAgenda() async {
+  cargarHistorial() async {
     try {
       await Future.delayed(const Duration(seconds: 1));
-      Get.offNamed(AppRoutes.historial);
+      Get.toNamed(AppRoutes.historial);
     } catch (e) {
       throw Exception(
           "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.");
     }
   }
-
-  cargarLogin() async {
-    try {
-      await Future.delayed(const Duration(seconds: 1));
-      Get.offNamed(AppRoutes.identificacion);
-    } catch (e) {
-      throw Exception(
-          "Ha ocurrido un error, por favor inténtelo de nuevo más tarde.");
-    }
-  }
-
+ 
   /*  DIA PARA AGENDAR EN FORM PEDIR GAS */
 
   //
@@ -256,17 +232,7 @@ class InicioController extends GetxController {
     totalTextoController.value.text = '${precioGlp.value}';
   }
 
-  final diaInicialSeleccionado = 0.obs;
-  void guardarDiaDeEntregaPedido() {
-    if (itemSeleccionadoDia.value == 0) {
-      diaDeEntregaPedidoController.value.text = "Ahora";
-      diaInicialSeleccionado.value = 0;
-    } else {
-      diaDeEntregaPedidoController.value.text = "Mañana";
-      diaInicialSeleccionado.value = 1;
-    }
-  }
-
+ 
 //Cuando el pedido se crea
   _cargarProcesoPedido() async {
     try {
@@ -294,44 +260,19 @@ class InicioController extends GetxController {
   }
 
   Future<void> getUbicacionUsuario() async {
-    if (!(await Geolocator.isLocationServiceEnabled())) {
-      //si la ubicacion esta deshabilitado tiene activarse
-      await Geolocator.openLocationSettings();
-      return Future.error('Servicio de ubicación deshabilitada.');
-    } else {
-      LocationPermission permission;
-      permission = await Geolocator.checkPermission();
-      if (permission == LocationPermission.denied) {
-        permission = await Geolocator.requestPermission();
-        if (permission == LocationPermission.denied) {
-          //Si la ubicacion sigue dehabilitado mostrar sms
-          return Future.error('Permiso de ubicación denegado.');
-        }
-      }
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
+    List<Placemark> placemark =
+        await placemarkFromCoordinates(position.latitude, position.longitude);
+    _posicionInicialCliente.value =
+        LatLng(position.latitude, position.longitude);
 
-      if (permission == LocationPermission.deniedForever) {
-        //Permiso denegado por siempre
-        return Future.error(
-            'Permiso de ubicación denegado de forma permanente.');
-      }
+    direccionTextController.text = placemark[0].name!;
+    direccion.value = placemark[0].name!;
 
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
-      List<Placemark> placemark =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      _posicionInicialCliente.value =
-          LatLng(position.latitude, position.longitude);
-
-      direccionTextController.text = placemark[0].name!;
-      direccion.value = placemark[0].name!;
-
-      _agregarMarcadorCliente(
-          _posicionInicialCliente.value, placemark[0].name!);
-      _mapaController
-          ?.moveCamera(CameraUpdate.newLatLng(_posicionInicialCliente.value));
-
-      //  notifyListeners();
-    }
+    _agregarMarcadorCliente(_posicionInicialCliente.value, placemark[0].name!);
+    _mapaController
+        ?.moveCamera(CameraUpdate.newLatLng(_posicionInicialCliente.value));
   }
 
   void onMapaCreado(GoogleMapController controller) {
@@ -342,7 +283,7 @@ class InicioController extends GetxController {
 
   Future<void> _agregarMarcadorCliente(
       LatLng posicion, String direccion) async {
-    final markerId = MarkerId(id);
+    var markerId = const MarkerId('MakerIdCliente');
 
     BitmapDescriptor _marcadorCliente = await BitmapDescriptor.fromAssetImage(
       const ImageConfiguration(),
@@ -362,7 +303,7 @@ class InicioController extends GetxController {
   void onCameraMove(CameraPosition position) async {
     _posicionInicialCliente.value = position.target;
 
-    final markerId = MarkerId(id);
+    var markerId = const MarkerId('MakerIdCliente');
 
     final marker = _marcadores[markerId];
 
@@ -399,6 +340,3 @@ class InicioController extends GetxController {
         '${precioGlp.value * (cantidadTextoController.text.isEmpty ? 0 : double.parse(cantidadTextoController.text))}';
   }
 }
-
-
-//TODO: Horarios de atencion
