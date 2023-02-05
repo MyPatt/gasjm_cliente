@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart';
+import 'package:flutter/material.dart'; 
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
@@ -19,38 +18,42 @@ class ContenidoMapa extends StatelessWidget {
     return Column(
       children: [
         Expanded(
-            child: StreamBuilder<DocumentSnapshot>(
+            child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection('ubicacionRepartidor')
                     //   .doc('IXvTa9j5pZbYjpC0Ttgh0OXNcCD3')
-                    .doc(_.pedido.value.idRepartidor)
+                   // .doc(_.pedido.value.idRepartidor)
                     .snapshots(),
-                builder: (context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasData) {
                     //
-                    Direccion ubicacionActualRepartidor = Direccion.fromMap(
-                        snapshot.data?.get("ubicacionActual"));
-
-                    //
-                    _.posicionOrigenVehiculoRepartidor.value = LatLng(
-                        ubicacionActualRepartidor.latitud,
-                        ubicacionActualRepartidor.longitud);
-
-                    //
+                   for (var repartidor in  snapshot.data!.docs) {
+    var markerId = MarkerId(repartidor.id);
+//
+   Direccion ubicacionActualRepartidor = Direccion.fromMap(
+                        repartidor.get("ubicacionActual"));
+    //
                     double rotacionActualRepartidor =
-                        snapshot.data?.get("rotacionActual");
+                       repartidor.get("rotacionActual");
+                       
+                       //
+                    
+                       final marker = Marker(
+      markerId: markerId,
+      position: LatLng(
+                        ubicacionActualRepartidor.latitud,
+                        ubicacionActualRepartidor.longitud),
+     rotation:rotacionActualRepartidor ,
+      icon: _.iconoOrigenMarcadorVehiculoRepartidor,
+    );
 
+    //
+      _.marcadoresAux[markerId] = marker;
+                   }
+                 
+                   
                     //
-                    // _.cargarPuntosDeLaRutaDelPedido();
-                    //
-                    final cameraUpdate = CameraUpdate.newLatLng(
-                      _.posicionOrigenVehiculoRepartidor.value,
-                    );
-                    _.controladorGoogleMap?.animateCamera(cameraUpdate);
-
-                    //
-                    return Obx(() => _.polylineCoordinates.isNotEmpty
-                        ? GoogleMap(
+                    return  GoogleMap(
                             myLocationButtonEnabled: true,
                             compassEnabled: true,
                             zoomControlsEnabled: false,
@@ -65,41 +68,17 @@ class ContenidoMapa extends StatelessWidget {
                             indoorViewEnabled: false,
                             initialCameraPosition: CameraPosition(
                               target: LatLng(
-                                  _.posicionOrigenVehiculoRepartidor.value
+                                  _.posicionDestinoPedidoCliente.value
                                       .latitude,
-                                  _.posicionOrigenVehiculoRepartidor.value
+                                  _.posicionDestinoPedidoCliente.value
                                       .longitude),
                               zoom: 15,
                             ),
-                            markers: {
-                              Marker(
-                                  markerId: const MarkerId(
-                                      "OrigenMarcadorVehiculoRepartidor"),
-                                  icon: _.iconoOrigenMarcadorVehiculoRepartidor,
-                                  position:
-                                      _.posicionOrigenVehiculoRepartidor.value,
-                                  rotation: rotacionActualRepartidor),
-                              Marker(
-                                markerId: const MarkerId(
-                                    "DestinoMarcadorPedidoCliente"),
-                                icon: _.iconoDestinoMarcadorPedidoCliente,
-                                position: _.posicionDestinoPedidoCliente.value,
-                              ),
-                            },
-                           /* polylines: {
-                              Polyline(
-                                polylineId: const PolylineId("ruta"),
-                                points: _.polylineCoordinates,
-                                color: AppTheme.blueBackground,
-                                width: 4,
-                              ),
-                            },*/
+                            markers: Set.of(_.marcadores), 
                             onMapCreated: (controller) =>
                                 _.onMapaCreado(controller),
-                          )
-                        : const Center(
-                            child: CircularProgress(),
-                          ));
+            );
+                     
                   }
                   //
                   return const Center(

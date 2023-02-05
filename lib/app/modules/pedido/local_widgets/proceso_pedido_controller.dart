@@ -58,8 +58,8 @@ class ProcesoPedidoController extends GetxController {
   RxList<String> get notificaciones => _notificaciones;
 
   //Lista de marcadores (vehiculo y cliente)
-  final Map<MarkerId, Marker> marcadoresAux = {};
-  Set<Marker> get marcadores => marcadoresAux.values.toSet();
+  final Map<MarkerId, Marker> _marcadores = {};
+  Set<Marker> get marcadores => _marcadores.values.toSet();
 
   //Borrar
   late String id = 'MakerIdCliente';
@@ -192,7 +192,7 @@ class ProcesoPedidoController extends GetxController {
               ' para ${pedido.value.direccionUsuario}',
         ));
 
-    marcadoresAux[markerId] = marker;
+    _marcadores[markerId] = marker;
   }
 
   Future<PedidoModel> _getDatosPedido() async {
@@ -436,7 +436,27 @@ class ProcesoPedidoController extends GetxController {
 
   //
   Future<void> getUbicacionUsuario() async {
-   
+    if (!(await Geolocator.isLocationServiceEnabled())) {
+      //si la ubicacion esta deshabilitado tiene activarse
+      await Geolocator.openLocationSettings();
+      return Future.error('Servicio de ubicación deshabilitada.');
+    } else {
+      LocationPermission permission;
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          //Si la ubicacion sigue dehabilitado mostrar sms
+          return Future.error('Permiso de ubicación denegado.');
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        //Permiso denegado por siempre
+        return Future.error(
+            'Permiso de ubicación denegado de forma permanente.');
+      }
+
       Position position = await Geolocator.getCurrentPosition(
           desiredAccuracy: LocationAccuracy.high);
 
@@ -472,7 +492,7 @@ class ProcesoPedidoController extends GetxController {
           controladorGoogleMap?.animateCamera(cameraUpdate);
         }
       });
-  }}
+
       //
 
 /*
@@ -490,7 +510,9 @@ class ProcesoPedidoController extends GetxController {
           ?.moveCamera(CameraUpdate.newLatLng(_posicionInicialCliente.value));*/
 
       //  notifyListeners();
- 
+    }
+  }
+
   //Actualizaciones de ubicación en tiempo real en el mapa
 
-
+}
