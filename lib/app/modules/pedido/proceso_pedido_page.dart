@@ -32,18 +32,7 @@ class ProcesoPedidoPage extends StatelessWidget {
           ),
           backgroundColor: AppTheme.blueBackground,
           // actions: const [ActionsProcesoPedido()],
-          actions: <Widget>[
-            /*  IconButton(
-                onPressed: () {
-                 // globals.existeNotificacion.value = false;
-                 _.cargarListaNotificaciones();
-                print(_.notificaciones.length);
-                },
-                icon: Obx(
-                  () => Icon(globals.existeNotificacion.value
-                      ? Icons.notifications_active_outlined
-                      : Icons.notifications_none_outlined),
-                )),*/
+          actions: <Widget>[ 
             Obx(
               () => PopuMenuNotificacion(
                   icono: (Icon(globals.existeNotificacion.value

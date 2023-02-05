@@ -86,14 +86,14 @@ class ContenidoMapa extends StatelessWidget {
                                 position: _.posicionDestinoPedidoCliente.value,
                               ),
                             },
-                            polylines: {
+                           /* polylines: {
                               Polyline(
                                 polylineId: const PolylineId("ruta"),
                                 points: _.polylineCoordinates,
                                 color: AppTheme.blueBackground,
                                 width: 4,
                               ),
-                            },
+                            },*/
                             onMapCreated: (controller) =>
                                 _.onMapaCreado(controller),
                           )

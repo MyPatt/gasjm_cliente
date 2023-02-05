@@ -91,7 +91,7 @@ Future<void> main() async {
 //////////////////////////////////////////////////
 
   //Para obtener estado del GPS
-  runApp(  MyApp(),
+  runApp(  const MyApp(),
    );
 }
 //
@@ -106,20 +106,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   //controlador de autenticacion
   final autenticacionController = Get.put(AutenticacionController());
-  String _lastMessage = "";
   _MyAppState() {
     // subscribe to the message stream fed by foreground message handler
     _messageStreamController.listen((message) {
       setState(() {
         if (message.notification != null) {
-          _lastMessage = 'Received a notification message:'
-              '\n\nTitle=${message.notification?.title},'
-              '\n\nBody=${message.notification?.body},'
-              '\n\nData=${message.data}';
 
           globals.existeNotificacion.value = true;
         } else {
-          _lastMessage = 'Received a data message: ${message.data}';
         }
       });
     });

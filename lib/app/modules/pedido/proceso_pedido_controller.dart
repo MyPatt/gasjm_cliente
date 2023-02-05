@@ -358,7 +358,7 @@ class ProcesoPedidoController extends GetxController {
         _posicionDestinoCliente.value.longitude));
     pedido.value.direccionUsuario = direccion.value;
 
-     cargarPuntosDeLaRutaDelPedido();
+    // cargarPuntosDeLaRutaDelPedido();
   }
 
   //Variables para la vista previa de la ruta en tiempo real -1.325901, -78.870296
