@@ -389,13 +389,15 @@ class ProcesoPedidoController extends GetxController {
         iconoDestinoMarcadorPedidoCliente = icon;
       },
     );
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/icons/camiongasjm.png")
-        .then(
-      (icon) {
-        currentLocationIcon = icon;
-      },
-    );
+
+    //
+    var markerId = const MarkerId('MarcadorPedidoCliente');
+    final marker = Marker(
+        markerId: markerId,
+        position: LatLng(_posicionDestinoCliente.value.latitude,
+            _posicionDestinoCliente.value.longitude),
+        icon: iconoDestinoMarcadorPedidoCliente);
+    marcadoresAux[markerId] = marker;
   }
 
   //Metodo para dibujar la dirección de la ruta
@@ -436,43 +438,43 @@ class ProcesoPedidoController extends GetxController {
 
   //
   Future<void> getUbicacionUsuario() async {
-   
-      Position position = await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high);
 
+    posicionOrigenVehiculoRepartidor.value =
+        LatLng(position.latitude, position.longitude);
+
+    Geolocator.getPositionStream().listen((event) async {
+      //
+      double rotation = Geolocator.bearingBetween(
+          posicionOrigenVehiculoRepartidor.value.latitude,
+          posicionOrigenVehiculoRepartidor.value.longitude,
+          event.latitude,
+          event.longitude);
+
+      //
+      rotacionMarcadorVehiculoRepartidor.value = rotation;
+      //
       posicionOrigenVehiculoRepartidor.value =
-          LatLng(position.latitude, position.longitude);
+          LatLng(event.latitude, event.longitude);
 
-      Geolocator.getPositionStream().listen((event) async {
-        //
-        double rotation = Geolocator.bearingBetween(
-            posicionOrigenVehiculoRepartidor.value.latitude,
-            posicionOrigenVehiculoRepartidor.value.longitude,
-            event.latitude,
-            event.longitude);
+      //  cargarPuntosDeLaRutaDelPedido();
+      //
+      if (controladorGoogleMap != null) {
+        final zoom = await controladorGoogleMap!.getZoomLevel();
+        final cameraUpdate = CameraUpdate.newLatLngZoom(
+            LatLng(
+              event.latitude,
+              event.longitude,
+            ),
+            zoom);
 
         //
-        rotacionMarcadorVehiculoRepartidor.value = rotation;
-        //
-        posicionOrigenVehiculoRepartidor.value =
-            LatLng(event.latitude, event.longitude);
-
-        //  cargarPuntosDeLaRutaDelPedido();
-        //
-        if (controladorGoogleMap != null) {
-          final zoom = await controladorGoogleMap!.getZoomLevel();
-          final cameraUpdate = CameraUpdate.newLatLngZoom(
-              LatLng(
-                event.latitude,
-                event.longitude,
-              ),
-              zoom);
-
-          //
-          controladorGoogleMap?.animateCamera(cameraUpdate);
-        }
-      });
-  }}
+        controladorGoogleMap?.animateCamera(cameraUpdate);
+      }
+    });
+  }
+}
       //
 
 /*

@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
@@ -13,10 +15,10 @@ class ContenidoPedido extends StatelessWidget {
     /*   final ProcesoPedidoController controladorDePedidos =
         Get.put(ProcesoPedidoController());*/
 
-    return Card(
-      elevation: 0,
+    return Container(
+     
       margin: const EdgeInsets.only(top: 5.0, left: 5, right: 5, bottom: 0),
-      shape: RoundedRectangleBorder(
+      decoration:BoxDecoration(
         borderRadius: BorderRadius.circular(10.0),
       ),
       //  shape: Border.all(color: AppTheme.light, width: 0.5),
@@ -27,7 +29,7 @@ class ContenidoPedido extends StatelessWidget {
             child: Container(
               alignment: Alignment.centerLeft,
               height: Responsive.getScreenSize(context).height * .05,
-              width: Responsive.getScreenSize(context).width * .80,
+              width: Responsive.getScreenSize(context).width   * .80,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[

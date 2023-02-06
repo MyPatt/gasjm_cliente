@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
+import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/modal_alert.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/boton_cancelar.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/contenido_mapa.dart'; 
@@ -19,8 +20,8 @@ class ProcesoPedidoPage extends StatelessWidget {
     return GetBuilder<ProcesoPedidoController>(
       builder: (_) => Scaffold(
         backgroundColor: AppTheme.background,
-        //Menú deslizable a la izquierda con opciones del  usuario
-        //drawer: MenuLateral(imagenPerfil: _.imagenUsuario),
+         //Menú deslizable a la izquierda con opciones del  usuario
+        drawer: const MenuLateral(),
         //Barra de herramientas de opciones para  agenda y  historial
         appBar: AppBar(
           automaticallyImplyLeading: false,

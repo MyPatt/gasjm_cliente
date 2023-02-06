@@ -5,13 +5,13 @@ import 'package:gasjm/app/global_widgets/dialogs/progress_dialog.dart';
 import 'package:gasjm/app/global_widgets/modal_alert.dart';
 
 import 'package:gasjm/app/routes/app_routes.dart';
-import 'package:get/get.dart'; 
+import 'package:get/get.dart';
 
 //Menú deslizable a la izquierda con opciones del  usuario
 class MenuLateral extends StatelessWidget {
-  const MenuLateral({key, required this.imagenPerfil}) : super(key: key);
-
-  final RxString imagenPerfil;
+  const MenuLateral({
+    key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +24,7 @@ class MenuLateral extends StatelessWidget {
       child: ListView(
         padding: EdgeInsets.zero,
         children: <Widget>[
-          _buildDrawerHeader(imagenPerfil),
+          _buildDrawerHeader(Get.find<AutenticacionController>().imagenUsuario),
           const SizedBox(
             height: 15,
           ),
@@ -77,7 +77,6 @@ class MenuLateral extends StatelessWidget {
                       ProgressDialog.show(context, "Cerrando sesión");
 
                       Get.find<AutenticacionController>().cerrarSesion();
-                    
                     },
                     titulo: 'Cerrar sesión',
                     mensaje: '¿Está seguro de cerrar sesión en la aplicación?',
@@ -118,7 +117,7 @@ Widget _buildDrawerHeader(RxString imagenPerfil) {
             () => CircleAvatar(
                 radius: 40.0,
                 backgroundColor: Colors.white,
-                child: (imagenPerfil.isEmpty )
+                child: (imagenPerfil.isEmpty)
                     ? const CircleAvatar(
                         backgroundColor: AppTheme.light,
                         radius: 38.0,
