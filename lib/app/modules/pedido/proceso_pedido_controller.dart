@@ -13,6 +13,7 @@ import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -73,6 +74,8 @@ class ProcesoPedidoController extends GetxController {
   //Variable de rotacion que muestra el sentido en que va el vehiculo repartidor
   final RxDouble rotacionMarcadorVehiculoRepartidor = 0.0.obs;
 
+  //Obtener distancia entre el pedido y el repartidor
+  RxDouble distanciaRuta = (0.0).obs;
   //METODOS PROPIOS GETX
   @override
   void onInit() {
@@ -169,32 +172,6 @@ class ProcesoPedidoController extends GetxController {
   }
 
   //
-
-  Future<void> _agregarMarcadorCliente(LatLng posicion) async {
-    final markerId = MarkerId(id);
-
-    BitmapDescriptor _marcadorCliente = await BitmapDescriptor.fromAssetImage(
-      const ImageConfiguration(),
-      "assets/icons/marcadorCliente.png",
-    );
-
-    final marker = Marker(
-        markerId: markerId,
-        position: posicion,
-        draggable: true,
-        icon: _marcadorCliente,
-        infoWindow: InfoWindow(
-          title: pedido.value.estadoPedidoUsuario,
-          snippet: ('\$${pedido.value.totalPedido} de ') +
-              (pedido.value.cantidadPedido > 1
-                  ? '${pedido.value.cantidadPedido} cilindros'
-                  : '${pedido.value.cantidadPedido} cilindro') +
-              ' para ${pedido.value.direccionUsuario}',
-        ));
-
-    marcadoresAux[markerId] = marker;
-  }
-
   Future<PedidoModel> _getDatosPedido() async {
     //Obtener uid de  usuario actual
     final _personaRepository = Get.find<PersonaRepository>();
@@ -389,15 +366,6 @@ class ProcesoPedidoController extends GetxController {
         iconoDestinoMarcadorPedidoCliente = icon;
       },
     );
-
-    //
-    var markerId = const MarkerId('MarcadorPedidoCliente');
-    final marker = Marker(
-        markerId: markerId,
-        position: LatLng(_posicionDestinoCliente.value.latitude,
-            _posicionDestinoCliente.value.longitude),
-        icon: iconoDestinoMarcadorPedidoCliente);
-    marcadoresAux[markerId] = marker;
   }
 
   //Metodo para dibujar la dirección de la ruta
@@ -474,25 +442,20 @@ class ProcesoPedidoController extends GetxController {
       }
     });
   }
+
+  //Obtener distancia entre el pedido y el repartidor
+  getDistanciaPedidoYrepartidor() async {
+    distanciaRuta.value = Geolocator.distanceBetween(
+        posicionDestinoPedidoCliente.value.latitude,
+        posicionDestinoPedidoCliente.value.longitude,
+        pedido.value.direccion.latitud,
+        pedido.value.direccion.longitud);
+
+    //
+    Dio dio = Dio();
+    var response = await dio.get(
+        "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C,-73.9976592&key=$google_api_key");
+    print('?????????');
+    print(response.data);
+  }
 }
-      //
-
-/*
-      List<Placemark> placemark =
-          await placemarkFromCoordinates(position.latitude, position.longitude);
-      _posicionInicialCliente.value =
-          LatLng(position.latitude, position.longitude);
-*/
-      //  direccionTextController.text = placemark[0].name!;
-      // direccion.value = placemark[0].name!;
-
-      //  _agregarMarcadorCliente(    _posicionInicialCliente.value, placemark[0].name!);
-      /*
-      _mapaController
-          ?.moveCamera(CameraUpdate.newLatLng(_posicionInicialCliente.value));*/
-
-      //  notifyListeners();
- 
-  //Actualizaciones de ubicación en tiempo real en el mapa
-
-

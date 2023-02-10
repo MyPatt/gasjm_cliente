@@ -19,7 +19,7 @@ class ContenidoMapa extends StatelessWidget {
     //return Column(    children: const <Widget>[NotificacionEstado(), MapaWidget()],   );
     return Column(
       children: [
-        ContenidoPedido(pedido: _.pedido.value),
+        const ContenidoPedido(),
         Expanded(
             child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
@@ -35,18 +35,33 @@ class ContenidoMapa extends StatelessWidget {
                   }
                   if (snapshot.hasData) {
                     //
+                    //
+                    var markerId2 = const MarkerId('MarcadorPedidoCliente');
+                    final marker2 = Marker(
+                        markerId: markerId2,
+                        position: LatLng(_.pedido.value.direccion.latitud,
+                            _.pedido.value.direccion.longitud),
+                        icon: _.iconoDestinoMarcadorPedidoCliente);
+                    print('-----');
+                    // print(_posicionDestinoCliente.value.latitude);
+                    _.marcadoresAux[markerId2] = marker2;
+
+                    //
                     for (var repartidor in snapshot.data!.docs) {
-                     
                       var markerId = MarkerId(repartidor.id);
 //
                       Direccion ubicacionActualRepartidor =
                           Direccion.fromMap(repartidor.get("ubicacionActual"));
                       //
                       double rotacionActualRepartidor =
-                          double.parse(repartidor.get("rotacionActual"));
+                          (repartidor.get("rotacionActual"));
 
                       //
 
+                      print('******');
+                      print(rotacionActualRepartidor);
+                      print('******');
+                      //
                       final marker = Marker(
                         markerId: markerId,
                         position: LatLng(ubicacionActualRepartidor.latitud,
@@ -56,7 +71,13 @@ class ContenidoMapa extends StatelessWidget {
                       );
 
                       //
+
                       _.marcadoresAux[markerId] = marker;
+
+                      //Asignar
+                      _.posicionOrigenVehiculoRepartidor.value = LatLng(
+                          ubicacionActualRepartidor.latitud,
+                          ubicacionActualRepartidor.longitud);
                     }
 
                     //

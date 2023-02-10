@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart';
+import 'package:flutter/material.dart'; 
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
