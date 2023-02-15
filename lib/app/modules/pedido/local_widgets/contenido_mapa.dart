@@ -39,10 +39,11 @@ class ContenidoMapa extends StatelessWidget {
                     var markerId2 = const MarkerId('MarcadorPedidoCliente');
                     final marker2 = Marker(
                         markerId: markerId2,
-                        position: LatLng(_.pedido.value.direccion.latitud,
-                            _.pedido.value.direccion.longitud),
+                        position: LatLng(
+                            _.posicionDestinoPedidoCliente.value.latitude,
+                            _.posicionDestinoPedidoCliente.value.longitude),
                         icon: _.iconoDestinoMarcadorPedidoCliente);
-                    print('-----');
+               
                     // print(_posicionDestinoCliente.value.latitude);
                     _.marcadoresAux[markerId2] = marker2;
 
@@ -55,12 +56,7 @@ class ContenidoMapa extends StatelessWidget {
                       //
                       double rotacionActualRepartidor =
                           (repartidor.get("rotacionActual"));
-
-                      //
-
-                      print('******');
-                      print(rotacionActualRepartidor);
-                      print('******');
+ 
                       //
                       final marker = Marker(
                         markerId: markerId,

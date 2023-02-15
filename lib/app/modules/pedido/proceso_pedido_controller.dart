@@ -13,7 +13,6 @@ import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:dio/dio.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -75,7 +74,8 @@ class ProcesoPedidoController extends GetxController {
   final RxDouble rotacionMarcadorVehiculoRepartidor = 0.0.obs;
 
   //Obtener distancia entre el pedido y el repartidor
-  RxDouble distanciaRuta = (0.0).obs;
+  RxInt distanciaRuta = (0).obs;
+
   //METODOS PROPIOS GETX
   @override
   void onInit() {
@@ -86,20 +86,17 @@ class ProcesoPedidoController extends GetxController {
     //Obtiene el nombre de direccion del destino del pediod a partir de la posicion en LatLng
     _cargarDireccionDestinoDelPedido();
 
-    //TODO: obtner ubicacion actual del repartidor no del cliente
-
-    //Obtener la ruta del viaje a partir de la ubicacion actual del vehiculo repartidor hasta el destino del pedido
-    // cargarPuntosDeLaRutaDelPedido();
-    //getUbicacionUsuario();
-
+  
     //Se asigna los iconos personalizados a los marcadores del mapa (detinopedido y vehiculo)
     cargarIconosMarcadoresDelMapa();
   }
 
-//Metodo para cancelar el pedido
-  Future<void> _pedidoCancelado() async {
+//Metodo para actualizar la variable del estado de la memoria, si ya no esta en true debe volver a cargar el inicio  cancelar el pedido
+  Future<void> _actualizarPedidoCanceladoEnFalse() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("pedido_esperando", false);
+
+    prefs.remove("pedido_esperando");
     //
     Get.offAllNamed(AppRoutes.inicio);
   }
@@ -118,12 +115,8 @@ class ProcesoPedidoController extends GetxController {
       cargandoDatosDelPedidoRealizado.value = true;
 
       //CARGAR DATOS DEL PEDIDO
-      var aux = await _getDatosPedido();
-      print(".......................");
-      print(aux.direccion.latitud);
-      print(aux.direccion.longitud);
-      String _nombreCliente = _personaRepository.nombreUsuarioActual;
-
+      var aux = await _getDatosPedido(); 
+      String _nombreCliente = _personaRepository.nombreUsuarioActual; 
       var estado = await _getNombreEstado(aux.idEstadoPedido);
 
       //
@@ -165,7 +158,7 @@ class ProcesoPedidoController extends GetxController {
 
   //Diseno mapa
   void onMapaCreado(GoogleMapController controller) {
-    controller.showMarkerInfoWindow(MarkerId(id));
+    //controller.showMarkerInfoWindow(MarkerId(id));
 
     controladorGoogleMap = controller;
     controller.setMapStyle(estiloMapa);
@@ -185,7 +178,9 @@ class ProcesoPedidoController extends GetxController {
   }
 
   //Metodo para actualizar el estado de un pedido
-  Future<void> actualizarEstadoPedido(String idPedido) async {
+  Future<void> actualizarEstadoPedido() async {
+    String idPedido = pedido.value.idPedido!;
+
     ///en estadoPedido3 se guarda info   de si se cancela o finaliza el pedidoaceptado
     try {
       await _pedidoRepository.updateEstadoPedido(
@@ -201,7 +196,7 @@ class ProcesoPedidoController extends GetxController {
             color: Colors.white,
           ));
       //
-      await _pedidoCancelado();
+      await _actualizarPedidoCanceladoEnFalse();
     } catch (e) {
       Mensajes.showGetSnackbar(
           titulo: 'Alerta',
@@ -404,58 +399,29 @@ class ProcesoPedidoController extends GetxController {
   final Rx<LatLng> posicionOrigenVehiculoRepartidor =
       const LatLng(-12.122711, -77.027475).obs;
 
-  //
-  Future<void> getUbicacionUsuario() async {
-    Position position = await Geolocator.getCurrentPosition(
-        desiredAccuracy: LocationAccuracy.high);
-
-    posicionOrigenVehiculoRepartidor.value =
-        LatLng(position.latitude, position.longitude);
-
-    Geolocator.getPositionStream().listen((event) async {
-      //
-      double rotation = Geolocator.bearingBetween(
-          posicionOrigenVehiculoRepartidor.value.latitude,
-          posicionOrigenVehiculoRepartidor.value.longitude,
-          event.latitude,
-          event.longitude);
-
-      //
-      rotacionMarcadorVehiculoRepartidor.value = rotation;
-      //
-      posicionOrigenVehiculoRepartidor.value =
-          LatLng(event.latitude, event.longitude);
-
-      //  cargarPuntosDeLaRutaDelPedido();
-      //
-      if (controladorGoogleMap != null) {
-        final zoom = await controladorGoogleMap!.getZoomLevel();
-        final cameraUpdate = CameraUpdate.newLatLngZoom(
-            LatLng(
-              event.latitude,
-              event.longitude,
-            ),
-            zoom);
-
-        //
-        controladorGoogleMap?.animateCamera(cameraUpdate);
-      }
-    });
-  }
-
+  
   //Obtener distancia entre el pedido y el repartidor
-  getDistanciaPedidoYrepartidor() async {
+  Future<void> getDistanciaPedidoYrepartidor() async {
     distanciaRuta.value = Geolocator.distanceBetween(
-        posicionDestinoPedidoCliente.value.latitude,
-        posicionDestinoPedidoCliente.value.longitude,
-        pedido.value.direccion.latitud,
-        pedido.value.direccion.longitud);
-
+            posicionOrigenVehiculoRepartidor.value.latitude,
+            posicionOrigenVehiculoRepartidor.value.longitude,
+            pedido.value.direccion.latitud,
+            pedido.value.direccion.longitud)
+        .toInt();
+   
     //
-    Dio dio = Dio();
-    var response = await dio.get(
-        "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C,-73.9976592&key=$google_api_key");
-    print('?????????');
-    print(response.data);
+    /*
+    try {
+      print('?????????');
+      Dio dio = Dio();
+      print('????????');
+      var response = await dio.get(
+          "https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=40.6655101,-73.89188969999998&destinations=40.6905615%2C,-73.9976592&key=$google_api_key");
+      print('??  ?');
+      print(response.data);
+    } catch (e) {
+      print('888888888888');
+      print(e);
+    }*/
   }
 }

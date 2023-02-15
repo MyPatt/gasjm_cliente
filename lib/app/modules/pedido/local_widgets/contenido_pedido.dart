@@ -13,34 +13,41 @@ class ContenidoPedido extends StatelessWidget {
     /*   final ProcesoPedidoController controladorDePedidos =
         Get.put(ProcesoPedidoController());*/
 
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          color: Colors.transparent,
-          alignment: Alignment.centerLeft,
-          height: Responsive.getScreenSize(context).height * .05,
-          width: Responsive.getScreenSize(context).width * .95,
-          child: GetBuilder<ProcesoPedidoController>(
-              builder: (_) => Row(
-                    children: [
-                      Column(
-                        children: <Widget>[
-                          const TextSubtitle(text: 'Pedido realizado '),
-                          TextDescription(
-                              text: ('\$${_.pedido.value.totalPedido} de ') +
-                                  (_.pedido.value.cantidadPedido > 1
-                                      ? '${_.pedido.value.cantidadPedido} cilindros'
-                                      : '${_.pedido.value.cantidadPedido} cilindro')),
-                          //   const TextDescription(text: "5 min")
-                        ],
-                      ),
-                      Column(
-                        children: [
-                          Obx(() => TextDescription(text: '${_.distanciaRuta}  m'))
-                        ],
-                      )
+    return Container(
+      margin: const EdgeInsets.only(top: 8.0, left: 8.0, right: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(10)
+          /*BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15))*/
+          ),
+      alignment: Alignment.centerLeft,
+      height: Responsive.getScreenSize(context).height * .09,
+      width: Responsive.getScreenSize(context).width * .95,
+      child: GetBuilder<ProcesoPedidoController>(
+          builder: (_) => Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    //  crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      const TextSubtitle(text: 'Pedido realizado '),
+                      TextDescription(
+                          text: (_.pedido.value.cantidadPedido > 1
+                              ? '${_.pedido.value.cantidadPedido} cilindros'
+                              : '${_.pedido.value.cantidadPedido} cilindro')),
+                      //   const TextDescription(text: "5 min")
                     ],
-                  )),
-        ));
+                  ),
+                  Column(
+                    children: [
+                      Obx(() => TextDescription(
+                          text: '\$${_.pedido.value.totalPedido}'))
+                    ],
+                  )
+                ],
+              )),
+    );
   }
 }

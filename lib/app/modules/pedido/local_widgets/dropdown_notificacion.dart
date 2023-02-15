@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
-import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';import 'package:gasjm/app/core/utils/globals.dart' as globals;
 import 'package:get/get.dart';
 
 class PopuMenuNotificacion extends StatelessWidget {
   const PopuMenuNotificacion({
     Key? key,
-    required this.icono,
-  }) : super(key: key);
-  final Widget icono;
+  }) : super(key: key); 
 
 //
 
@@ -19,7 +17,9 @@ class PopuMenuNotificacion extends StatelessWidget {
       builder: (_) => PopupMenuButton(
         padding: const EdgeInsets.all(0.0),
         offset: Offset(0.0, AppBar().preferredSize.height),
-        icon: icono,
+        icon: Obx(()=>(Icon(globals.existeNotificacion.value
+                      ? Icons.notifications_active_outlined
+                      : Icons.notifications_none_outlined))),
         itemBuilder: (ctx) => _.notificaciones
             .map((e) => PopupMenuItem(
                 onTap: () => _.cargarDetalle(),
