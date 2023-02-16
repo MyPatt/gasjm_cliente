@@ -22,11 +22,7 @@ class ContenidoMapa extends StatelessWidget {
         const ContenidoPedido(),
         Expanded(
             child: StreamBuilder<QuerySnapshot>(
-                stream: FirebaseFirestore.instance
-                    .collection('ubicacionRepartidor')
-                    //   .doc('IXvTa9j5pZbYjpC0Ttgh0OXNcCD3')
-                    // .doc(_.pedido.value.idRepartidor)
-                    .snapshots(),
+                stream: _.getUbicacionesDeRepartidores(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
                     return const Center(

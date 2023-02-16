@@ -86,7 +86,6 @@ class ProcesoPedidoController extends GetxController {
     //Obtiene el nombre de direccion del destino del pediod a partir de la posicion en LatLng
     _cargarDireccionDestinoDelPedido();
 
-  
     //Se asigna los iconos personalizados a los marcadores del mapa (detinopedido y vehiculo)
     cargarIconosMarcadoresDelMapa();
   }
@@ -115,8 +114,8 @@ class ProcesoPedidoController extends GetxController {
       cargandoDatosDelPedidoRealizado.value = true;
 
       //CARGAR DATOS DEL PEDIDO
-      var aux = await _getDatosPedido(); 
-      String _nombreCliente = _personaRepository.nombreUsuarioActual; 
+      var aux = await _getDatosPedido();
+      String _nombreCliente = _personaRepository.nombreUsuarioActual;
       var estado = await _getNombreEstado(aux.idEstadoPedido);
 
       //
@@ -154,6 +153,15 @@ class ProcesoPedidoController extends GetxController {
     }
 
     cargandoDatosDelPedidoRealizado.value = false;
+  }
+
+  Stream<QuerySnapshot> getUbicacionesDeRepartidores() {
+    var snapshot = FirebaseFirestore.instance
+        .collection('ubicacionRepartidor')
+        //   .doc('IXvTa9j5pZbYjpC0Ttgh0OXNcCD3')
+        // .doc(_.pedido.value.idRepartidor)
+        .snapshots();
+    return snapshot;
   }
 
   //Diseno mapa
@@ -399,7 +407,6 @@ class ProcesoPedidoController extends GetxController {
   final Rx<LatLng> posicionOrigenVehiculoRepartidor =
       const LatLng(-12.122711, -77.027475).obs;
 
-  
   //Obtener distancia entre el pedido y el repartidor
   Future<void> getDistanciaPedidoYrepartidor() async {
     distanciaRuta.value = Geolocator.distanceBetween(
@@ -408,7 +415,7 @@ class ProcesoPedidoController extends GetxController {
             pedido.value.direccion.latitud,
             pedido.value.direccion.longitud)
         .toInt();
-   
+
     //
     /*
     try {
