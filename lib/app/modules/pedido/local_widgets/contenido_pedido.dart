@@ -26,28 +26,31 @@ class ContenidoPedido extends StatelessWidget {
       height: Responsive.getScreenSize(context).height * .09,
       width: Responsive.getScreenSize(context).width * .95,
       child: GetBuilder<ProcesoPedidoController>(
-          builder: (_) => Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    //  crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      const TextSubtitle(text: 'Pedido realizado '),
-                      TextDescription(
-                          text: (_.pedido.value.cantidadPedido > 1
-                              ? '${_.pedido.value.cantidadPedido} cilindros'
-                              : '${_.pedido.value.cantidadPedido} cilindro')),
-                      //   const TextDescription(text: "5 min")
-                    ],
-                  ),
-                  Column(
-                    children: [
-                      Obx(() => TextDescription(
-                          text: '\$${_.pedido.value.totalPedido}'))
-                    ],
-                  )
-                ],
-              )),
+          builder: (_) => GestureDetector(
+              onTap: () => _.cargarDetalle(),
+            child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      //  crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        const TextSubtitle(text: 'Pedido realizado '),
+                        TextDescription(
+                            text: (_.pedido.value.cantidadPedido > 1
+                                ? '${_.pedido.value.cantidadPedido} cilindros'
+                                : '${_.pedido.value.cantidadPedido} cilindro')),
+                        //   const TextDescription(text: "5 min")
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        Obx(() => TextDescription(
+                            text: '\$${_.pedido.value.totalPedido}'))
+                      ],
+                    )
+                  ],
+                ),
+          )),
     );
   }
 }

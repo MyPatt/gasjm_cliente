@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart'; 
-import 'package:gasjm/app/global_widgets/menu_lateral.dart';
-import 'package:gasjm/app/modules/notificacion/local_widgets/contenido_notificacion.dart'; 
+import 'package:gasjm/app/core/theme/app_theme.dart';
+import 'package:gasjm/app/modules/notificacion/local_widgets/contenido_notificacion.dart';
 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
 class NotificacionPage extends StatelessWidget {
@@ -11,9 +10,8 @@ class NotificacionPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(221, 226, 227, 1),
-      //Menú deslizable a la izquierda con opciones del  usuario
-      drawer: const MenuLateral(),
+      backgroundColor: AppTheme.background,
+
       //Barra de herramientas de opciones para  agenda y  historial
       appBar: AppBar(
         automaticallyImplyLeading: true,

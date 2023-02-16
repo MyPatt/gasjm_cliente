@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/map_style.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/models/estadopedido_model.dart';
-import 'package:gasjm/app/data/models/notificacion_model.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
-import 'package:gasjm/app/data/repository/notificacion_repository.dart';
 import 'package:gasjm/app/data/repository/pedido_repository.dart';
 import 'package:gasjm/app/data/repository/persona_repository.dart';
 import 'package:gasjm/app/modules/historial/widgets/detalle_page.dart';
@@ -22,7 +20,6 @@ class ProcesoPedidoController extends GetxController {
   //Repositorios
   final _pedidoRepository = Get.find<PedidoRepository>();
   final _personaRepository = Get.find<PersonaRepository>();
-  final _notificacionRepository = Get.find<NotificacionRepository>();
 
   //Variable para dsatos del pedido
   final Rx<PedidoModel> pedido = PedidoModel(
@@ -50,12 +47,6 @@ class ProcesoPedidoController extends GetxController {
       const LatLng(-0.2053476, -79.4894387).obs;
   Rx<LatLng> get posicionDestinoPedidoCliente =>
       _posicionDestinoCliente.value.obs;
-
-  //Lista observable que muestra las notificaciones del pedido, inicializado sin notificaciones.
-  // En caso de que haya notificaciones se carga los datos
-  final RxList<String> _notificaciones =
-      ["Sin notificaciones, ,En este momento"].obs;
-  RxList<String> get notificaciones => _notificaciones;
 
   //Lista de marcadores (vehiculo y cliente)
   final Map<MarkerId, Marker> marcadoresAux = {};
@@ -100,13 +91,6 @@ class ProcesoPedidoController extends GetxController {
     Get.offAllNamed(AppRoutes.inicio);
   }
 
-  //Metodo que devuelve una fecha tipo timestap en formato d/m/y  h:m
-  String formatoFecha(Timestamp fecha) {
-    String formatoFecha = DateFormat.yMd("es").format(fecha.toDate());
-    String formatoHora = DateFormat.Hm("es").format(fecha.toDate());
-    return "$formatoFecha $formatoHora";
-  }
-
   //Metodo que obtiene el ultimo pedido realizado y aun no se a finalizado
 
   Future<void> _cargarDatosDelPedidoRealizado() async {
@@ -139,8 +123,6 @@ class ProcesoPedidoController extends GetxController {
       //Mostrar el marcador del cliente en el mapa
       // _agregarMarcadorCliente(_posicionCliente.value);
 
-      //Cargar los datos de la notificacion
-      _cargarListaNotificaciones();
     } on FirebaseException catch (e) {
       Mensajes.showGetSnackbar(
           titulo: 'Alerta',
@@ -217,26 +199,6 @@ class ProcesoPedidoController extends GetxController {
     }
   }
 
-  Future<void> _cargarListaNotificaciones() async {
-    try {
-      //CARGAR DATOS DEL PEDIDO
-      List<Notificacion>? aux =
-          await _notificacionRepository.getNotificacionesPorField(
-              field: "idPedidoNotificacion", dato: pedido.value.idPedido!);
-
-      if (aux!.length.toInt() > 0) {
-        _notificaciones.clear();
-
-        for (var element in aux) {
-          _notificaciones.add(
-              "${element.tituloNotificacion}, por ${element.textoNotificacion},${formatoHoraFecha(element.fechaNotificacion)}");
-        }
-      }
-    } catch (e) {
-      //
-    }
-  }
-
 //
   RxBool cargandoDetalle = false.obs;
   final Rx<EstadoDelPedido> _estadoPedido1 = EstadoDelPedido(
@@ -303,7 +265,7 @@ class ProcesoPedidoController extends GetxController {
 
 //Cargar pagina de notifiaciones
   void cargarPaginaNotifiaciones() {
-    Get.toNamed(AppRoutes.notificacion,arguments: pedido.value);
+    Get.toNamed(AppRoutes.notificacion, arguments: pedido.value);
   }
 
   //Metodo para encontrar el  nombre del estado
@@ -346,11 +308,8 @@ class ProcesoPedidoController extends GetxController {
     // cargarPuntosDeLaRutaDelPedido();
   }
 
-  //Variables para la vista previa de la ruta en tiempo real -1.325901, -78.870296
-  /*LatLng sourceLocation = LatLng(-1.353455, -78.866747);
-  LatLng destination = LatLng(-1.325901, -78.870296);
-*/
-  static const google_api_key = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
+  //Variables para la vista previa de la ruta en tiempo real 
+  static const googleapikey = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
 
   //Varriables de los iconos para marcadores del mapa
   BitmapDescriptor iconoOrigenMarcadorVehiculoRepartidor =
@@ -385,7 +344,7 @@ class ProcesoPedidoController extends GetxController {
     PolylinePoints polylinePoints = PolylinePoints();
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      google_api_key, // Your Google Map Key
+      googleapikey, // Your Google Map Key
       PointLatLng(posicionOrigenVehiculoRepartidor.value.latitude,
           posicionOrigenVehiculoRepartidor.value.longitude),
       PointLatLng(posicionDestinoPedidoCliente.value.latitude,
