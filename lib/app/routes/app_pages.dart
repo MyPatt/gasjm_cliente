@@ -10,6 +10,8 @@ import 'package:gasjm/app/modules/identificacion/identificacion_binding.dart';
 import 'package:gasjm/app/modules/identificacion/identificacion_page.dart';
 import 'package:gasjm/app/modules/inicio/inicio_binding.dart';
 import 'package:gasjm/app/modules/inicio/inicio_page.dart';
+import 'package:gasjm/app/modules/notificacion/notificacion_binding.dart';
+import 'package:gasjm/app/modules/notificacion/notificacion_page.dart';
 import 'package:gasjm/app/modules/pedido/proceso_pedido_binding.dart';
 import 'package:gasjm/app/modules/pedido/proceso_pedido_page.dart';
 import 'package:gasjm/app/modules/login/login_binding.dart';
@@ -101,6 +103,13 @@ class AppPages {
       name: AppRoutes.historial,
       page: () => HistorialPage(),
       binding: HistorialBinding(),
+      transition: Transition.fade,
+      transitionDuration: const Duration(milliseconds: 500),
+    ),
+       GetPage(
+      name: AppRoutes.notificacion,
+      page: () => const NotificacionPage(),
+      binding: NotificacionBinding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),

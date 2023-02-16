@@ -16,4 +16,5 @@ class AppRoutes {
   /*static const editaragenda = "/editaragenda";*/
   static const signup = "/signup";
   static const procesopedido = "/procesopedido";
+  static const notificacion = "/notificacion";
 }

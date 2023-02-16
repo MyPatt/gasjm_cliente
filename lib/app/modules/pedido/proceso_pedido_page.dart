@@ -4,7 +4,7 @@ import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/boton_cancelar.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/contenido_mapa.dart';
-import 'package:gasjm/app/modules/pedido/local_widgets/dropdown_notificacion.dart';
+import 'package:gasjm/app/core/utils/globals.dart' as globals;
 import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
 
@@ -16,12 +16,11 @@ class ProcesoPedidoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromRGBO(221, 226, 227, 1),
+      backgroundColor: const Color.fromRGBO(221, 226, 227, 1),
       //Menú deslizable a la izquierda con opciones del  usuario
       drawer: const MenuLateral(),
       //Barra de herramientas de opciones para  agenda y  historial
       appBar: AppBar(
-        automaticallyImplyLeading: false,
         elevation: 0,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(
@@ -31,8 +30,13 @@ class ProcesoPedidoPage extends StatelessWidget {
         backgroundColor: AppTheme.blueBackground,
 
         // actions: const [ActionsProcesoPedido()],
-        actions: const <Widget>[
-          PopuMenuNotificacion(),
+        actions: <Widget>[
+          IconButton(
+              onPressed: () => Get.find<ProcesoPedidoController>()
+                  .cargarPaginaNotifiaciones(),
+              icon: Obx(() => (Icon(globals.existeNotificacion.value
+                  ? Icons.notifications_active_outlined
+                  : Icons.notifications_none_outlined))))
         ],
         title: const Text('Gas J&M'),
       ),

@@ -301,6 +301,11 @@ class ProcesoPedidoController extends GetxController {
         routeName: 'detalle');
   }
 
+//Cargar pagina de notifiaciones
+  void cargarPaginaNotifiaciones() {
+    Get.toNamed(AppRoutes.notificacion,arguments: pedido.value);
+  }
+
   //Metodo para encontrar el  nombre del estado
   Future<String> _getNombreEstado(String idEstado) async {
     final nombre =
