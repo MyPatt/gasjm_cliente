@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/menu_lateral.dart';
+import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/boton_cancelar.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/contenido_mapa.dart';
 import 'package:gasjm/app/core/utils/globals.dart' as globals;
@@ -34,9 +36,38 @@ class ProcesoPedidoPage extends StatelessWidget {
           IconButton(
               onPressed: () => Get.find<ProcesoPedidoController>()
                   .cargarPaginaNotifiaciones(),
+              icon: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('notificacion')
+                      .where('idPedidoNotificacion',
+                          isEqualTo: Get.find<ProcesoPedidoController>()
+                              .pedido
+                              .value
+                              .idPedido)
+                      .orderBy("fechaNotificacion", descending: true)
+                      .snapshots(),
+                  // Get.find<ProcesoPedidoController>().getNotificacion(),
+                  builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: TextDescription(text: 'Espere un momento...'),
+                      );
+                    }
+                    if (snapshot.hasData) {
+                      print('''''``````````````````````````````''' '');
+                      print(snapshot.data?.docs.length);
+                  
+                      return const Icon(Icons.notifications_active_outlined);
+                    }
+
+                    return const Icon(Icons.notifications_none_outlined);
+                  }))
+          /*    IconButton(
+              onPressed: () => Get.find<ProcesoPedidoController>()
+                  .cargarPaginaNotifiaciones(),
               icon: Obx(() => (Icon(globals.existeNotificacion.value
                   ? Icons.notifications_active_outlined
-                  : Icons.notifications_none_outlined))))
+                  : Icons.notifications_none_outlined))))*/
         ],
         title: const Text('Gas J&M'),
       ),

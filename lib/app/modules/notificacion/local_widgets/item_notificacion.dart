@@ -16,6 +16,7 @@ class ItemNotificacion extends StatelessWidget {
       onTap: onTap,
       child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15.0),
+          margin: const EdgeInsets.only(bottom: 5.0),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(15.0), color: Colors.white),
           child: Row(children: <Widget>[

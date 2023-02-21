@@ -137,6 +137,7 @@ class ProcesoPedidoController extends GetxController {
     cargandoDatosDelPedidoRealizado.value = false;
   }
 
+//al acualizar  la ubicacion de un repartidor cuando se ha cambiado se muestra en el mapa
   Stream<QuerySnapshot> getUbicacionesDeRepartidores() {
     var snapshot = FirebaseFirestore.instance
         .collection('ubicacionRepartidor')
@@ -308,7 +309,7 @@ class ProcesoPedidoController extends GetxController {
     // cargarPuntosDeLaRutaDelPedido();
   }
 
-  //Variables para la vista previa de la ruta en tiempo real 
+  //Variables para la vista previa de la ruta en tiempo real
   static const googleapikey = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
 
   //Varriables de los iconos para marcadores del mapa
@@ -394,5 +395,17 @@ class ProcesoPedidoController extends GetxController {
       print('888888888888');
       print(e);
     }*/
+  }
+
+  //para ejecutar cuando se actualiza el pedido
+  Stream<QuerySnapshot> getNotificacion() {
+    var snapshot = FirebaseFirestore.instance
+        .collection('notificacion')
+        .where('idPedidoNotificacion', isEqualTo: pedido.value.idPedido)
+        .orderBy("fechaNotificacion", descending: true)
+        .snapshots();
+    
+
+    return snapshot;
   }
 }

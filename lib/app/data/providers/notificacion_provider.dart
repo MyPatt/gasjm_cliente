@@ -40,4 +40,24 @@ class NotificacionProvider {
           .toList();
     }
   }
+
+  //
+   Future<List<Notificacion>> getNotificacionesPorIdPedido(
+      {required String idPedido}) async {
+ 
+    final resultado = await _firestoreInstance
+        .collection('notificacion') 
+        .where('idPedidoNotificacion', isEqualTo: idPedido)
+        .orderBy("fechaNotificacion", descending: true)
+        .get();
+  
+
+    if (resultado.docs.isEmpty) {
+      return [];
+    } else {
+  
+      return (resultado.docs.map((item) => Notificacion.fromMap(item.data())))
+          .toList();
+    }
+  }
 }

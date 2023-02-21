@@ -36,11 +36,11 @@ class NotificacionController extends GetxController {
   Future<void> _cargarListaNotificaciones() async {
     try {
       //CARGAR DATOS DEL PEDIDO
-      List<Notificacion>? aux =
-          await _notificacionRepository.getNotificacionesPorField(
-              field: "idPedidoNotificacion", dato: pedido!.idPedido!);
-
-      if (aux!.length.toInt() > 0) {
+      List<Notificacion> aux = await _notificacionRepository
+          .getNotificacionesPorIdPedido(idPedido: pedido!.idPedido!);
+      print('uuuuuuuuuuuuuuuuuuuuuuuuu');
+      print(aux.length);
+      if (aux.length.toInt() > 0) {
         _notificaciones.clear();
 
         for (var element in aux) {
@@ -50,6 +50,7 @@ class NotificacionController extends GetxController {
       }
     } catch (e) {
       //
+      Exception('Error, inténtalo más tarde.');
     }
   }
 
