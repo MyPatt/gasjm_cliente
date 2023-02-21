@@ -5,8 +5,7 @@ import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/boton_cancelar.dart';
-import 'package:gasjm/app/modules/pedido/local_widgets/contenido_mapa.dart';
-import 'package:gasjm/app/core/utils/globals.dart' as globals;
+import 'package:gasjm/app/modules/pedido/local_widgets/contenido_mapa.dart'; 
 import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
 
@@ -33,18 +32,31 @@ class ProcesoPedidoPage extends StatelessWidget {
 
         // actions: const [ActionsProcesoPedido()],
         actions: <Widget>[
+
           IconButton(
               onPressed: () => Get.find<ProcesoPedidoController>()
                   .cargarPaginaNotifiaciones(),
-              icon: StreamBuilder(
+              icon:
+               Obx(
+        () => Get.find<ProcesoPedidoController>()
+                .cargandoDatosDelPedidoRealizado
+                .value
+            ?
+              const Icon(Icons.notifications_none_outlined)
+              :
+               StreamBuilder(
                   stream: FirebaseFirestore.instance
                       .collection('notificacion')
+                      // .doc('5jvaOHl0jt8Gz1sZKlTB')
                       .where('idPedidoNotificacion',
-                          isEqualTo: Get.find<ProcesoPedidoController>()
+                          isEqualTo: 
+                          //'6kqZh8vmKPuTKlAzKdnT'
+                           Get.find<ProcesoPedidoController>()
                               .pedido
                               .value
-                              .idPedido)
-                      .orderBy("fechaNotificacion", descending: true)
+                              .idPedido
+                          )
+                        .orderBy("fechaNotificacion", descending: true) 
                       .snapshots(),
                   // Get.find<ProcesoPedidoController>().getNotificacion(),
                   builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -54,14 +66,19 @@ class ProcesoPedidoPage extends StatelessWidget {
                       );
                     }
                     if (snapshot.hasData) {
+                      print(Get.find<ProcesoPedidoController>()
+                          .pedido
+                          .value
+                          .idPedido);
+                   ///   print(Get.find<ProcesoPedidoController>().idPedido);
                       print('''''``````````````````````````````''' '');
                       print(snapshot.data?.docs.length);
-                  
+
                       return const Icon(Icons.notifications_active_outlined);
                     }
 
                     return const Icon(Icons.notifications_none_outlined);
-                  }))
+                  })))
           /*    IconButton(
               onPressed: () => Get.find<ProcesoPedidoController>()
                   .cargarPaginaNotifiaciones(),

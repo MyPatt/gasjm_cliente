@@ -67,6 +67,9 @@ class ProcesoPedidoController extends GetxController {
   //Obtener distancia entre el pedido y el repartidor
   RxInt distanciaRuta = (0).obs;
 
+  //
+  String idPedido = '';
+
   //METODOS PROPIOS GETX
   @override
   void onInit() {
@@ -122,7 +125,8 @@ class ProcesoPedidoController extends GetxController {
 
       //Mostrar el marcador del cliente en el mapa
       // _agregarMarcadorCliente(_posicionCliente.value);
-
+      print('*****${pedido.value.idPedido}');
+      idPedido = pedido.value.idPedido!;
     } on FirebaseException catch (e) {
       Mensajes.showGetSnackbar(
           titulo: 'Alerta',
@@ -404,7 +408,6 @@ class ProcesoPedidoController extends GetxController {
         .where('idPedidoNotificacion', isEqualTo: pedido.value.idPedido)
         .orderBy("fechaNotificacion", descending: true)
         .snapshots();
-    
 
     return snapshot;
   }
