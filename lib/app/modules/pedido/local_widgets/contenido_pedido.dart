@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
@@ -27,14 +28,36 @@ class ContenidoPedido extends StatelessWidget {
       width: Responsive.getScreenSize(context).width * .95,
       child: GetBuilder<ProcesoPedidoController>(
           builder: (_) => GestureDetector(
-              onTap: () => _.cargarDetalle(),
-            child: Row(
+                onTap: () => _.cargarDetalle(),
+                child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Column(
                       //  crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        const TextSubtitle(text: 'Pedido realizado '),
+                        StreamBuilder(
+                            stream: _.getNotificacion(),
+                            builder: (context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasError) {
+                                return const Center(
+                                  child: TextDescription(
+                                      text: 'Pedido realizado...'),
+                                );
+                              }
+                              if (snapshot.hasData) {
+                                print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+                                var texto = snapshot.data?.docs.first
+                                    .get('tituloNotificacion');
+                                print(texto);
+
+                                return  TextSubtitle(
+                                    text: texto );
+                              }
+                              return const TextSubtitle(
+                                  text: 'Pedido realizado');
+                            }),
+
                         TextDescription(
                             text: (_.pedido.value.cantidadPedido > 1
                                 ? '${_.pedido.value.cantidadPedido} cilindros'
@@ -50,7 +73,7 @@ class ContenidoPedido extends StatelessWidget {
                     )
                   ],
                 ),
-          )),
+              )),
     );
   }
 }
