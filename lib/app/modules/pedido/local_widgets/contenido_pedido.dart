@@ -40,20 +40,25 @@ class ContenidoPedido extends StatelessWidget {
                             builder: (context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
                               if (snapshot.hasError) {
-                                return const Center(
-                                  child: TextDescription(
-                                      text: 'Pedido realizado...'),
-                                );
+                                print('Has error');
+                                return const TextDescription(
+                                    text: 'Pedido realizado.');
                               }
                               if (snapshot.hasData) {
-                                print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-                                var texto = snapshot.data?.docs.first
-                                    .get('tituloNotificacion');
-                                print(texto);
+                                try {
+                                  print('Has data');
 
-                                return  TextSubtitle(
-                                    text: texto );
+                                  print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
+                                  var texto = snapshot.data?.docs.first
+                                      .get('tituloNotificacion');
+                                  print(texto);
+                                  return TextSubtitle(text: texto);
+                                } catch (e) { 
+                                  print(e);
+                                }
                               }
+                              print('Has else');
+
                               return const TextSubtitle(
                                   text: 'Pedido realizado');
                             }),
