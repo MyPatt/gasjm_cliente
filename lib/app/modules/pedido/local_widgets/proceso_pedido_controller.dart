@@ -17,6 +17,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class ProcesoPedidoController extends GetxController {
   //Repositorios
@@ -515,4 +516,50 @@ class ProcesoPedidoController extends GetxController {
 
   //Actualizaciones de ubicación en tiempo real en el mapa
 
+  //
+   showNotification() async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+        FlutterLocalNotificationsPlugin();
+ 
+    const AndroidInitializationSettings initializationSettingsAndroid =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+ 
+    const IOSInitializationSettings initializationSettingsIOS =
+        IOSInitializationSettings(
+      requestSoundPermission: false,
+      requestBadgePermission: false,
+      requestAlertPermission: false,
+    );
+    const InitializationSettings initializationSettings =
+        InitializationSettings(
+      android: initializationSettingsAndroid,
+      iOS: initializationSettingsIOS,
+    );
+ 
+    await flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+ 
+    AndroidNotificationChannel channel = const 
+    
+    
+    
+    AndroidNotificationChannel('id','name','description'
+      'high channel',
+     
+      importance: Importance.max,
+    );
+ 
+    await flutterLocalNotificationsPlugin.show(
+      1,
+      'my first notification',
+      'a very long message for the user of app',
+      NotificationDetails(
+        android: AndroidNotificationDetails(channel.id, channel.name,
+            channel.description),
+      ),
+    );
+  }
+
 }
+  
