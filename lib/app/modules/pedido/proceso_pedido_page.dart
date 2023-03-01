@@ -6,8 +6,7 @@ import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/boton_cancelar.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/contenido_mapa.dart';
-import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
-import 'package:gasjm/app/modules/pedido/local_widgets/local_notice_service.dart';
+import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart'; 
 import 'package:get/get.dart';
 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
@@ -33,12 +32,7 @@ class ProcesoPedidoPage extends StatelessWidget {
 
         // actions: const [ActionsProcesoPedido()],
         actions: <Widget>[
-          IconButton(
-              onPressed: () => Noti.showBigTextNotification(
-                  title: "New message title", body: "Your long body"),
-              icon: const Icon(Icons.filter_alt_outlined)), IconButton(
-              onPressed: () =>Get.find<ProcesoPedidoController>().showNotification(),
-              icon: const Icon(Icons.filter_vintage_outlined)),
+     
           IconButton(
               onPressed: () => Get.find<ProcesoPedidoController>()
                   .cargarPaginaNotifiaciones(),
@@ -69,17 +63,7 @@ class ProcesoPedidoPage extends StatelessWidget {
                           );
                         }
                         if (snapshot.hasData) {
-                          print(Get.find<ProcesoPedidoController>()
-                              .pedido
-                              .value
-                              .idPedido);
-
-                          ///   print(Get.find<ProcesoPedidoController>().idPedido);
-                          print('''''``````````````````````````````''' '');
-                          print(snapshot.data?.docs.length);
-                          Noti.showBigTextNotification(
-                              title: "New message title",
-                              body: "Your long body");
+                         
                           return const Icon(
                               Icons.notifications_active_outlined);
                         }

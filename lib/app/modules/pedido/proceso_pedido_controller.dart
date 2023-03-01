@@ -16,6 +16,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class ProcesoPedidoController extends GetxController {
   //Repositorios
@@ -73,7 +75,7 @@ class ProcesoPedidoController extends GetxController {
 
   //METODOS PROPIOS GETX
   @override
-  void onInit() {
+  Future<void> onInit() async {
     super.onInit();
     //Obtener  datos del pedido  realizado
     Future.wait([_cargarDatosDelPedidoRealizado()]);
@@ -83,6 +85,12 @@ class ProcesoPedidoController extends GetxController {
 
     //Se asigna los iconos personalizados a los marcadores del mapa (detinopedido y vehiculo)
     cargarIconosMarcadoresDelMapa();
+    //
+
+    tz.initializeTimeZones();
+    print('#### ${tz.local}');
+    //
+  await  initNotificacion();
   }
 
 //Metodo para actualizar la variable del estado de la memoria, si ya no esta en true debe volver a cargar el inicio  cancelar el pedido
@@ -414,15 +422,13 @@ class ProcesoPedidoController extends GetxController {
   }
 
   //
-  
-  //
-   showNotification() async {
+  showNotificationn() async {
     FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
         FlutterLocalNotificationsPlugin();
- 
+
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@mipmap/ic_launcher_foreground');
- 
+
     const IOSInitializationSettings initializationSettingsIOS =
         IOSInitializationSettings(
       requestSoundPermission: false,
@@ -434,31 +440,104 @@ class ProcesoPedidoController extends GetxController {
       android: initializationSettingsAndroid,
       iOS: initializationSettingsIOS,
     );
- 
+
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
     );
- 
-    AndroidNotificationChannel channel = const 
-    
-    
-    
-    AndroidNotificationChannel('id','name','description'
-      'high channel',
-     
+
+    AndroidNotificationChannel channel = const AndroidNotificationChannel(
+      'id',
+      'name',
+      'description'
+          'high channel',
       importance: Importance.max,
     );
- 
+
     await flutterLocalNotificationsPlugin.show(
       0,
       'my first notification',
       'a very long message for the user of app',
       NotificationDetails(
-        android: AndroidNotificationDetails(channel.id, channel.name,
-            channel.description),
+        android: AndroidNotificationDetails(
+            channel.id, channel.name, channel.description),
       ),
     );
   }
 
+//////
+  ///
+  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
 
+  ///Inicializar notificacion
+  Future<void> initNotificacion() async {
+
+    
+
+    //Inicializacion Android
+    AndroidInitializationSettings initializationSettingsAndroid =
+        const AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    //Inicializacion ios
+    IOSInitializationSettings initializationSettingsIOS =
+        const IOSInitializationSettings(
+      requestAlertPermission: false,
+      requestBadgePermission: false,
+      requestSoundPermission: false,
+    );
+
+    //Inicializacion configuracion
+    final InitializationSettings initializationSettings =
+        InitializationSettings(
+            android: initializationSettingsAndroid,
+            iOS: initializationSettingsIOS);
+
+    //Los ajustes de inicialización se inicializan después de configurarlos
+    await flutterLocalNotificationsPlugin.initialize(initializationSettings);
+  }
+
+  ///Mostrar notificacion  por fecha y hora
+  Future<void> showNotificacion(
+    int id,
+    String mensaje,
+    DateTime fechaProgramada,
+  ) async {
+    print('/////////$fechaProgramada');
+    var zone = tz.getLocation('America/Guayaquil');
+    print('????$zone');
+    var fecha = tz.TZDateTime.from(fechaProgramada, zone)
+        .add(const Duration(seconds: 1));
+    print('/////////$fecha');
+
+    //
+     
+    await flutterLocalNotificationsPlugin.zonedSchedule(
+      id, null,
+      //titulo,
+      mensaje,
+      //Programar la notificación para que se muestre después de 1 segundos.
+      fecha,
+      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)),
+
+      const NotificationDetails(
+        //Detalle Android
+        android: AndroidNotificationDetails(
+            'main_channel_id', 'main_channel_name', 'main_channel_description',
+            importance: Importance.max, priority: Priority.max),
+        //Detalle iOS
+        iOS: IOSNotificationDetails(
+          sound: 'default.wav',
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
+
+      //Tipo de interpretación del tiempo
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      androidAllowWhileIdle:
+          true, //Para mostrar la notificación incluso cuando la aplicación está cerrada
+    );
+  }
 }

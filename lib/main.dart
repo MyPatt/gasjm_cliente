@@ -4,8 +4,7 @@ import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/routes/app_pages.dart';
 import 'package:gasjm/app/modules/splash/splash_binding.dart';
 import 'package:gasjm/app/modules/splash/splash_page.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:gasjm/app/modules/pedido/local_widgets/local_notice_service.dart';
+import 'package:flutter_localizations/flutter_localizations.dart'; 
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -90,9 +89,7 @@ Future<void> main() async {
   //   Set up background message handler
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 //////////////////////////////////////////////////
-///
-await LocalNoticeService().setup();
-
+ 
   //Para obtener estado del GPS
   runApp(  const MyApp(),
    );

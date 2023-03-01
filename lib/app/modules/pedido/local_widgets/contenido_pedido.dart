@@ -49,11 +49,25 @@ class ContenidoPedido extends StatelessWidget {
                                   print('Has data');
 
                                   print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
-                                  var texto = snapshot.data?.docs.first
+                                  var titulo = snapshot.data?.docs.first
                                       .get('tituloNotificacion');
-                                  print(texto);
-                                  return TextSubtitle(text: texto);
-                                } catch (e) { 
+                                  var texto = snapshot.data?.docs.first
+                                      .get('textoNotificacion');
+                                  Timestamp fecha = snapshot.data?.docs.first
+                                      .get('fechaNotificacion');
+                                        print(fecha);
+                                  var fechaProgramada =
+                                      DateTime.fromMillisecondsSinceEpoch(
+                                          fecha.seconds*1000);
+                              
+
+                                  //
+                                  _.showNotificacion(
+                                    0,
+                                    '$titulo por $texto',fechaProgramada
+                                  );
+                                  return TextSubtitle(text: titulo);
+                                } catch (e) {
                                   print(e);
                                 }
                               }
