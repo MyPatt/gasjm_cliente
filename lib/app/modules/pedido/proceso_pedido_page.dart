@@ -6,7 +6,7 @@ import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/boton_cancelar.dart';
 import 'package:gasjm/app/modules/pedido/local_widgets/contenido_mapa.dart';
-import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart'; 
+import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
@@ -32,7 +32,6 @@ class ProcesoPedidoPage extends StatelessWidget {
 
         // actions: const [ActionsProcesoPedido()],
         actions: <Widget>[
-     
           IconButton(
               onPressed: () => Get.find<ProcesoPedidoController>()
                   .cargarPaginaNotifiaciones(),
@@ -41,19 +40,8 @@ class ProcesoPedidoPage extends StatelessWidget {
                       .value
                   ? const Icon(Icons.notifications_none_outlined)
                   : StreamBuilder(
-                      stream: FirebaseFirestore.instance
-                          .collection('notificacion')
-                          // .doc('5jvaOHl0jt8Gz1sZKlTB')
-                          .where('idPedidoNotificacion',
-                              isEqualTo:
-                                  //'6kqZh8vmKPuTKlAzKdnT'
-                                  Get.find<ProcesoPedidoController>()
-                                      .pedido
-                                      .value
-                                      .idPedido)
-                          .orderBy("fechaNotificacion", descending: true)
-                          .snapshots(),
-                      // Get.find<ProcesoPedidoController>().getNotificacion(),
+                      stream:
+                          Get.find<ProcesoPedidoController>().getNotificacion(),
                       builder:
                           (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasError) {
@@ -63,9 +51,7 @@ class ProcesoPedidoPage extends StatelessWidget {
                           );
                         }
                         if (snapshot.hasData) {
-                         
-                          return const Icon(
-                              Icons.notifications_active_outlined);
+                          return const Icon(Icons.notifications_none_outlined);
                         }
 
                         return const Icon(Icons.notifications_none_outlined);

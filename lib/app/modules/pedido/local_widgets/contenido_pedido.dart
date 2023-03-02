@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
+import 'package:gasjm/app/global_widgets/modal_alert.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
@@ -11,6 +12,7 @@ class ContenidoPedido extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+     
     /*   final ProcesoPedidoController controladorDePedidos =
         Get.put(ProcesoPedidoController());*/
 
@@ -44,7 +46,7 @@ class ContenidoPedido extends StatelessWidget {
                                 return const TextDescription(
                                     text: 'Pedido realizado.');
                               }
-                              if (snapshot.hasData) {
+                              if (snapshot.hasData == true) {
                                 try {
                                   print('Has data');
 
@@ -55,17 +57,21 @@ class ContenidoPedido extends StatelessWidget {
                                       .get('textoNotificacion');
                                   Timestamp fecha = snapshot.data?.docs.first
                                       .get('fechaNotificacion');
-                                        print(fecha);
+
                                   var fechaProgramada =
                                       DateTime.fromMillisecondsSinceEpoch(
-                                          fecha.seconds*1000);
-                              
+                                          fecha.seconds * 1000);
 
                                   //
                                   _.showNotificacion(
-                                    0,
-                                    '$titulo por $texto',fechaProgramada
-                                  );
+                                      context,
+                                      0,
+                                      titulo,
+                                      texto,
+                                      Timestamp.now().toDate(),
+                                      fechaProgramada);
+
+                             
                                   return TextSubtitle(text: titulo);
                                 } catch (e) {
                                   print(e);

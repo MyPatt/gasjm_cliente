@@ -87,10 +87,8 @@ class ProcesoPedidoController extends GetxController {
     cargarIconosMarcadoresDelMapa();
     //
 
-    tz.initializeTimeZones();
-    print('#### ${tz.local}');
     //
-  await  initNotificacion();
+    await initNotificacion();
   }
 
 //Metodo para actualizar la variable del estado de la memoria, si ya no esta en true debe volver a cargar el inicio  cancelar el pedido
@@ -471,9 +469,6 @@ class ProcesoPedidoController extends GetxController {
 
   ///Inicializar notificacion
   Future<void> initNotificacion() async {
-
-    
-
     //Inicializacion Android
     AndroidInitializationSettings initializationSettingsAndroid =
         const AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -491,53 +486,93 @@ class ProcesoPedidoController extends GetxController {
         InitializationSettings(
             android: initializationSettingsAndroid,
             iOS: initializationSettingsIOS);
-
+    configureLocalTimeZone();
     //Los ajustes de inicialización se inicializan después de configurarlos
     await flutterLocalNotificationsPlugin.initialize(initializationSettings);
   }
 
   ///Mostrar notificacion  por fecha y hora
   Future<void> showNotificacion(
+    BuildContext context,
     int id,
-    String mensaje,
+    String titulo,
+    String texto,
+    DateTime fechaActual,
     DateTime fechaProgramada,
   ) async {
-    print('/////////$fechaProgramada');
-    var zone = tz.getLocation('America/Guayaquil');
-    print('????$zone');
-    var fecha = tz.TZDateTime.from(fechaProgramada, zone)
-        .add(const Duration(seconds: 1));
-    print('/////////$fecha');
-
     //
-     
-    await flutterLocalNotificationsPlugin.zonedSchedule(
-      id, null,
-      //titulo,
-      mensaje,
-      //Programar la notificación para que se muestre después de 1 segundos.
-      fecha,
-      // tz.TZDateTime.now(tz.local).add(const Duration(seconds: 1)),
+    print('vv${fechaActual.subtract(const Duration(seconds: 20))}');
+    print('vv$fechaProgramada');
 
-      const NotificationDetails(
-        //Detalle Android
-        android: AndroidNotificationDetails(
-            'main_channel_id', 'main_channel_name', 'main_channel_description',
-            importance: Importance.max, priority: Priority.max),
-        //Detalle iOS
-        iOS: IOSNotificationDetails(
-          sound: 'default.wav',
-          presentAlert: true,
-          presentBadge: true,
-          presentSound: true,
+//
+    if (fechaProgramada
+        .isAfter(fechaActual.subtract(const Duration(seconds: 10)))) {
+      await flutterLocalNotificationsPlugin.zonedSchedule(
+        id, null,
+        //titulo,
+        '$titulo por $texto',
+        //Programar la notificación para que se muestre después de 1 segundos..add(const Duration(seconds: 1))
+        tz.TZDateTime.now(tz.local).add(const Duration(milliseconds: 5)),
+
+        const NotificationDetails(
+          //Detalle Android
+          android: AndroidNotificationDetails('main_channel_id',
+              'main_channel_name', 'main_channel_description',
+              importance: Importance.max, priority: Priority.max),
+          //Detalle iOS
+          iOS: IOSNotificationDetails(
+            sound: 'default.wav',
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
+          ),
         ),
-      ),
 
-      //Tipo de interpretación del tiempo
-      uiLocalNotificationDateInterpretation:
-          UILocalNotificationDateInterpretation.absoluteTime,
-      androidAllowWhileIdle:
-          true, //Para mostrar la notificación incluso cuando la aplicación está cerrada
-    );
+        //Tipo de interpretación del tiempo
+        uiLocalNotificationDateInterpretation:
+            UILocalNotificationDateInterpretation.absoluteTime,
+        androidAllowWhileIdle:
+            true, //Para mostrar la notificación incluso cuando la aplicación está cerrada
+      );
+    }
+
+//
+    if (titulo == 'Pedido finalizado' ||
+        titulo == 'Pedido cancelado' ||
+        titulo == 'Pedido rechazado') {
+      Future.delayed(const Duration(seconds: 1));
+      //Mensajes.showGetSnackbar(titulo: 'Gas J&M', mensaje: titulo);
+      _actualizarPedidoCanceladoEnFalse();
+      /*  Future.delayed(const Duration(seconds: 1));
+      return showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) {
+          return //Obx
+              (
+                  //() =>
+                  ModalAlert(
+                      titulo: titulo,
+                      mensaje: '¿Retornar a la página de inicio?',
+                      icono: Icons.cancel_outlined,
+                      onPressed: () => _actualizarPedidoCanceladoEnFalse()));
+        },
+      );*/
+    }
+  }
+
+//
+  Future<void> configureLocalTimeZone() async {
+    tz.initializeTimeZones();
+    var detroit = tz.getLocation('America/Guayaquil');
+    final String timeZoneName = Timestamp.now().toDate().timeZoneName;
+    print('===${detroit.name}');
+    print('===${detroit.currentTimeZone}');
+    tz.TZDateTime.from(DateTime.now(), detroit);
+    tz.setLocalLocation(tz.getLocation(detroit.name));
+    /*tz.initializeTimeZones();
+    final String timeZoneName = await FlutterNativeTimezone.getLocalTimezone();
+    print('===$timeZoneName');
+    tz.setLocalLocation(tz.getLocation(timeZoneName));*/
   }
 }

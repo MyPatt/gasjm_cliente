@@ -26,7 +26,7 @@ class BotonCancelar extends StatelessWidget {
                 texto: "Cancelar",
                 onPressed: () =>
                     //modal para confirmar si desea cancelar
-                    showDialog(
+                   showDialog(
                       context: context,
                       barrierDismissible: true,
                       builder: (context) {
@@ -36,7 +36,7 @@ class BotonCancelar extends StatelessWidget {
                                 ModalAlert(
                                     titulo: 'Cancelar pedido',
                                     mensaje:
-                                        '¿Está seguro de cancelar su pedido?',
+                                         '¿Está seguro de cancelar su pedido?',
                                     icono: Icons.cancel_outlined,
                                     onPressed: () =>
                                         //en caso de confirmar se actualiza el estado como cancelado
