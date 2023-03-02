@@ -117,9 +117,7 @@ class ProcesoPedidoController extends GetxController {
 
       //CARGAR DATOS DEL PEDIDO
       var aux = await _getDatosPedido();
-      print(".......................");
-      print(aux.direccion.latitud);
-      print(aux.direccion.longitud);
+  
       String _nombreCliente = _personaRepository.nombreUsuarioActual;
 
       var estado = await _getNombreEstado(aux.idEstadoPedido);
@@ -366,7 +364,7 @@ class ProcesoPedidoController extends GetxController {
   /*LatLng sourceLocation = LatLng(-1.353455, -78.866747);
   LatLng destination = LatLng(-1.325901, -78.870296);
 */
-  static const google_api_key = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
+   static const googleapikey = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
 
   //Varriables de los iconos para marcadores del mapa
   BitmapDescriptor iconoOrigenMarcadorVehiculoRepartidor =
@@ -404,11 +402,11 @@ class ProcesoPedidoController extends GetxController {
   RxList<LatLng> get polylineCoordinates => _polylineCoordinates;
 
   void cargarPuntosDeLaRutaDelPedido() async {
-    print("aaaaaaaaaaaaaaaaaaaaaaa");
+ 
     PolylinePoints polylinePoints = PolylinePoints();
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      google_api_key, // Your Google Map Key
+      googleapikey, // Your Google Map Key
       PointLatLng(posicionOrigenVehiculoRepartidor.value.latitude,
           posicionOrigenVehiculoRepartidor.value.longitude),
       PointLatLng(posicionDestinoPedidoCliente.value.latitude,
@@ -421,14 +419,14 @@ class ProcesoPedidoController extends GetxController {
           LatLng(point.latitude, point.longitude),
         );
 
-        print(point);
+        
       }
 
       _polylineCoordinates.value = aux;
       // setState(() {});
     }
 
-    print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+  
   }
 
 //

@@ -38,8 +38,7 @@ class NotificacionController extends GetxController {
       //CARGAR DATOS DEL PEDIDO
       List<Notificacion> aux = await _notificacionRepository
           .getNotificacionesPorIdPedido(idPedido: pedido!.idPedido!);
-      print('uuuuuuuuuuuuuuuuuuuuuuuuu');
-      print(aux.length);
+    
       if (aux.length.toInt() > 0) {
         _notificaciones.clear();
 

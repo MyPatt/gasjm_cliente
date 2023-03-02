@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_auth/firebase_auth.dart'; 
 import 'package:gasjm/app/data/controllers/autenticacion_controller.dart';
 import 'package:gasjm/app/data/models/persona_model.dart';
 import 'package:gasjm/app/data/repository/authenticacion_repository.dart';
@@ -43,16 +42,14 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
       String correo, String contrasena) async {
     final resultadoAutenticacion = await _firebaseAutenticacion
         .signInWithEmailAndPassword(email: correo, password: contrasena);
-    //
-    await _agregarTokenParaFCM();
+ 
     return _usuarioDeFirebase(resultadoAutenticacion.user);
   }
 
   @override
   Future<void> cerrarSesion() async {
     await Future.delayed(const Duration(seconds: 2));
-    //Borrar token
-    await _borrarTokenParaFCM();
+ 
     await _firebaseAutenticacion.signOut();
     //Limpiar memoria de datos guardados de forma local
     await _borrarDatosGuardados();
@@ -67,8 +64,7 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
     //
     //Ingresar datos de usuario en firestore
     await _insertPersona(usuario);
-    //Guardar token _
-    await _agregarTokenParaFCM();
+ 
     return _usuarioDeFirebase(resultadoAutenticacion.user);
   }
 
@@ -98,30 +94,9 @@ class AutenticacionRepositoryImpl extends AutenticacionRepository {
     firestoreInstance.collection("persona").doc(uid).update({"uid": uid});
   }
 
-  //
-  Future<void> _agregarTokenParaFCM() async {
-    var messaging = FirebaseMessaging.instance;
-    String? token = await messaging.getToken();
-    final uid =
-        Get.find<AutenticacionController>().autenticacionUsuario.value!.uid;
-    //
-    await firestoreInstance.collection("persona").doc(uid).update({
-      "tokensParaNotificacion": FieldValue.arrayUnion([token]),
-    });
-  }
+ 
 
-  //
-  Future<void> _borrarTokenParaFCM() async {
-    var messaging = FirebaseMessaging.instance;
-    String? token = await messaging.getToken();
-    final uid =
-        Get.find<AutenticacionController>().autenticacionUsuario.value!.uid;
-    //
-    await firestoreInstance.collection("persona").doc(uid).update({
-      "tokensParaNotificacion": FieldValue.arrayRemove([token]),
-    });
-  }
-
+   
   Future<void> _borrarDatosGuardados() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

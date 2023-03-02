@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
-import 'package:gasjm/app/global_widgets/modal_alert.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
 import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
@@ -12,7 +11,6 @@ class ContenidoPedido extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     
     /*   final ProcesoPedidoController controladorDePedidos =
         Get.put(ProcesoPedidoController());*/
 
@@ -42,15 +40,11 @@ class ContenidoPedido extends StatelessWidget {
                             builder: (context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
                               if (snapshot.hasError) {
-                                print('Has error');
                                 return const TextDescription(
                                     text: 'Pedido realizado.');
                               }
                               if (snapshot.hasData == true) {
                                 try {
-                                  print('Has data');
-
-                                  print('vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv');
                                   var titulo = snapshot.data?.docs.first
                                       .get('tituloNotificacion');
                                   var texto = snapshot.data?.docs.first
@@ -71,13 +65,13 @@ class ContenidoPedido extends StatelessWidget {
                                       Timestamp.now().toDate(),
                                       fechaProgramada);
 
-                             
                                   return TextSubtitle(text: titulo);
                                 } catch (e) {
-                                  print(e);
+                                  Exception(
+                                      'Ha ocurrideo un error inesperado...');
                                 }
                               }
-                              print('Has else');
+                         
 
                               return const TextSubtitle(
                                   text: 'Pedido realizado');

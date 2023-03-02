@@ -132,7 +132,7 @@ class ProcesoPedidoController extends GetxController {
 
       //Mostrar el marcador del cliente en el mapa
       // _agregarMarcadorCliente(_posicionCliente.value);
-      print('*****${pedido.value.idPedido}');
+     
       idPedido = pedido.value.idPedido!;
     } on FirebaseException catch (e) {
       Mensajes.showGetSnackbar(
@@ -352,7 +352,7 @@ class ProcesoPedidoController extends GetxController {
   RxList<LatLng> get polylineCoordinates => _polylineCoordinates;
 
   void cargarPuntosDeLaRutaDelPedido() async {
-    print("aaaaaaaaaaaaaaaaaaaaaaa");
+    
     PolylinePoints polylinePoints = PolylinePoints();
 
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
@@ -369,14 +369,14 @@ class ProcesoPedidoController extends GetxController {
           LatLng(point.latitude, point.longitude),
         );
 
-        print(point);
+      
       }
 
       _polylineCoordinates.value = aux;
       // setState(() {});
     }
 
-    print("bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb");
+    
   }
 
 //
@@ -500,9 +500,7 @@ class ProcesoPedidoController extends GetxController {
     DateTime fechaActual,
     DateTime fechaProgramada,
   ) async {
-    //
-    print('vv${fechaActual.subtract(const Duration(seconds: 20))}');
-    print('vv$fechaProgramada');
+     
 
 //
     if (fechaProgramada
@@ -565,9 +563,7 @@ class ProcesoPedidoController extends GetxController {
   Future<void> configureLocalTimeZone() async {
     tz.initializeTimeZones();
     var detroit = tz.getLocation('America/Guayaquil');
-    final String timeZoneName = Timestamp.now().toDate().timeZoneName;
-    print('===${detroit.name}');
-    print('===${detroit.currentTimeZone}');
+  
     tz.TZDateTime.from(DateTime.now(), detroit);
     tz.setLocalLocation(tz.getLocation(detroit.name));
     /*tz.initializeTimeZones();
