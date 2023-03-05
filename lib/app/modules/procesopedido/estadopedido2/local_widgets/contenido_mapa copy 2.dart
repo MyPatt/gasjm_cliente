@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart'; 
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
-import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido1/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 

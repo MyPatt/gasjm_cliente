@@ -4,14 +4,14 @@ import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
-import 'package:gasjm/app/modules/pedido/local_widgets/boton_cancelar.dart';
-import 'package:gasjm/app/modules/pedido/local_widgets/contenido_mapa.dart';
-import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido1/local_widgets/boton_cancelar.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido1/local_widgets/contenido_mapa.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido1/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
-class ProcesoPedidoPage extends StatelessWidget {
-  const ProcesoPedidoPage({key}) : super(key: key);
+class EstadoPedido2Page  extends StatelessWidget {
+  const EstadoPedido2Page({key}) : super(key: key);
 
 //
   @override

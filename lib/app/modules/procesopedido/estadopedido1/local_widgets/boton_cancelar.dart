@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/modal_alert.dart';
 import 'package:gasjm/app/global_widgets/primary_button.dart';
-import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido1/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
 
 class BotonCancelar extends StatelessWidget {

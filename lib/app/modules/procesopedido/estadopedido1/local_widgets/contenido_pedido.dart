@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
-import 'package:gasjm/app/modules/pedido/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido1/proceso_pedido_controller.dart';
 import 'package:get/get.dart';
 
 class ContenidoPedido extends StatelessWidget {
