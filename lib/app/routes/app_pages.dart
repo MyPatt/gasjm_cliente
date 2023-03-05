@@ -16,6 +16,8 @@ import 'package:gasjm/app/modules/procesopedido/estadopedido1/proceso_pedido_bin
 import 'package:gasjm/app/modules/procesopedido/estadopedido1/proceso_pedido_page.dart';
 import 'package:gasjm/app/modules/login/login_binding.dart';
 import 'package:gasjm/app/modules/login/login_page.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_binding.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_page.dart';
 import 'package:gasjm/app/modules/registrar/registrar_binding.dart';
 import 'package:gasjm/app/modules/registrar/registrar_page.dart';
 import 'package:gasjm/app/modules/splash/splash_binding.dart';
@@ -94,8 +96,8 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.procesopedido,
-      page: () => const ProcesoPedidoPage(),
-      binding: ProcesoPedidoBinding(),
+      page: () => const EstadoPedido2Page(),
+      binding: EstadoPedido2Binding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
     ),

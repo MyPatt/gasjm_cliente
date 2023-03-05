@@ -4,8 +4,8 @@ import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
-import 'package:gasjm/app/modules/procesopedido/estadopedido1/local_widgets/contenido_pedido.dart';
-import 'package:gasjm/app/modules/procesopedido/estadopedido1/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_controller.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/local_widgets/contenido_pedido.dart'; 
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -14,7 +14,7 @@ class ContenidoMapa extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final _ = Get.put(ProcesoPedidoController());
+  final _ = Get.put(EstadoPedido2Controller());
   @override
   Widget build(BuildContext context) {
     //return Column(    children: const <Widget>[NotificacionEstado(), MapaWidget()],   );
@@ -96,7 +96,15 @@ class ContenidoMapa extends StatelessWidget {
                         onMapCreated: (controller) =>
                             _.onMapaCreado(controller),
                         markers: Set.of(_.marcadores),
-                        polylines: _.polylineCoordinates.isNotEmpty
+                        polylines: {
+                                Polyline(
+                                  polylineId: const PolylineId("ruta"),
+                                  points: _.polylineCoordinates,
+                                  color: AppTheme.blueBackground,
+                                  width: 3,
+                                )
+                              },
+                        /*polylines: _.polylineCoordinates.isNotEmpty
                             ? {
                                 Polyline(
                                   polylineId: const PolylineId("ruta"),
@@ -105,7 +113,9 @@ class ContenidoMapa extends StatelessWidget {
                                   width: 3,
                                 )
                               }
-                            : { });
+                            : { }
+                            */
+                            );
                   }
                   //
                   return const Center(

@@ -4,9 +4,9 @@ import 'package:gasjm/app/core/theme/app_theme.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
-import 'package:gasjm/app/modules/procesopedido/estadopedido1/local_widgets/boton_cancelar.dart';
-import 'package:gasjm/app/modules/procesopedido/estadopedido1/local_widgets/contenido_mapa.dart';
-import 'package:gasjm/app/modules/procesopedido/estadopedido1/proceso_pedido_controller.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/local_widgets/boton_cancelar.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/local_widgets/contenido_mapa.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_controller.dart';
 import 'package:get/get.dart';
 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
@@ -32,16 +32,17 @@ class EstadoPedido2Page  extends StatelessWidget {
 
         // actions: const [ActionsProcesoPedido()],
         actions: <Widget>[
+          IconButton(onPressed:()=>  Get.find<EstadoPedido2Controller>().getPolyline(), icon: Icon(Icons.route_outlined)),
           IconButton(
-              onPressed: () => Get.find<ProcesoPedidoController>()
+              onPressed: () => Get.find<EstadoPedido2Controller>()
                   .cargarPaginaNotifiaciones(),
-              icon: Obx(() => Get.find<ProcesoPedidoController>()
+              icon: Obx(() => Get.find<EstadoPedido2Controller>()
                       .cargandoDatosDelPedidoRealizado
                       .value
                   ? const Icon(Icons.notifications_none_outlined)
                   : StreamBuilder(
                       stream:
-                          Get.find<ProcesoPedidoController>().getNotificacion(),
+                          Get.find<EstadoPedido2Controller>().getNotificacion(),
                       builder:
                           (context, AsyncSnapshot<QuerySnapshot> snapshot) {
                         if (snapshot.hasError) {
@@ -67,7 +68,7 @@ class EstadoPedido2Page  extends StatelessWidget {
       ),
       //Body
       body: Obx(
-        () => Get.find<ProcesoPedidoController>()
+        () => Get.find<EstadoPedido2Controller>()
                 .cargandoDatosDelPedidoRealizado
                 .value
             ? const Center(child: CircularProgress())

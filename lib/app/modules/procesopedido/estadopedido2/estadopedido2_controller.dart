@@ -151,6 +151,7 @@ class EstadoPedido2Controller extends GetxController {
 
     controladorGoogleMap = controller;
     controller.setMapStyle(estiloMapa);
+    cargarPuntosDeLaRutaDelPedido();
   }
 
   //
@@ -483,7 +484,7 @@ class EstadoPedido2Controller extends GetxController {
     DateTime fechaProgramada,
   ) async {
 //
-    _getPolyline();
+    getPolyline();
 //
     if (fechaProgramada
         .isAfter(fechaActual.subtract(const Duration(seconds: 10)))) {
@@ -552,7 +553,8 @@ class EstadoPedido2Controller extends GetxController {
 
   //
 
-  Future <void> _getPolyline() async {
+  Future<void> getPolyline() async {
+    print('-----------');
     PolylinePoints polylinePoints = PolylinePoints();
     PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
         googleapikey, // Your Google Map Key
@@ -567,6 +569,13 @@ class EstadoPedido2Controller extends GetxController {
         polylineCoordinates.add(LatLng(point.latitude, point.longitude));
       }
     }
+    print(result.errorMessage);
+    print(polylineCoordinates.length);
+    print(posicionOrigenVehiculoRepartidor.value);
+    print(posicionDestinoPedidoCliente.value);
+
+    print('*-----------');
+
     // _addPolyLine();
   }
 }
