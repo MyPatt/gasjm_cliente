@@ -16,6 +16,7 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:syncfusion_flutter_maps/maps.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -40,10 +41,7 @@ class EstadoPedido2Controller extends GetxController {
 
   //Variable para mostrar el avance de la consulta desde firestore
   final cargandoDatosDelPedidoRealizado = false.obs;
-
-  //Contralador del mapa
-  // ignore: unused_field
-  GoogleMapController? controladorGoogleMap;
+ 
 
   //Posicion del destino final para entregar el pedido que es el cliente, inicializado
   final Rx<LatLng> _posicionDestinoCliente =
@@ -66,15 +64,13 @@ class EstadoPedido2Controller extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     //Obtener  datos del pedido  realizado
-    Future.wait([_cargarDatosDelPedidoRealizado()]);
+    Future.wait([cargarDatosDelPedidoRealizado()]);
 
     //Obtiene el nombre de direccion del destino del pediod a partir de la posicion en LatLng
-    _cargarDireccionDestinoDelPedido();
-
-    //Se asigna los iconos personalizados a los marcadores del mapa (detinopedido y vehiculo)
-    cargarIconosMarcadoresDelMapa();
+    _cargarDireccionDestinoDelPedido(); 
+     
     //
-
+    cargarPolylines();
     //
     await initNotificacion();
   }
@@ -91,7 +87,7 @@ class EstadoPedido2Controller extends GetxController {
 
   //Metodo que obtiene el ultimo pedido realizado y aun no se a finalizado
 
-  Future<void> _cargarDatosDelPedidoRealizado() async {
+  Future<PedidoModel?> cargarDatosDelPedidoRealizado() async {
     try {
       cargandoDatosDelPedidoRealizado.value = true;
 
@@ -120,7 +116,7 @@ class EstadoPedido2Controller extends GetxController {
 
       //Mostrar el marcador del cliente en el mapa
       // _agregarMarcadorCliente(_posicionCliente.value);
-
+      return aux;
     } on FirebaseException catch (e) {
       Mensajes.showGetSnackbar(
           titulo: 'Alerta',
@@ -133,6 +129,7 @@ class EstadoPedido2Controller extends GetxController {
     }
 
     cargandoDatosDelPedidoRealizado.value = false;
+    return null;
   }
 
 //al acualizar  la ubicacion de un repartidor cuando se ha cambiado se muestra en el mapa
@@ -144,15 +141,7 @@ class EstadoPedido2Controller extends GetxController {
         .snapshots();
     return snapshot;
   }
-
-  //Diseno mapa
-  void onMapaCreado(GoogleMapController controller) {
-    //controller.showMarkerInfoWindow(MarkerId(id));
-
-    controladorGoogleMap = controller;
-    controller.setMapStyle(estiloMapa);
-    cargarPuntosDeLaRutaDelPedido();
-  }
+ 
 
   //
   Future<PedidoModel> _getDatosPedido() async {
@@ -311,30 +300,6 @@ class EstadoPedido2Controller extends GetxController {
   //Variables para la vista previa de la ruta en tiempo real
   static const googleapikey = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
 
-  //Varriables de los iconos para marcadores del mapa
-  BitmapDescriptor iconoOrigenMarcadorVehiculoRepartidor =
-      BitmapDescriptor.defaultMarker;
-  BitmapDescriptor iconoDestinoMarcadorPedidoCliente =
-      BitmapDescriptor.defaultMarker;
-  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
-
-  void cargarIconosMarcadoresDelMapa() {
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/icons/camiongasjm.png")
-        .then(
-      (icon) {
-        iconoOrigenMarcadorVehiculoRepartidor = icon;
-      },
-    );
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/icons/marcadorCliente.png")
-        .then(
-      (icon) {
-        iconoDestinoMarcadorPedidoCliente = icon;
-      },
-    );
-  }
-
   //Metodo para dibujar la dirección de la ruta
   final RxList<LatLng> _polylineCoordinates = <LatLng>[].obs;
   RxList<LatLng> get polylineCoordinates => _polylineCoordinates;
@@ -484,8 +449,6 @@ class EstadoPedido2Controller extends GetxController {
     DateTime fechaProgramada,
   ) async {
 //
-    getPolyline();
-//
     if (fechaProgramada
         .isAfter(fechaActual.subtract(const Duration(seconds: 10)))) {
       await flutterLocalNotificationsPlugin.zonedSchedule(
@@ -553,29 +516,65 @@ class EstadoPedido2Controller extends GetxController {
 
   //
 
-  Future<void> getPolyline() async {
-    print('-----------');
-    PolylinePoints polylinePoints = PolylinePoints();
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-        googleapikey, // Your Google Map Key
-        PointLatLng(posicionOrigenVehiculoRepartidor.value.latitude,
-            posicionOrigenVehiculoRepartidor.value.longitude),
-        PointLatLng(posicionDestinoPedidoCliente.value.latitude,
-            posicionDestinoPedidoCliente.value.longitude),
-        travelMode: TravelMode.driving,
-        wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
-    if (result.points.isNotEmpty) {
-      for (var point in result.points) {
-        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
-      }
-    }
-    print(result.errorMessage);
-    print(polylineCoordinates.length);
-    print(posicionOrigenVehiculoRepartidor.value);
-    print(posicionDestinoPedidoCliente.value);
+  //////////////////////////////////////
+  late List<MapLatLng> polyline;
+  late List<List<MapLatLng>> polylines;
+//late MapShapeSource dataSource;
+  late MapZoomPanBehavior zoomPanBehavior;
 
-    print('*-----------');
+  ///
+  MapShapeSource dataSource = const MapShapeSource.asset(
+    'assets/india.json',
+    shapeDataField: 'name',
+  );
 
-    // _addPolyLine();
+  ///
+  cargarPolylines() {
+    polyline = const <MapLatLng>[
+      MapLatLng(13.0827, 80.2707),
+      MapLatLng(13.1746, 79.6117),
+      MapLatLng(13.6373, 79.5037),
+      MapLatLng(14.4673, 78.8242),
+      MapLatLng(14.9091, 78.0092),
+      MapLatLng(16.2160, 77.3566),
+      MapLatLng(17.1557, 76.8697),
+      MapLatLng(18.0975, 75.4249),
+      MapLatLng(18.5204, 73.8567),
+      MapLatLng(19.0760, 72.8777),
+    ];
+
+    polylines = <List<MapLatLng>>[polyline];
   }
+
+  ///
+
+  late List<Model> data;
+     MapTileLayerController controller=MapTileLayerController();
+
+  ///
+  cargarMarcadorees() {
+    data = <Model>[
+      Model(pedido.value.direccion.latitud, pedido.value.direccion.longitud,
+          Image.asset('assets/icons/marcadorCliente.png')),
+      Model(
+          pedido.value.direccion.latitud + 0.0001,
+          pedido.value.direccion.longitud + 0.0001,
+          Image.asset('assets/icons/camiongasjm.png')),
+    ];
+    controller = MapTileLayerController();
+    //
+    for (var i = 0; i < data.length; i++) {
+      controller.insertMarker(i);
+    }
+  }
+
+  ///
+}
+
+class Model {
+  Model(this.latitude, this.longitude, this.icon);
+
+  final double latitude;
+  final double longitude;
+  Widget icon;
 }

@@ -36,8 +36,8 @@ class ContenidoMapa extends StatelessWidget {
                     final marker2 = Marker(
                         markerId: markerId2,
                         position: LatLng(
-                            _.posicionDestinoPedidoCliente.value.latitude,
-                            _.posicionDestinoPedidoCliente.value.longitude),
+                              _.posicionDestinoPedidoCliente.value.latitude,
+                              _.posicionDestinoPedidoCliente.value.longitude),
                         icon: _.iconoDestinoMarcadorPedidoCliente);
                
                     // print(_posicionDestinoCliente.value.latitude);

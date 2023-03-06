@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/theme/app_theme.dart';
+import 'package:gasjm/app/data/models/pedido_model.dart';
 import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/menu_lateral.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
@@ -8,14 +9,16 @@ import 'package:gasjm/app/modules/procesopedido/estadopedido2/local_widgets/boto
 import 'package:gasjm/app/modules/procesopedido/estadopedido2/local_widgets/contenido_mapa.dart';
 import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_controller.dart';
 import 'package:get/get.dart';
+import 'package:syncfusion_flutter_maps/maps.dart';
 
 //Pantalla   del cliente cuando su pedido se encuentra procesando
-class EstadoPedido2Page  extends StatelessWidget {
+class EstadoPedido2Page extends StatelessWidget {
   const EstadoPedido2Page({key}) : super(key: key);
 
 //
   @override
   Widget build(BuildContext context) {
+    MapTileLayerController controller = MapTileLayerController();
     return Scaffold(
       backgroundColor: const Color.fromRGBO(221, 226, 227, 1),
       //Menú deslizable a la izquierda con opciones del  usuario
@@ -29,59 +32,78 @@ class EstadoPedido2Page  extends StatelessWidget {
           ),
         ),
         backgroundColor: AppTheme.blueBackground,
-
-        // actions: const [ActionsProcesoPedido()],
-        actions: <Widget>[
-          IconButton(onPressed:()=>  Get.find<EstadoPedido2Controller>().getPolyline(), icon: Icon(Icons.route_outlined)),
-          IconButton(
-              onPressed: () => Get.find<EstadoPedido2Controller>()
-                  .cargarPaginaNotifiaciones(),
-              icon: Obx(() => Get.find<EstadoPedido2Controller>()
-                      .cargandoDatosDelPedidoRealizado
-                      .value
-                  ? const Icon(Icons.notifications_none_outlined)
-                  : StreamBuilder(
-                      stream:
-                          Get.find<EstadoPedido2Controller>().getNotificacion(),
-                      builder:
-                          (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                        if (snapshot.hasError) {
-                          return const Center(
-                            child:
-                                TextDescription(text: 'Espere un momento...'),
-                          );
-                        }
-                        if (snapshot.hasData) {
-                          return const Icon(Icons.notifications_none_outlined);
-                        }
-
-                        return const Icon(Icons.notifications_none_outlined);
-                      })))
-          /*    IconButton(
-              onPressed: () => Get.find<ProcesoPedidoController>()
-                  .cargarPaginaNotifiaciones(),
-              icon: Obx(() => (Icon(globals.existeNotificacion.value
-                  ? Icons.notifications_active_outlined
-                  : Icons.notifications_none_outlined))))*/
+        actions: [
+          ElevatedButton(
+            child: Text('Add'),
+            onPressed: () {
+              controller.insertMarker(0);
+              print(controller.markersCount);
+            },
+          ),
         ],
         title: const Text('Gas J&M'),
       ),
-      //Body
-      body: Obx(
-        () => Get.find<EstadoPedido2Controller>()
-                .cargandoDatosDelPedidoRealizado
-                .value
-            ? const Center(child: CircularProgress())
-            : Stack(
-                children: [
-                  //Widget de Mapa  para la vista previa de la ruta en tiempo real
-                  //  Positioned.fill(child: ContenidoMapa()),
-                  Positioned(child: ContenidoMapa()),
-                  //Boton para que el usuario cancele su pedido
-                  const BotonCancelar()
-                ],
-              ),
-      ),
+      body: GetBuilder<EstadoPedido2Controller>(
+          builder: (_) => StreamBuilder<QuerySnapshot>(
+              stream: _.getUbicacionesDeRepartidores(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapchat) {
+                if (snapchat.hasData) {
+                  List<Model> _data = [];
+                  //
+                  _data.add(Model(
+                      _.posicionDestinoPedidoCliente.value.latitude,
+                      _.posicionDestinoPedidoCliente.value.longitude,
+                      //Image.asset('assets/icons/marcadorCliente.png'
+                      Icon(Icons.abc)));
+//
+                  controller.insertMarker(0);
+
+                  var i = 0;
+
+                  for (var repartidor in snapchat.data!.docs) {
+                    i++;
+                    Direccion ubicacionActualRepartidor =
+                        Direccion.fromMap(repartidor.get("ubicacionActual"));
+
+                    _data.add(Model(ubicacionActualRepartidor.latitud,
+                        ubicacionActualRepartidor.longitud, Icon(Icons.abc)
+                        //Image.asset('assets/icons/camiongasjm.png'
+                        ));
+
+                    controller.insertMarker(i);
+                  }
+
+                  print('@@@@@@@${_data.length}');
+                  controller.notifyListeners();
+
+                  //
+                  return SfMaps(layers: [
+                    MapTileLayer(
+                      initialFocalLatLng: MapLatLng(
+                          _.pedido.value.direccion.latitud,
+                          _.pedido.value.direccion.longitud),
+                      initialZoomLevel: 10,
+                      initialMarkersCount: _data.length,
+                      urlTemplate:
+                          'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                      markerBuilder: (BuildContext context, int index) {
+                        return MapMarker(
+                          /*  latitude: _data[index].latitude,
+                          longitude: _data[index].longitude,
+                          child: _data[index].icon,*/
+                          latitude: _.pedido.value.direccion.latitud,
+                          longitude: _.pedido.value.direccion.longitud,
+                          child:
+                              Image.asset('assets/icons/marcadorCliente.png'),
+                          size: const Size(40, 40),
+                        );
+                      },
+                      controller: controller,
+                    )
+                  ]);
+                }
+                return const Center(child: CircularProgress());
+              })),
     );
   }
 }

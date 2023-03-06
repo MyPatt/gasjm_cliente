@@ -6,8 +6,8 @@ import 'package:gasjm/app/global_widgets/circular_progress.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_controller.dart';
 import 'package:gasjm/app/modules/procesopedido/estadopedido2/local_widgets/contenido_pedido.dart'; 
-import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:get/get.dart'; 
+import 'package:syncfusion_flutter_maps/maps.dart';
 
 class ContenidoMapa extends StatelessWidget {
   ContenidoMapa({
@@ -22,106 +22,27 @@ class ContenidoMapa extends StatelessWidget {
       children: [
         const ContenidoPedido(),
         Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-                stream: _.getUbicacionesDeRepartidores(),
-                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Center(
-                      child: TextDescription(text: 'Espere un momento...'),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    //
-                    //
-                    var markerId2 = const MarkerId('MarcadorPedidoCliente');
-                    final marker2 = Marker(
-                        markerId: markerId2,
-                        position: LatLng(
-                            _.posicionDestinoPedidoCliente.value.latitude,
-                            _.posicionDestinoPedidoCliente.value.longitude),
-                        icon: _.iconoDestinoMarcadorPedidoCliente);
-
-                    // print(_posicionDestinoCliente.value.latitude);
-                    _.marcadoresAux[markerId2] = marker2;
-
-                    //
-                    for (var repartidor in snapshot.data!.docs) {
-                      var markerId = MarkerId(repartidor.id);
-//
-                      Direccion ubicacionActualRepartidor =
-                          Direccion.fromMap(repartidor.get("ubicacionActual"));
-                      //
-                      double rotacionActualRepartidor =
-                          (repartidor.get("rotacionActual"));
-
-                      //
-                      final marker = Marker(
-                        markerId: markerId,
-                        position: LatLng(ubicacionActualRepartidor.latitud,
-                            ubicacionActualRepartidor.longitud),
-                        rotation: rotacionActualRepartidor,
-                        icon: _.iconoOrigenMarcadorVehiculoRepartidor,
-                      );
-
-                      //
-
-                      _.marcadoresAux[markerId] = marker;
-
-                      //Asignar
-                      _.posicionOrigenVehiculoRepartidor.value = LatLng(
-                          ubicacionActualRepartidor.latitud,
-                          ubicacionActualRepartidor.longitud);
-                    }
-
-                    //
-                    return GoogleMap(
-                        myLocationButtonEnabled: true,
-                        compassEnabled: true,
-                        zoomControlsEnabled: false,
-                        zoomGesturesEnabled: true,
-                        mapToolbarEnabled: false,
-                        trafficEnabled: false,
-                        tiltGesturesEnabled: false,
-                        scrollGesturesEnabled: true,
-                        rotateGesturesEnabled: false,
-                        myLocationEnabled: true,
-                        liteModeEnabled: false,
-                        indoorViewEnabled: false,
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(
-                              _.posicionDestinoPedidoCliente.value.latitude,
-                              _.posicionDestinoPedidoCliente.value.longitude),
-                          zoom: 15,
-                        ),
-                        onMapCreated: (controller) =>
-                            _.onMapaCreado(controller),
-                        markers: Set.of(_.marcadores),
-                        polylines: {
-                                Polyline(
-                                  polylineId: const PolylineId("ruta"),
-                                  points: _.polylineCoordinates,
-                                  color: AppTheme.blueBackground,
-                                  width: 3,
-                                )
-                              },
-                        /*polylines: _.polylineCoordinates.isNotEmpty
-                            ? {
-                                Polyline(
-                                  polylineId: const PolylineId("ruta"),
-                                  points: _.polylineCoordinates,
-                                  color: AppTheme.blueBackground,
-                                  width: 3,
-                                )
-                              }
-                            : { }
-                            */
-                            );
-                  }
-                  //
-                  return const Center(
-                    child: CircularProgress(),
+            child:SfMaps(
+      layers: [
+        MapShapeLayer(
+          source: _.dataSource,
+          sublayers: [
+            MapPolylineLayer(
+              polylines: List<MapPolyline>.generate(
+               _. polylines.length,
+                (int index) {
+                  return MapPolyline(
+                    points: _.polylines[index],
                   );
-                })),
+                },
+              ).toSet(),
+            ),
+          ],
+          zoomPanBehavior: _.zoomPanBehavior,
+        ),
+      ],
+    ),
+   )
       ],
     );
   }
