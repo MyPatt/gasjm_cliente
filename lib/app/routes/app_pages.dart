@@ -18,6 +18,7 @@ import 'package:gasjm/app/modules/login/login_binding.dart';
 import 'package:gasjm/app/modules/login/login_page.dart';
 import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_binding.dart';
 import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_page.dart';
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/mapa_page.dart';
 import 'package:gasjm/app/modules/registrar/registrar_binding.dart';
 import 'package:gasjm/app/modules/registrar/registrar_page.dart';
 import 'package:gasjm/app/modules/splash/splash_binding.dart';
@@ -96,7 +97,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.procesopedido,
-      page: () => const EstadoPedido2Page(),
+      page: () => const LocationTrackerBlog(),
       binding: EstadoPedido2Binding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),
