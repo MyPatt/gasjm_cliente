@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">GasJM Cliente</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoibWFzYXoiLCJhIjoiY2xleTJsNW4zMGZ2NjQybzBxNjlpZmV5ZyJ9.N6R32DyDwNP82pRSbUL7sg</string>
     <string name="facebook_app_id">1209793573173045</string>
     <string name="fb_login_protocol_scheme">fb1209793573173045</string>
     <string name="facebook_client_token">3e368cd6ec186153016b3348e3c6842e</string>

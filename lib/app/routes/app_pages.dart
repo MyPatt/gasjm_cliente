@@ -97,7 +97,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.procesopedido,
-      page: () => const LocationTrackerBlog(),
+      page: () => const EstadoPedido2Page(),
       binding: EstadoPedido2Binding(),
       transition: Transition.fade,
       transitionDuration: const Duration(milliseconds: 500),

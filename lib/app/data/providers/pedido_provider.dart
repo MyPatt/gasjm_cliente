@@ -116,8 +116,8 @@ class PedidoProvider {
         .collection('estadopedido')
         .where("idEstadoPedido", isEqualTo: idEstado)
         .limit(1)
-        .get();
-    return snapshot.docs.first.get("nombreEstadoPedido").toString();
+        .get(); 
+    return snapshot.docs.first.get("descripcionEstadoPedido").toString();
   }
 
   //Obtener los cambios de los estados

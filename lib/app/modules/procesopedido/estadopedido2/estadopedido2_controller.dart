@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:gasjm/app/core/utils/map_style.dart';
+import 'package:flutter/services.dart';
 import 'package:gasjm/app/core/utils/mensajes.dart';
 import 'package:gasjm/app/data/models/estadopedido_model.dart';
 import 'package:gasjm/app/data/models/pedido_model.dart';
@@ -11,12 +11,11 @@ import 'package:gasjm/app/routes/app_routes.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:mapbox_gl/mapbox_gl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:syncfusion_flutter_maps/maps.dart';
+
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest.dart' as tz;
 
@@ -41,17 +40,12 @@ class EstadoPedido2Controller extends GetxController {
 
   //Variable para mostrar el avance de la consulta desde firestore
   final cargandoDatosDelPedidoRealizado = false.obs;
- 
 
   //Posicion del destino final para entregar el pedido que es el cliente, inicializado
   final Rx<LatLng> _posicionDestinoCliente =
       const LatLng(-0.2053476, -79.4894387).obs;
   Rx<LatLng> get posicionDestinoPedidoCliente =>
       _posicionDestinoCliente.value.obs;
-
-  //Lista de marcadores (vehiculo y cliente)
-  final Map<MarkerId, Marker> marcadoresAux = {};
-  Set<Marker> get marcadores => marcadoresAux.values.toSet();
 
   //Variable observable que muestra la direccion/ destino para entregar el pedido, esto se visualiza en un modal
   RxString direccion = ''.obs;
@@ -64,14 +58,11 @@ class EstadoPedido2Controller extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     //Obtener  datos del pedido  realizado
-    Future.wait([cargarDatosDelPedidoRealizado()]);
+    //Future.wait([cargarDatosDelPedidoRealizado()]);
 
     //Obtiene el nombre de direccion del destino del pediod a partir de la posicion en LatLng
-    _cargarDireccionDestinoDelPedido(); 
-     
-    //
-    cargarPolylines();
-    //
+    //_cargarDireccionDestinoDelPedido();
+
     await initNotificacion();
   }
 
@@ -87,7 +78,7 @@ class EstadoPedido2Controller extends GetxController {
 
   //Metodo que obtiene el ultimo pedido realizado y aun no se a finalizado
 
-  Future<PedidoModel?> cargarDatosDelPedidoRealizado() async {
+  Future<LatLng> cargarDatosDelPedidoRealizado() async {
     try {
       cargandoDatosDelPedidoRealizado.value = true;
 
@@ -95,7 +86,7 @@ class EstadoPedido2Controller extends GetxController {
       var aux = await _getDatosPedido();
       String _nombreCliente = _personaRepository.nombreUsuarioActual;
       var estado = await _getNombreEstado(aux.idEstadoPedido);
-
+      print('!!!!!$estado');
       //
       aux.nombreUsuario = _nombreCliente;
 
@@ -116,7 +107,7 @@ class EstadoPedido2Controller extends GetxController {
 
       //Mostrar el marcador del cliente en el mapa
       // _agregarMarcadorCliente(_posicionCliente.value);
-      return aux;
+
     } on FirebaseException catch (e) {
       Mensajes.showGetSnackbar(
           titulo: 'Alerta',
@@ -129,7 +120,8 @@ class EstadoPedido2Controller extends GetxController {
     }
 
     cargandoDatosDelPedidoRealizado.value = false;
-    return null;
+    return LatLng(
+        pedido.value.direccion.latitud, pedido.value.direccion.longitud);
   }
 
 //al acualizar  la ubicacion de un repartidor cuando se ha cambiado se muestra en el mapa
@@ -141,7 +133,6 @@ class EstadoPedido2Controller extends GetxController {
         .snapshots();
     return snapshot;
   }
- 
 
   //
   Future<PedidoModel> _getDatosPedido() async {
@@ -254,7 +245,12 @@ class EstadoPedido2Controller extends GetxController {
 
 //Cargar pagina de notifiaciones
   void cargarPaginaNotifiaciones() {
-    Get.toNamed(AppRoutes.notificacion, arguments: pedido.value);
+    //  onStyleLoaded();
+    // Get.toNamed(AppRoutes.notificacion, arguments: pedido.value);
+    controller.addSymbol(SymbolOptions(
+      geometry: posicionDestinoPedidoCliente.value,
+      iconImage: "assetImage",
+    ));
   }
 
   //Metodo para encontrar el  nombre del estado
@@ -298,34 +294,6 @@ class EstadoPedido2Controller extends GetxController {
   }
 
   //Variables para la vista previa de la ruta en tiempo real
-  static const googleapikey = 'AIzaSyAQMbEr7dS-0H_AUbuggKw3PhHyxDfJ8JA';
-
-  //Metodo para dibujar la dirección de la ruta
-  final RxList<LatLng> _polylineCoordinates = <LatLng>[].obs;
-  RxList<LatLng> get polylineCoordinates => _polylineCoordinates;
-
-  void cargarPuntosDeLaRutaDelPedido() async {
-    PolylinePoints polylinePoints = PolylinePoints();
-
-    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
-      googleapikey, // Your Google Map Key
-      PointLatLng(posicionOrigenVehiculoRepartidor.value.latitude,
-          posicionOrigenVehiculoRepartidor.value.longitude),
-      PointLatLng(posicionDestinoPedidoCliente.value.latitude,
-          posicionDestinoPedidoCliente.value.longitude),
-    );
-    if (result.points.isNotEmpty) {
-      List<LatLng> aux = [];
-      for (var point in result.points) {
-        aux.add(
-          LatLng(point.latitude, point.longitude),
-        );
-      }
-
-      _polylineCoordinates.value = aux;
-      // setState(() {});
-    }
-  }
 
 //
   final Rx<LatLng> posicionOrigenVehiculoRepartidor =
@@ -365,49 +333,6 @@ class EstadoPedido2Controller extends GetxController {
         .snapshots();
 
     return snapshot;
-  }
-
-  //
-  showNotificationn() async {
-    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-        FlutterLocalNotificationsPlugin();
-
-    const AndroidInitializationSettings initializationSettingsAndroid =
-        AndroidInitializationSettings('@mipmap/ic_launcher_foreground');
-
-    const IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
-      requestSoundPermission: false,
-      requestBadgePermission: false,
-      requestAlertPermission: false,
-    );
-    const InitializationSettings initializationSettings =
-        InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsIOS,
-    );
-
-    await flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-    );
-
-    AndroidNotificationChannel channel = const AndroidNotificationChannel(
-      'id',
-      'name',
-      'description'
-          'high channel',
-      importance: Importance.max,
-    );
-
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'my first notification',
-      'a very long message for the user of app',
-      NotificationDetails(
-        android: AndroidNotificationDetails(
-            channel.id, channel.name, channel.description),
-      ),
-    );
   }
 
 //////
@@ -517,64 +442,40 @@ class EstadoPedido2Controller extends GetxController {
   //
 
   //////////////////////////////////////
-  late List<MapLatLng> polyline;
-  late List<List<MapLatLng>> polylines;
-//late MapShapeSource dataSource;
-  late MapZoomPanBehavior zoomPanBehavior;
+  late MapboxMapController controller;
 
-  ///
-  MapShapeSource dataSource = const MapShapeSource.asset(
-    'assets/india.json',
-    shapeDataField: 'name',
-  );
-
-  ///
-  cargarPolylines() {
-    polyline = const <MapLatLng>[
-      MapLatLng(13.0827, 80.2707),
-      MapLatLng(13.1746, 79.6117),
-      MapLatLng(13.6373, 79.5037),
-      MapLatLng(14.4673, 78.8242),
-      MapLatLng(14.9091, 78.0092),
-      MapLatLng(16.2160, 77.3566),
-      MapLatLng(17.1557, 76.8697),
-      MapLatLng(18.0975, 75.4249),
-      MapLatLng(18.5204, 73.8567),
-      MapLatLng(19.0760, 72.8777),
-    ];
-
-    polylines = <List<MapLatLng>>[polyline];
+  onMapCreated(MapboxMapController controller) async {
+    this.controller = controller;
+    onStyleLoadedCallback();
   }
 
-  ///
+  void onStyleLoadedCallback() async {
+    addImageFromAsse('assetImage', 'assets/icons/camiongasjm.png');
+/*
+    await controller.addSymbol(SymbolOptions(
+      geometry: posicionDestinoPedidoCliente.value,
+      iconSize: 0.2,
+      iconImage: "assets/icon/food.png",
+    ));*/
 
-  late List<Model> data;
-     MapTileLayerController controller=MapTileLayerController();
-
-  ///
-  cargarMarcadorees() {
-    data = <Model>[
-      Model(pedido.value.direccion.latitud, pedido.value.direccion.longitud,
-          Image.asset('assets/icons/marcadorCliente.png')),
-      Model(
-          pedido.value.direccion.latitud + 0.0001,
-          pedido.value.direccion.longitud + 0.0001,
-          Image.asset('assets/icons/camiongasjm.png')),
-    ];
-    controller = MapTileLayerController();
-    //
-    for (var i = 0; i < data.length; i++) {
-      controller.insertMarker(i);
-    }
+    // _addSourceAndLineLayer(0, false);
   }
 
-  ///
-}
+  Future<void> addImageFromAsse(String name, String assetName) async {
+    final ByteData bytes = await rootBundle.load(assetName);
+    final Uint8List list = bytes.buffer.asUint8List();
 
-class Model {
-  Model(this.latitude, this.longitude, this.icon);
+    return controller.addImage(name, list);
+  }
 
-  final double latitude;
-  final double longitude;
-  Widget icon;
+  onStyleLoaded() async {
+    controller.addSymbol(
+      SymbolOptions(
+          geometry: posicionDestinoPedidoCliente.value,
+          iconImage: "bar-11",
+          iconSize: 5),
+    );
+
+    // _addSourceAndLineLayer(0, false);
+  }
 }

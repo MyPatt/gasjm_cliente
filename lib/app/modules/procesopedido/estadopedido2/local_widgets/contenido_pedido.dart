@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gasjm/app/core/utils/responsive.dart';
 import 'package:gasjm/app/global_widgets/text_description.dart';
 import 'package:gasjm/app/global_widgets/text_subtitle.dart';
-import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_controller.dart'; 
+import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_controller.dart';
 import 'package:get/get.dart';
 
 class ContenidoPedido extends StatelessWidget {
@@ -65,13 +65,15 @@ class ContenidoPedido extends StatelessWidget {
                                       Timestamp.now().toDate(),
                                       fechaProgramada);
 
-                                  return TextSubtitle(text: titulo);
+                                  return TextSubtitle(
+                                      text:
+                                          _.pedido.value.estadoPedidoUsuario ??
+                                              titulo);
                                 } catch (e) {
                                   Exception(
                                       'Ha ocurrideo un error inesperado...');
                                 }
                               }
-                         
 
                               return const TextSubtitle(
                                   text: 'Pedido realizado');

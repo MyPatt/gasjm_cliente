@@ -24,12 +24,12 @@ class ContenidoMapa extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
                 stream: _.getUbicacionesDeRepartidores(),
                 builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (snapshot.hasError) {
-                    return const Center(
-                      child: TextDescription(text: 'Espere un momento...'),
-                    );
-                  }
-                  if (snapshot.hasData) {
+                    if (snapshot.hasError) {
+                      return const Center(
+                        child: TextDescription(text: 'Espere un momento...'),
+                      );
+                    }
+                    if (snapshot.hasData) {
                     //
                     //
                     var markerId2 = const MarkerId('MarcadorPedidoCliente');
