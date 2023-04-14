@@ -1,10 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_map/flutter_map.dart';
-import 'package:gasjm/app/core/theme/app_theme.dart';
-import 'package:gasjm/app/data/models/pedido_model.dart';
-import 'package:gasjm/app/global_widgets/circular_progress.dart';
-import 'package:gasjm/app/global_widgets/text_description.dart';
+import 'package:flutter/material.dart'; 
 import 'package:gasjm/app/modules/procesopedido/estadopedido2/estadopedido2_controller.dart';
 import 'package:gasjm/app/modules/procesopedido/estadopedido2/local_widgets/contenido_pedido.dart';
 import 'package:get/get.dart';
@@ -25,7 +19,6 @@ class ContenidoMapa extends StatelessWidget {
         const ContenidoPedido(),
         Expanded(
             child: MapboxMap(
-              onMapCreated: _.onMapCreated,
           accessToken:
               'pk.eyJ1IjoibWFzYXoiLCJhIjoiY2xleTJsNW4zMGZ2NjQybzBxNjlpZmV5ZyJ9.N6R32DyDwNP82pRSbUL7sg',
           initialCameraPosition: CameraPosition(
@@ -35,8 +28,11 @@ class ContenidoMapa extends StatelessWidget {
                 _.posicionDestinoPedidoCliente.value.longitude,
               ),
               zoom: 14),
+          onMapCreated: _.onMapCreated,
+         // onStyleLoadedCallback: _.onStyleLoadedCallback(),
           //myLocationTrackingMode: MyLocationTrackingMode.TrackingGPS,
           minMaxZoomPreference: const MinMaxZoomPreference(13, 16),
+
           //onMapCreated: _.onMapCreated,onStyleLoadedCallback: _.onStyleLoadedCallback(),
         )
             /* FlutterMap(

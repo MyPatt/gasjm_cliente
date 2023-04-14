@@ -63,7 +63,7 @@ class EstadoPedido2Controller extends GetxController {
     //Obtiene el nombre de direccion del destino del pediod a partir de la posicion en LatLng
     //_cargarDireccionDestinoDelPedido();
 
-    await initNotificacion();
+    //await initNotificacion();
   }
 
 //Metodo para actualizar la variable del estado de la memoria, si ya no esta en true debe volver a cargar el inicio  cancelar el pedido
@@ -247,10 +247,11 @@ class EstadoPedido2Controller extends GetxController {
   void cargarPaginaNotifiaciones() {
     //  onStyleLoaded();
     // Get.toNamed(AppRoutes.notificacion, arguments: pedido.value);
-    controller.addSymbol(SymbolOptions(
+    onStyleLoadedCallback();
+    /*  controller.addSymbol(SymbolOptions(
       geometry: posicionDestinoPedidoCliente.value,
       iconImage: "assetImage",
-    ));
+    ));*/
   }
 
   //Metodo para encontrar el  nombre del estado
@@ -446,10 +447,9 @@ class EstadoPedido2Controller extends GetxController {
 
   onMapCreated(MapboxMapController controller) async {
     this.controller = controller;
-    onStyleLoadedCallback();
   }
 
-  void onStyleLoadedCallback() async {
+  void _onStyleLoadedCallback() async {
     addImageFromAsse('assetImage', 'assets/icons/camiongasjm.png');
 /*
     await controller.addSymbol(SymbolOptions(
@@ -474,6 +474,19 @@ class EstadoPedido2Controller extends GetxController {
           geometry: posicionDestinoPedidoCliente.value,
           iconImage: "bar-11",
           iconSize: 5),
+    );
+
+    // _addSourceAndLineLayer(0, false);
+  }
+
+  //
+  onStyleLoadedCallback() async {
+    await controller.addSymbol(
+      SymbolOptions(
+        geometry: posicionOrigenVehiculoRepartidor.value,
+        iconSize: 0.2,
+        iconImage: "assets/icons/camiongasjm.png",
+      ),
     );
 
     // _addSourceAndLineLayer(0, false);
